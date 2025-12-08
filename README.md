@@ -1,6 +1,6 @@
 # EAN-MAPS
 
-Proyecto básico que muestra un mapa interactivo con Leaflet y OpenStreetMap.
+Proyecto básico que muestra un mapa interactivo con Leaflet y OpenStreetMap, Leaflet Routing Machine (Usando OSRM (OPEN SOURCE ROUTING MACHINE))
 
 Modos:
 - `plane`: medir distancia en línea recta entre dos puntos.
