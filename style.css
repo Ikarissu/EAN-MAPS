@@ -1,0 +1,24 @@
+#main-map {
+    height: 900px;
+    width: auto;
+}
+
+
+button {
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    cursor: pointer;
+}
+
+
+.selected-mode {
+    border-color: #007bff; 
+    background-color: #e0f0ff; 
+    font-weight: bold;
+    cursor: default; 
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
