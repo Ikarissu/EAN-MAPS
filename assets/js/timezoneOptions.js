@@ -9,3 +9,4 @@ function GMT() {
   }
 }
 GMT();
+document.getElementById("timezone").value = "GMT-4";

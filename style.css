@@ -20,14 +20,15 @@
     z-index: 1000;
     border-radius: 0.5rem;
     margin: 0.5rem;
+    margin-top: 3rem;
 }
 
 /* Alinear Menú Derecho A La Derecha */
 .right-menu{
     right: 0.5rem;
-    width: 30vw;
+    width: 23vw;
+    overflow-x: hidden;
 }
-
 /* Títulos */
 .left-menu-title, .right-menu-title{
     padding: 1rem;
@@ -91,6 +92,13 @@
 .left-menu-options #vehicle:hover,
 .left-menu-options #clear-mode:hover {
     background-color: #417885;
+}
+
+/* Efecto Deshabilitado De Los Botones Del Menú Izquierdo */
+.left-menu-options #plane:disabled,
+.left-menu-options #vehicle:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* Fuente Y Color De Fondo Del Select2 */
@@ -169,23 +177,107 @@
     background: #284b53;
 }
 
+/* Opciones Del Menú Derecho */
+.right-menu-options {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    padding-top: 0;
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Distancias Buscadas */
+.distance-info {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+    border: 0.2rem solid #2e5863;
+    border-radius: 0.5rem;
+    background-color: #33616d;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 1rem;
+    color: #fff;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+/* Botón Para Guardar La Distancia Buscada */
+.save-button {
+    margin-left: auto;        /* lo lleva a la derecha */
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* centra el texto/icono */
+    padding: 0.5rem;
+    border: 0.15rem solid #2e5863;
+    border-radius: 0.5rem;
+    background-color: #417885;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Texto Del Botón */
+.button-text{
+    font-size: 0.5rem;
+}
+
+/* Texto y Botón Alineados */
+.save-text-and-button{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Reloj Con La Hora Actual Según La Zona Horaria */
+.tz-clock{
+    font-size: 1.1rem;
+}
 
 
+/* Poner Los Botones De Zoom Del Mapa En Línea Horizontal */
+.leaflet-control-zoom {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+}
 
+/* Paginación De Las Distancias Buscadas */
+.distance-pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+}
+/* Botones De La Paginación De Las Distancias Buscadas */
+.distance-pagination button{
+    padding: 0.4rem 0.8rem;
+    border: 0.15rem solid #2e5863;
+    border-radius: 0.4rem;
+    background-color: #417885;
+    color: #fff;
+    cursor: pointer;
+    font-family: "ProjectFont", sans-serif;
+}
+/* Efecto Deshabilitado De Los Botones De La Paginación */
+.distance-pagination button:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
+/* *** MAPA *** */
+
+/* Tamaño Base Del Mapa */
 #main-map {
-    height: 900px;
+    height: 100vh;
     width: auto;
 }
 
-.selected-mode {
-    border-color: #007bff; 
-    background-color: #e0f0ff; 
-    font-weight: bold;
-    cursor: default; 
-}
-
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.distance-info + .distance-info{
+    margin-top: 0.75rem;
 }

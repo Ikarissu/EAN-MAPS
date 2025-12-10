@@ -1,6 +1,5 @@
 $(function () {
   $("#timezone").select2({
-    placeholder: "Seleccione...",
     allowClear: true,
     width: "100%",
     dropdownParent: $(".left-menu"),

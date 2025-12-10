@@ -17,11 +17,136 @@ let markerA = null;
 let markerB = null;
 let mapClickListener = null; 
 
-
 // Botones de modo
 const planeBtn = document.getElementById('plane');
 const vehicleBtn = document.getElementById('vehicle');
 
+// Zona Horaria Seleccionada
+const timezoneSelect = document.getElementById('timezone');
+// Reloj Que Muestra La Hora Actual Según La Zona Seleccionada
+const tzClock = document.getElementById('tz-clock');
+
+// Lista De Distancias Buscadas
+const distanceList = document.getElementById('distance-list');
+// Indicador De Página
+const pageIndicator = document.getElementById('distance-page-indicator');
+// Botón De Anterior
+const prevBtn = document.getElementById('prev-distance');
+// Botón De Siguiente
+const nextBtn = document.getElementById('next-distance');
+// Sólo Se Muestran Dos Registros Por Página
+const PAGE_SIZE = 2;
+// Arreglo Con Las Distancias
+let distanceRecords = [];
+// Página Actual De La Páginación
+let currentPage = 1;
+
+
+
+// Renderizar Lista De Distancias Buscadas
+function renderDistanceList() {
+    // Calcular Las Páginas Total En Base A Los Registros Existentes
+    // Y La Cantidad De Registros Por Página
+    const totalPages = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
+    currentPage = Math.max(1, Math.min(currentPage, totalPages));
+
+    // Actualizar Indicador De Páginas Y Habilitar/Deshabilitar Botones
+    if (pageIndicator) {
+        const current = distanceRecords.length ? currentPage : 0;
+        pageIndicator.textContent = `Página ${current}/${totalPages}`;
+    }
+    if (prevBtn) prevBtn.disabled = currentPage <= 1 || !distanceRecords.length;
+    if (nextBtn) nextBtn.disabled = currentPage >= totalPages || !distanceRecords.length;
+
+    // Limpiar Contenedor De Distancias Si No Hay Ninguna
+    if (!distanceList) return;
+    distanceList.innerHTML = '';
+
+    // Mostrar Mensaje Si No Hay Registros
+    if (!distanceRecords.length) {
+        distanceList.innerHTML = '<div class="distance-info empty-distance">Sin búsquedas registradas.</div>';
+        return;
+    }
+
+    // Manejar Que Sólo Se Muestren Dos Registros Por Página
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const items = distanceRecords.slice(start, start + PAGE_SIZE);
+
+    // Insertar Las Tarjetas Con La Información De Las Distancias Buscadas
+    items.forEach(r => {
+        distanceList.insertAdjacentHTML(
+            'beforeend',
+            `<div class="distance-info">
+                ${r.type}: ${r.distance} Kilómetros
+                <div>
+                    <p>Hora de Salida (${r.tzLabel}): ${r.start_hour}</p>
+                    <p>Hora de Llegada Aproximada (${r.tzLabel}): ${r.end_hour}</p>
+                    <div class="save-text-and-button">
+                        <p>Presione Para Guardar:</p>
+                        <button class="save-button">
+                            <i class="bx bx-save save-btn"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>`
+        );
+    });
+}
+
+// Si Existe El Botón "Anterior", Cuando Se Presiona Decrementa Las Páginas
+// Siempre Que Sean Mayor a 1, Y Actualiza El Número De La Página Actual
+prevBtn?.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderDistanceList();
+    }
+});
+
+// Si Existe El Botón "Siguiente", Cuando Se Presiona Verifica Que Sea
+// La Última. Si No Lo Es, Incremente En 1 Y Actualiza El Número De La 
+// Página Actual
+nextBtn?.addEventListener('click', () => {
+    const totalPages = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderDistanceList();
+    }
+});
+
+// Obtener La Diferencia Horaria Estándar De La Zona Seleccionada.
+// Por Defecto Retorna -4 (Venezuela)
+function getSelectedTimezoneOffset() {
+    const tz = timezoneSelect?.value || 'GMT-4';
+    const match = tz.match(/GMT([+-]?)(\d+)/);
+    if (!match) return -4;
+    const sign = match[1] === '-' ? -1 : 1;
+    return sign * parseInt(match[2], 10);
+}
+
+// Formatear La Hora Obtenida
+function formatTimeWithOffset(timestampMs, offsetHours) {
+    const date = new Date(timestampMs + offsetHours * 3600000);
+    return date.toLocaleTimeString('es-VE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'UTC'
+    });
+}
+
+// Actualizar La Hora Actual Según La Zona Seleccionada
+function updateSelectedTimezoneClock() {
+    const offset = getSelectedTimezoneOffset();
+    const tzLabel = timezoneSelect?.value || 'GMT-4';
+    const now = Date.now();
+    const current = formatTimeWithOffset(now, offset);
+    if (tzClock) {
+        tzClock.textContent = `Hora Actual (${tzLabel}): ${current}`;
+    }
+}
+
+// Función Para Limpiar La Opción Activa
 function clearActiveMode() {
     // A. Eliminar el evento listener del mapa si existe
     if (mapClickListener) {
@@ -68,11 +193,29 @@ function PlanePointAB() {
 
             let distance = map.distance(_pointA, _pointB);
             distance = distance / 1000; 
-            let start_hour = new Date().toLocaleTimeString()
-            let end_hour = new Date(new Date().getTime() + (distance / 800) * 3600000).toLocaleTimeString();
-            document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia aerea: ${distance.toFixed(2)} kilometros <div>
-            <p>Hora de salida: ${start_hour}</p>
-            <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div>`);
+
+            // Obtener La Diferencia Horaria Estándar De La Zona Seleccionada
+            const offset = getSelectedTimezoneOffset();
+            // Marcar El Tiempo De Salida (Tiempo Actual)
+            const startTS = Date.now();
+            // Calcular El Tiempo Estimado De Salida Asumiendo 800 km/h
+            const endTS = startTS + (distance / 800) * 3600000;
+            // Mostar La Zona Horaria Seleccionada En El Reporte
+            const tzLabel = timezoneSelect?.value || 'GMT-4';
+            // Formatear La Hora De Salida Según La Zona Seleccionada
+            const start_hour = formatTimeWithOffset(startTS, offset);
+            // Formatear La Hora Estimada De Llegada Según La Zona Seleccionada
+            const end_hour = formatTimeWithOffset(endTS, offset);
+
+            // Generar El Reporte De Cada Distancia Aérea Buscada En El Menú Derecho
+            distanceRecords.push({
+                type: 'Distancia Aérea',
+                distance: distance.toFixed(2),
+                tzLabel,
+                start_hour,
+                end_hour
+            });
+            renderDistanceList();
         }else { 
             // Tercer clic: Reinicio de la ruta + eliminación de capas previas
             if (_polyline) {
@@ -189,15 +332,28 @@ function VehiclePointAB() {
                 let route = e.routes[0];
                 if (route) {
                     let distance = route.summary.totalDistance / 1000; 
-                    let start_hour = new Date().toLocaleTimeString()
-                    let end_hour = new Date(new Date().getTime() + (distance / 70) * 3600000).toLocaleTimeString();
-                    // Eliminar información de distancia anterior si existe
-                    document.querySelectorAll('.distance-info').forEach(el => el.remove());
+                    // Obtener La Diferencia Horaria Estándar De La Zona Seleccionada
+                    const offset = getSelectedTimezoneOffset();
+                    // Marcar El Tiempo De Salida (Tiempo Actual)
+                    const startTS = Date.now();
+                    // Calcular El Tiempo Estimado De Salida Asumiendo 70 km/h
+                    const endTS = startTS + (distance / 70) * 3600000;
+                    // Mostar La Zona Horaria Seleccionada En El Reporte
+                    const tzLabel = timezoneSelect?.value || 'GMT-4';
+                    // Formatear La Hora De Salida Según La Zona Seleccionada
+                    const start_hour = formatTimeWithOffset(startTS, offset);
+                    // Formatear La Hora Estimada De Llegada Según La Zona Seleccionada
+                    const end_hour = formatTimeWithOffset(endTS, offset);
 
-                    // Insertar el modal de distancia
-                    document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia vehicular: ${distance.toFixed(2)} kilometros <div>
-                        <p>Hora de salida: ${start_hour}</p>
-                        <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div></div>`);
+                    // Generar El Reporte De Cada Distancia Terrestre Buscada En El Menú Derecho
+                    distanceRecords.push({
+                        type: 'Distancia Terrestre',
+                        distance: distance.toFixed(2),
+                        tzLabel,
+                        start_hour,
+                        end_hour
+                    });
+                    renderDistanceList();
                 }
             }); 
             
@@ -228,6 +384,11 @@ function VehiclePointAB() {
     map.on('click', mapClickListener); 
 };
 
+// Llamar A La Función
+renderDistanceList();
+
+// Obtener El Botón Que Limpia La Selección
+const clearBtn = document.getElementById('clear-mode');
 
 //Manejadores de los botones en la interfaz
 if (planeBtn) {
@@ -253,3 +414,19 @@ if (vehicleBtn) {
         }
     });
 }
+
+// Limpiar La Opción Seleccionada Si Se Presionó El Botón
+if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+        clearActiveMode();
+        planeBtn?.classList.remove('selected-mode');
+        vehicleBtn?.classList.remove('selected-mode');
+        if (planeBtn) planeBtn.disabled = false;
+        if (vehicleBtn) vehicleBtn.disabled = false;
+    });
+}
+
+// Actualizar La Hora Actual Si Cambia La Selección
+timezoneSelect?.addEventListener('change', updateSelectedTimezoneClock);
+updateSelectedTimezoneClock();
+setInterval(updateSelectedTimezoneClock, 1000);
