@@ -99,6 +99,47 @@ function PlanePointAB() {
     map.on('click', mapClickListener); 
 };
 
+// Función para mostrar una notificación sencilla
+function showNotification(message, duration = 3000) {
+    // 1. Crear el elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = 'error-notification';
+    notification.textContent = message;
+
+    // 2. Aplicar estilos básicos
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #ff4d4d; /* Rojo para error */
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 10000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    `;
+
+    // 3. Añadir al cuerpo del documento y mostrar
+    document.body.appendChild(notification);
+    
+    // Forzar un repaint para asegurar la transición de opacidad
+    setTimeout(() => {
+        notification.style.opacity = 1;
+    }, 10);
+
+    // 4. Desaparecer y remover después de la duración
+    setTimeout(() => {
+        notification.style.opacity = 0;
+        // Esperar a que la transición termine antes de remover
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, duration);
+}
+
+
 function VehiclePointAB() { 
     clearActiveMode(); 
     mapClickListener = function(e) {
@@ -112,30 +153,51 @@ function VehiclePointAB() {
             markerB = L.marker(e.latlng).addTo(map);
             _pointB = e.latlng;
             routingControl = L.Routing.control({ 
-                // OPCIONES DE RUTA Y WAYPOINTS AÑADIDAS
                 waypoints: [
                     L.latLng(_pointA.lat, _pointA.lng), 
                     L.latLng(_pointB.lat, _pointB.lng)
                 ],
                 routeWhileDragging: false,
                 draggableWaypoints: false,
-                createMarker: function() { return null; }, // Evita que LRM añada sus propios marcadores
+                createMarker: function() { return null; },
                 lineOptions: {
                     styles: [{color: 'blue', opacity: 0.6, weight: 6}] 
                 }
             }).addTo(map); 
             
+            routingControl.on('routingerror', function(e) {
+                // Mensaje de error a mostrar al usuario
+                const errorMessage = "Error: No se encontró una ruta vehicular posible entre los puntos seleccionados. Por favor, intente con otras ubicaciones.";
+                
+                // Mostrar la notificación en pantalla
+                showNotification(errorMessage, 5000); 
+
+                // Limpiar la ruta y los marcadores para dejar la aplicación en un estado limpio
+                if (routingControl) {
+                    map.removeControl(routingControl);
+                    routingControl = null;
+                }
+                if (markerA) { map.removeLayer(markerA); }
+                if (markerB) { map.removeLayer(markerB); }
+                _pointA = null; // Reiniciar puntos para que el siguiente clic sea el Punto A
+                _pointB = null;
+                markerA = null;
+                markerB = null;
+            });
+
             routingControl.on('routesfound', function(e) {
-                // Asegurarse de que haya rutas encontradas
                 let route = e.routes[0];
                 if (route) {
                     let distance = route.summary.totalDistance / 1000; 
                     let start_hour = new Date().toLocaleTimeString()
                     let end_hour = new Date(new Date().getTime() + (distance / 70) * 3600000).toLocaleTimeString();
+                    // Eliminar información de distancia anterior si existe
+                    document.querySelectorAll('.distance-info').forEach(el => el.remove());
+
                     // Insertar el modal de distancia
                     document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia vehicular: ${distance.toFixed(2)} kilometros <div>
-            <p>Hora de salida: ${start_hour}</p>
-            <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div></div>`);
+                        <p>Hora de salida: ${start_hour}</p>
+                        <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div></div>`);
                 }
             }); 
             
@@ -143,11 +205,12 @@ function VehiclePointAB() {
             // Tercer clic: Reinicio de la ruta
             // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
             if (routingControl) {
-                map.removeControl(routingControl); // Elimina el controlador de la vista (Ruta Azul)
+                map.removeControl(routingControl);
                 routingControl = null;
             }
+            // Eliminar información de distancia anterior
+            document.querySelectorAll('.distance-info').forEach(el => el.remove());
             
-
             // 2. Limpieza de marcadores
             if (markerA) { map.removeLayer(markerA); }
             if (markerB) { map.removeLayer(markerB); }
