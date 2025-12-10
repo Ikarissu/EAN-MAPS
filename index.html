@@ -14,7 +14,7 @@
     <!-- CUSTOM CSS -->
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-    
+
 </head>
 
 <body>
@@ -48,12 +48,28 @@
                 <i class="bx bx-clock-dashed-half"></i>
                 <select id="timezone" name="timezone"></select>
             </div>
+            <div class="left-menu-item">
+                <i class="bx bx-clock"></i>
+                <div id="tz-clock" class="tz-clock"></div>
+            </div>
         </nav>
     </aside>
     <aside class="right-menu">
         <div class="right-menu-title">
             <i class="bx bx-location"></i>
             <label for="ubication-log">Ubicaciones Buscadas</label>
+        </div>
+        <div class="right-menu-options">
+            <div id="distance-list">
+                <div class="distance-info empty-distance">
+                    Sin búsquedas registradas.
+                </div>
+            </div>
+        </div>
+        <div class="distance-pagination">
+            <button id="prev-distance" type="button">◀</button>
+            <span id="distance-page-indicator">Página 0/1</span>
+            <button id="next-distance" type="button">▶</button>
         </div>
     </aside>
     <div id="main-map"></div>
