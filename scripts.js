@@ -68,7 +68,11 @@ function PlanePointAB() {
 
             let distance = map.distance(_pointA, _pointB);
             distance = distance / 1000; 
-            document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia aerea: ${distance.toFixed(2)} kilometros</div>`);
+            let start_hour = new Date().toLocaleTimeString()
+            let end_hour = new Date(new Date().getTime() + (distance / 800) * 3600000).toLocaleTimeString();
+            document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia aerea: ${distance.toFixed(2)} kilometros <div>
+            <p>Hora de salida: ${start_hour}</p>
+            <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div>`);
         }else { 
             // Tercer clic: Reinicio de la ruta + eliminación de capas previas
             if (_polyline) {
@@ -126,8 +130,12 @@ function VehiclePointAB() {
                 let route = e.routes[0];
                 if (route) {
                     let distance = route.summary.totalDistance / 1000; 
+                    let start_hour = new Date().toLocaleTimeString()
+                    let end_hour = new Date(new Date().getTime() + (distance / 70) * 3600000).toLocaleTimeString();
                     // Insertar el modal de distancia
-                    document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia vehicular: ${distance.toFixed(2)} kilometros</div>`);
+                    document.body.insertAdjacentHTML('beforeend', `<div class="distance-info" style="text-align: center; bottom: 10px; left: 10px; background: white; padding: 5px; border: 1px solid black;">Distancia vehicular: ${distance.toFixed(2)} kilometros <div>
+            <p>Hora de salida: ${start_hour}</p>
+            <p>Hora de llegada (Aproximada) ${end_hour} </p></div></div></div>`);
                 }
             }); 
             
