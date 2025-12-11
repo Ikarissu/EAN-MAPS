@@ -36,7 +36,7 @@ const nextBtn = document.getElementById("next-distance");
 // Sólo Se Muestran Dos Registros Por Página
 const PAGE_SIZE = 2;
 // Arreglo Con Las Distancias
-let distanceRecords = [];
+let distanceRecords = loadDistanceRecords();
 // Página Actual De La Páginación
 let currentPage = 1;
 
@@ -219,6 +219,8 @@ function PlanePointAB() {
         start_hour,
         end_hour,
       });
+      // Almacenar La Distancia Buscada
+      saveDistanceRecords(distanceRecords);
       renderDistanceList();
     } else {
       // Tercer clic: Reinicio de la ruta + eliminación de capas previas
@@ -408,6 +410,8 @@ function VehiclePointAB() {
             end_hour,
             instructions,
           });
+          // Almacenar La Distancia Buscada
+          saveDistanceRecords(distanceRecords);
           renderDistanceList();
         }
       });
