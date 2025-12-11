@@ -134,10 +134,12 @@ function renderDistanceList() {
                     <p>Punto de llegada: ${pointB_html}</p>
                     <p>Hora de Salida (${r.tzLabel}): ${r.start_hour}</p>
                     <p>Hora de Llegada Aproximada (${r.tzLabel}): ${r.end_hour}</p>
-                    <div class="save-text-and-button">
-                        <p>Presione Para Guardar:</p>
+                    <div class="distance-record-options">
                         <button class="save-button">
                             <i class="bx bx-save save-btn"></i>
+                        </button>
+                        <button class="show-route-button">
+                            <i class="bx bx-route"></i>
                         </button>
                     </div>
                 </div>
@@ -318,6 +320,8 @@ function PlanePointAB() {
                     lat: _pointB.lat,
                     lng: _pointB.lng,
                 },
+                pointA: _pointA,
+                pointB: _pointB,
               });
             saveDistanceRecords(distanceRecords);
             renderDistanceList();
@@ -537,6 +541,8 @@ function VehiclePointAB() {
                             lat: _pointB.lat,
                             lng: _pointB.lng,
                         },
+                        pointA: _pointA,
+                        pointB: _pointB,
                     });
                     saveDistanceRecords(distanceRecords);
                     renderDistanceList();
@@ -748,6 +754,14 @@ function generatePdf(record) {
 
 // Delegación de clic para el botón de guardar
 distanceList?.addEventListener("click", (e) => {
+  const showBtn = e.target.closest(".show-route-button");
+  if (showBtn) {
+    const card = showBtn.closest(".distance-info");
+    const idx = Number(card?.dataset.recordIndex);
+    const record = distanceRecords[idx];
+    if (record) showRecordOnMap(record);
+    return;
+  }
   const btn = e.target.closest(".save-button");
   if (!btn) return;
   const card = btn.closest(".distance-info");
