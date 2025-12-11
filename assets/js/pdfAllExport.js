@@ -12,7 +12,10 @@
 
   // Mostrar/ocultar modal
   const openModal = () => modal.removeAttribute("hidden");
-  const closeModal = () => modal.setAttribute("hidden", "hidden");
+  const closeModal = () => {
+    modal.setAttribute("hidden", "hidden");
+    form.reset(); // Limpiar todos los campos
+  };
 
   // Delegación de eventos de modal
   openBtn.addEventListener("click", openModal);
@@ -32,9 +35,9 @@
     // Mensaje de error si no existen registros que coincidan
     if (!filtered.length) {
       showNotification(
-        "No hay registros para exportar con esos filtros",
+        "No existen registros que coincidan con los filtros.",
         2000,
-        "warning"
+        "error"
       );
       return;
     }

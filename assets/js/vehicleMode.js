@@ -39,7 +39,7 @@ function VehiclePointAB() {
 
             routingControl.on("routingerror", function (e) {
                 // ... (Lógica de error existente) ...
-                showNotification("Error: No se encontró una ruta vehicular posible entre los puntos seleccionados. Por favor, intente con otras ubicaciones.", 5000, "error");
+                showNotification("Error: No se encontró una ruta vehicular posible entre los puntos seleccionados.", 5000, "error");
 
                 if (routingControl) {
                     map.removeControl(routingControl);

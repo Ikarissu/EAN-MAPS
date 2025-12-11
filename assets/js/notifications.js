@@ -2,8 +2,7 @@ function showNotification(message, duration = 3000, type = "error") {
   const bg =
     {
       error: "#ff4d4d",
-      info: "#22a4c5ff",
-      success: "#2e7d32",
+      info: "#39993eff",
     }[type] || "#333";
 
   const notification = document.createElement("div");
