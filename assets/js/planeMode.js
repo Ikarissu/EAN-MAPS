@@ -33,11 +33,13 @@ function PlanePointAB() {
             const end_hour = formatTimeWithOffset(endTS, offset);
 
             distanceRecords.push({
-                type: "Distancia Aérea",
+                type: "plane",
+                typeLabel: "Distancia Aérea",
                 distance: distance.toFixed(2),
                 tzLabel,
                 start_hour,
                 end_hour,
+                createdAt: new Date().toISOString(),
                 pointA_info: {
                 name: markerA.getPopup().getContent().match(/<b>(.*?) \((.*?)\)<\/b>/)?.[1] || "Origen", // Extraer nombre del popup
                 lat: _pointA.lat,

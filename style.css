@@ -11,7 +11,8 @@
 - DERECHO - HISTORIAL DE UBICACIONES BUSCADAS *** */
 
 /* Contenedores */
-.left-menu, .right-menu{
+.left-menu,
+.right-menu {
     background-color: #396974;
     font-family: "ProjectFont", sans-serif;
     color: #fff;
@@ -24,13 +25,15 @@
 }
 
 /* Alinear menú derecho a la derecha de la pantalla */
-.right-menu{
+.right-menu {
     right: 0.5rem;
     width: 25vw;
     overflow-x: hidden;
 }
+
 /* Títulos */
-.left-menu-title, .right-menu-title{
+.left-menu-title,
+.right-menu-title {
     padding: 1rem;
     padding-bottom: 0;
     font-size: 1.5rem;
@@ -41,18 +44,20 @@
 }
 
 /* Colocar padding inferior al título del menú derecho */
-.right-menu-title{
+.right-menu-title {
     padding-bottom: 1rem;
 }
 
 /* Íconos de los títulos */
-.left-menu-title .bx, .right-menu-title .bx{
+.left-menu-title .bx,
+.right-menu-title .bx {
     font-size: 3rem;
     line-height: 1;
 }
 
 /* Contenedor de las opciones y los íconos del menú izquierdo */
-.left-menu-item, .right-menu-item{
+.left-menu-item,
+.right-menu-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -60,12 +65,13 @@
 }
 
 /* Íconos de las opciones del menú izquierdo */
-.left-menu-item .bx, .right-menu-item .bx{
+.left-menu-item .bx,
+.right-menu-item .bx {
     font-size: 2rem;
 }
 
 /* Opciones del menú izquierdo */
-.left-menu-options{
+.left-menu-options {
     display: flex;
     flex-direction: column;
     padding: 1rem;
@@ -102,7 +108,7 @@
 }
 
 /* Fuente y color de fondo del Select2 */
-.select2-container .select2-selection--single{
+.select2-container .select2-selection--single {
     background-color: #33616d;
     border: 0.2rem solid #2e5863;
     font-family: "ProjectFont", sans-serif;
@@ -111,28 +117,28 @@
 }
 
 /* Fuente de las opciones del Select2 */
-.select2-container--default .select2-results__option{
+.select2-container--default .select2-results__option {
     font-family: "ProjectFont", sans-serif;
     font-size: 1rem;
 }
 
 /* Color de fuente del Select2 */
-.select2-container--default .select2-selection--single .select2-selection__placeholder{
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
     color: #fff;
 }
 
 /* Color del dropdown de las opciones del Select2 */
-.select2-container--default .select2-results > .select2-results__options{
+.select2-container--default .select2-results>.select2-results__options {
     background-color: #33616d;
 }
 
 /* Color de fuente de las opciones del Select2 */
-.select2-container--default .select2-results__option{
+.select2-container--default .select2-results__option {
     color: #fff;
 }
 
 /* Color de hover al seleccionar las opciones del Select2 */
-.select2-container--default .select2-results__option--highlighted[aria-selected]{
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #417885;
     color: #fff;
 }
@@ -144,7 +150,7 @@
 }
 
 /* Fuente y color del input de búsqueda de las opciones del Select2 */
-.select2-container--default .select2-search--dropdown .select2-search__field{
+.select2-container--default .select2-search--dropdown .select2-search__field {
     background: #2e5863;
     border: 0.12rem solid #2e5863;
     color: #fff;
@@ -157,23 +163,24 @@
 .left-menu .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #fff;
 }
+
 /* Color de la "X" del Select2 */
 .left-menu .select2-container--default .select2-selection--single .select2-selection__clear {
     color: #fff;
 }
 
 /* Ancho del scrollbar */
-.select2-container--default .select2-results__options::-webkit-scrollbar{
+.select2-container--default .select2-results__options::-webkit-scrollbar {
     width: 1rem;
 }
 
 /* Color del scrollbar thumb */
-.select2-container--default .select2-results__options::-webkit-scrollbar-thumb{
+.select2-container--default .select2-results__options::-webkit-scrollbar-thumb {
     background: #2e5863;
 }
 
 /* Color de fondo del scrollbar */
-.select2-container--default .select2-results__options::-webkit-scrollbar-track{
+.select2-container--default .select2-results__options::-webkit-scrollbar-track {
     background: #284b53;
 }
 
@@ -206,20 +213,21 @@
 }
 
 /* Espacio entre las cartas de las distancias buscadas */
-.distance-info + .distance-info{
+.distance-info+.distance-info {
     margin-top: 0.75rem;
 }
 
 /* Opciones de las distancias buscadas */
 .distance-record-options {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  left: 0.5rem;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    left: 0.5rem;
 }
 
 /* Botón para guardar la distancia buscada */
-.save-button, .show-route-button {
+.save-button,
+.show-route-button {
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -235,33 +243,34 @@
 }
 
 /* Texto del botón */
-.button-text{
+.button-text {
     font-size: 0.5rem;
 }
 
 /* Reloj con la hora actual según la zona horaria */
-.tz-clock{
+.tz-clock {
     font-size: 1.1rem;
 }
 
 
 /* Poner los botones de zoom del mapa en línea horizontal */
 .leaflet-control-zoom {
-  display: flex;
-  flex-direction: row;
-  gap: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
 }
 
 /* Paginación de las distancias buscadas */
-.distance-pagination{
+.distance-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
     padding: 0 1rem 1rem;
 }
+
 /* Botones de la paginación de las distancias buscadas */
-.distance-pagination button{
+.distance-pagination button {
     padding: 0.4rem 0.8rem;
     border: 0.15rem solid #2e5863;
     border-radius: 0.4rem;
@@ -270,10 +279,29 @@
     cursor: pointer;
     font-family: "ProjectFont", sans-serif;
 }
+
 /* Efecto deshabilitado de los botones de la paginación */
-.distance-pagination button:disabled{
+.distance-pagination button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* Color blanco para los puntos de salida y llegada en las distancias buscadas */
+.point-link {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Botón para exportar todas las distancias buscadas a PDF */
+.export-all-btn {
+    padding: 0.8rem 1rem;
+    border: 0.15rem solid #2e5863;
+    border-radius: 0.5rem;
+    background-color: #417885;
+    color: #fff;
+    cursor: pointer;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 1rem;
 }
 
 /* *** MAPA *** */
@@ -284,7 +312,116 @@
     width: auto;
 }
 
-.point-link{
-    text-decoration: none;
+/* MODAL PARA GENERAR REPORTES PDF */
+
+/* Centrar modal y oscurecer fondo */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Contenedor */
+.modal-content {
+    width: 90%;
+    max-width: 480px;
+    background: #f8f8f8;
+    color: #0f172a;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 2px solid #2e5863;
+}
+
+/* Encabezado */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #396974;
     color: #fff;
+    font-family: "ProjectFont", sans-serif;
+}
+
+/* Botón de cierre */
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* Cuerpo */
+.modal-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Agrupar los campos y definir fuente */
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-family: "ProjectFont", sans-serif;
+    color: #0f172a;
+}
+
+/* Colocar los inputs de fecha en línea horizontal */
+.modal-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Estilo personalizado para los inputs */
+.modal-row input[type="date"],
+.modal-body select {
+    flex: 1;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 0.95rem;
+    background: #fff;
+}
+
+/* Alinear a la derecha los botones de acciones */
+.modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+/* Estilos base de los botones */
+.modal-primary,
+.modal-secondary {
+    padding: 0.7rem 1.1rem;
+    border-radius: 0.5rem;
+    border: 0.12rem solid #2e5863;
+    font-family: "ProjectFont", sans-serif;
+    cursor: pointer;
+}
+
+/* Color para botón de generar PDF */
+.modal-primary {
+    background: #417885;
+    color: #fff;
+}
+
+/* Color para botón de cerrar */
+.modal-secondary {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* Ocultar todas las reglas overlay cuando ya la modal no se muestre (esté hidden) */
+.modal-overlay[hidden] {
+    display: none;
 }

@@ -75,11 +75,13 @@ function VehiclePointAB() {
 
                     // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS PARA renderDistanceList
                     distanceRecords.push({
-                        type: "Distancia Terrestre",
+                        type: "vehicle",
+                        typeLabel: "Distancia Terrestre",
                         distance: distance.toFixed(2),
                         tzLabel,
                         start_hour,
                         end_hour,
+                        createdAt: new Date().toISOString(),
                         instructions,
                         pointA_info: {
                             name: "Origen (Mapa)",

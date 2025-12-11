@@ -50,7 +50,7 @@ function renderDistanceList() {
         distanceList.insertAdjacentHTML(
             "beforeend",
             `<div class="distance-info" data-record-index="${globalIndex}">
-                ${r.type}: ${r.distance} Kilómetros
+                ${r.typeLabel || r.type}: ${r.distance} Kilómetros
                 <div>
                     <p>Punto de salida: ${pointA_html}</p>
                     <p>Punto de llegada: ${pointB_html}</p>

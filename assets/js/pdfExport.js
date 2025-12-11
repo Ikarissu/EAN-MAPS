@@ -5,13 +5,22 @@ function generatePdf(record) {
     return;
   }
 
+  // Dependiendo del modo en que se calculó la distancia, imprimir el nombre
+  const modeLabel =
+    record.typeLabel ||
+    (record.type === "plane" ? "Distancia Aérea" :
+     record.type === "vehicle" ? "Distancia Terrestre" :
+     (record.type || "Distancia"));
+
+  // Mostrar alerta de que el PDF se está generando
   showNotification("Generando PDF...", 1200, "info");
 
+  // Estructura y propiedades del PDF a generar
   const docDefinition = {
     content: [
       { text: "EAN-MAPS", style: "header" },
       {
-        text: `REPORTE DE ${(record.type || "").toUpperCase()}`,
+        text: `REPORTE DE ${modeLabel.toUpperCase()}`,
         style: "header",
       },
       {
@@ -86,7 +95,6 @@ function generatePdf(record) {
                 margin: [8, 6, 8, 10],
               },
             ],
-            // Instrucciones dentro del body
             ...(record.instructions?.length
               ? [
                   [
@@ -124,7 +132,8 @@ function generatePdf(record) {
     defaultStyle: { fontSize: 12 },
   };
 
+  // Esperar unos segundos antes de comenzar la descarga
   setTimeout(() => {
-    pdfMake.createPdf(docDefinition).download(`Reporte De ${record.type}.pdf`);
+    pdfMake.createPdf(docDefinition).download(`Reporte De ${modeLabel}.pdf`);
   }, 1000);
 }

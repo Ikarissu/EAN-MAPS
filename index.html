@@ -60,6 +60,9 @@
             <label for="ubication-log">Ubicaciones Buscadas</label>
         </div>
         <div class="right-menu-options">
+            <button id="export-all-pdf" type="button" class="export-all-btn">
+                Exportar PDF
+            </button>
             <div id="distance-list">
                 <div class="distance-info empty-distance">
                     Sin búsquedas registradas.
@@ -73,6 +76,38 @@
         </div>
     </aside>
     <div id="main-map"></div>
+
+    <div id="export-modal" class="modal-overlay" hidden>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Exportar PDF</h3>
+          <button type="button" id="close-export-modal" class="modal-close">✕</button>
+        </div>
+        <form id="export-filters-form" class="modal-body">
+          <label class="modal-field">
+            <span>Rango de fechas (opcional)</span>
+            <div class="modal-row">
+              <input type="date" id="filter-date-from" name="dateFrom">
+              <input type="date" id="filter-date-to" name="dateTo">
+            </div>
+          </label>
+
+          <label class="modal-field">
+            <span>Modalidad</span>
+            <select id="filter-mode" name="mode">
+              <option value="all">Todas</option>
+              <option value="plane">Aérea</option>
+              <option value="vehicle">Terrestre</option>
+            </select>
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" id="cancel-export-modal" class="modal-secondary">Cancelar</button>
+            <button type="submit" class="modal-primary">Generar PDF</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
 </body>
 <!-- LEAFTLET JS -->
@@ -122,6 +157,7 @@
 <script src="assets/js/reDrawDistanceRecords.js"></script>
 <!-- Eventos de los botones de guardar y redibujar ruta -->
 <script src="assets/js/distanceListDelegates.js"></script>
-
+<!-- Generación de PDF con todos los registros y según filtro -->
+<script src="assets/js/pdfAllExport.js"></script>
 
 </html>
