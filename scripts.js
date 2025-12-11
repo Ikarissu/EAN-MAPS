@@ -229,29 +229,38 @@ function updateSelectedTimezoneClock() {
 
 // Función Para Limpiar La Opción Activa
 function clearActiveMode() {
-    // 1. Limpiar el listener de clic del mapa (Notificación)
+    // 1. Limpiar el listener de clic del mapa (Notificación y VehiclePointAB)
     if (typeof mapClickListener !== 'undefined' && mapClickListener !== null) {
         map.off("click", mapClickListener);
         mapClickListener = null;
     }
     
-    // 2. Limpiar los listeners de clic de CADA marcador (Selección)
-    // 🚨 CAMBIO CLAVE: Pasamos la referencia de la función para removerla específicamente.
+    // 2. Limpiar los listeners de clic de CADA marcador (Selección de Avión)
     if (airportMarkers && airportMarkers.length > 0 && activeMarkerClickHandler) {
         airportMarkers.forEach(marker => {
-            // ¡SÓLO remueve el handler de selección! El handler del popup permanece.
             marker.off('click', activeMarkerClickHandler); 
         });
-        activeMarkerClickHandler = null; // Limpiar la referencia de la función
+        activeMarkerClickHandler = null;
     }
-
-    // 3. Limpieza de capas y estado
+    // 3. Limpieza de capas DE AMBOS MODOS
+    // Modo Avión: Limpieza de la polilínea
     if (_polyline) {
         map.removeLayer(_polyline);
     }
-    
+    // Modo Vehículo: Limpieza del control de ruta
+    if (routingControl) {
+        map.removeControl(routingControl); // Elimina el control de ruta del mapa
+        routingControl = null;             // Reinicia la variable
+    }
     map.closePopup();
-    
+    // 4. Limpieza de marcadores A y B (solo son temporales en VehiclePointAB)
+    if (markerA) {
+        map.removeLayer(markerA);
+    }
+    if (markerB) {
+        map.removeLayer(markerB);
+    }
+    // 5. Reinicio de variables de estado
     _pointA = null;
     _pointB = null;
     markerA = null;
@@ -533,32 +542,28 @@ function VehiclePointAB() {
                     renderDistanceList();
                 }
             });
-        } else {
-            // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
-            if (routingControl) {
-                map.removeControl(routingControl);
-                routingControl = null;
-            }
-            // Limpieza de la lista, ya que se regenerará en el próximo routesfound
-            document.querySelectorAll(".distance-info").forEach((el) => el.remove());
-
-            // 2. Limpieza de marcadores
-            if (markerA) {
-                map.removeLayer(markerA);
-            }
-            if (markerB) {
-                map.removeLayer(markerB);
-            }
-
-            // 3. Reinicio de variables de punto
-            _pointB = null;
-            markerB = null;
-
-            // 4. Nuevo punto A
-            _pointA = e.latlng;
-            markerA = L.marker(e.latlng).addTo(map);
-        }
-    };
+              } else {
+                          // Tercer clic: Reinicio de la ruta
+                          // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
+                          if (routingControl) {
+                              map.removeControl(routingControl);
+                              routingControl = null;
+                          }
+                          // Eliminar los marcadores anteriores
+                          if (markerA) {
+                              map.removeLayer(markerA);
+                          }
+                          if (markerB) {
+                              map.removeLayer(markerB);
+                          }
+                          // 2. Reinicio de variables de punto
+                          _pointB = null;
+                          markerB = null;
+                          // 3. Nuevo punto A
+                          _pointA = e.latlng;
+                          markerA = L.marker(e.latlng).addTo(map);
+                      }
+                  };
 
     map.on("click", mapClickListener);
 }
