@@ -71,7 +71,7 @@ const nextBtn = document.getElementById("next-distance");
 // Sólo Se Muestran Dos Registros Por Página
 const PAGE_SIZE = 2;
 // Arreglo Con Las Distancias
-let distanceRecords = [];
+let distanceRecords = loadDistanceRecords();
 // Página Actual De La Páginación
 let currentPage = 1;
 
@@ -310,6 +310,7 @@ function PlanePointAB() {
                     lng: _pointB.lng,
                 },
               });
+            saveDistanceRecords(distanceRecords);
             renderDistanceList();
             // --- FIN LÓGICA DE CÁLCULO Y DIBUJO ---
 
@@ -528,13 +529,11 @@ function VehiclePointAB() {
                             lng: _pointB.lng,
                         },
                     });
+                    saveDistanceRecords(distanceRecords);
                     renderDistanceList();
                 }
             });
         } else {
-            // Tercer clic: Reinicio de la ruta
-            // ... (Lógica de limpieza existente del else, se mantiene igual) ...
-
             // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
             if (routingControl) {
                 map.removeControl(routingControl);
