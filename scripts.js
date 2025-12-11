@@ -304,7 +304,10 @@ function PlanePointAB() {
 
             distanceRecords.push({
                 type: "Distancia Aérea",
-                distance: distance.toFixed(2),
+                distance: distance.toLocaleString("es-VE", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }),
                 tzLabel,
                 start_hour,
                 end_hour,
@@ -522,7 +525,10 @@ function VehiclePointAB() {
                     // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS PARA renderDistanceList
                     distanceRecords.push({
                         type: "Distancia Terrestre",
-                        distance: distance.toFixed(2),
+                        distance: distance.toLocaleString("es-VE", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }),
                         tzLabel,
                         start_hour,
                         end_hour,
