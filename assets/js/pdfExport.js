@@ -15,6 +15,12 @@ function generatePdf(record) {
   // Mostrar alerta de que el PDF se está generando
   showNotification("Generando PDF...", 1200, "info");
 
+  // Dar formato a la distancia en kilómetros
+  const fmtKm = (n) => new Intl.NumberFormat("es-ES", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(n));
+
   // Estructura y propiedades del PDF a generar
   const docDefinition = {
     content: [
@@ -43,7 +49,7 @@ function generatePdf(record) {
           body: [
             [
               {
-                text: "Distancia Recorrida",
+                text: `Distancia recorrida desde "${record.pointA_info?.name || "Origen"}" hasta "${record.pointB_info?.name || "Destino"}"`,
                 style: "label",
                 color: "#fff",
                 fillColor: "#396974",
