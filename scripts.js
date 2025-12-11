@@ -7,6 +7,40 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
+let airportMarkers = [];
+
+// Función para cargar y mostrar aeropuertos en el mapa
+fetch("json/yeison.json")
+  .then((response) => response.json())
+  .then((data) => {
+    data.forEach((airport) => {
+        // accede a las coordenadas correctamente desde el json
+        const lat = airport.geo_point_2d.lat;
+        const lon = airport.geo_point_2d.lon;
+
+        // Nombre IATA del aeropuerto
+        const iataCode = airport.iata; 
+        
+        // El resto de los datos (city, country, name)
+        if (lat && lon) { // Verificación para evitar errores si faltan datos
+          const marker = L.marker([lat, lon])
+            .addTo(map)
+            .bindPopup(
+              `<b>${airport.name} (${iataCode})</b><br>País: ${airport.country}`
+            );
+          airportMarkers.push(marker);
+        } else {
+            console.warn("Faltan coordenadas para el aeropuerto:", airport.name);
+        }
+    });
+  })
+  // Manejo de errores en el yeison
+  .catch((error) => {
+    console.error("Error al cargar los datos de aeropuertos:", error);
+  });
+
+
+
 // Variables globales para el estado del modo
 let routingControl = null;
 let _pointA = null;
@@ -15,6 +49,7 @@ let _polyline = null;
 let markerA = null;
 let markerB = null;
 let mapClickListener = null;
+let activeMarkerClickHandler = null;
 
 // Botones de modo
 const planeBtn = document.getElementById("plane");
@@ -42,11 +77,10 @@ let currentPage = 1;
 
 // Renderizar Lista De Distancias Buscadas
 function renderDistanceList() {
-  // Calcular Las Páginas Total En Base A Los Registros Existentes
-  // Y La Cantidad De Registros Por Página
+      // Calcular Las Páginas Total En Base A Los Registros Existentes
+      // Y La Cantidad De Registros Por Página
   const totalPages = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
   currentPage = Math.max(1, Math.min(currentPage, totalPages));
-
   // Actualizar Indicador De Páginas Y Habilitar/Deshabilitar Botones
   if (pageIndicator) {
     const current = distanceRecords.length ? currentPage : 0;
@@ -55,11 +89,9 @@ function renderDistanceList() {
   if (prevBtn) prevBtn.disabled = currentPage <= 1 || !distanceRecords.length;
   if (nextBtn)
     nextBtn.disabled = currentPage >= totalPages || !distanceRecords.length;
-
   // Limpiar Contenedor De Distancias Si No Hay Ninguna
   if (!distanceList) return;
   distanceList.innerHTML = "";
-
   // Mostrar Mensaje Si No Hay Registros
   if (!distanceRecords.length) {
     distanceList.innerHTML =
@@ -67,18 +99,39 @@ function renderDistanceList() {
     return;
   }
 
-  // Manejar Que Sólo Se Muestren Dos Registros Por Página
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const items = distanceRecords.slice(start, start + PAGE_SIZE);
+    // Manejar Que Sólo Se Muestren Dos Registros Por Página
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const items = distanceRecords.slice(start, start + PAGE_SIZE);
 
-  // Insertar Las Tarjetas Con La Información De Las Distancias Buscadas
-  items.forEach((r, idx) => {
-    const globalIndex = start + idx; // índice real en distanceRecords
-    distanceList.insertAdjacentHTML(
-      "beforeend",
-      `<div class="distance-info" data-record-index="${globalIndex}">
+    // Función auxiliar para formatear la información y crear el enlace
+    const createPointHTML = (pointInfo) => {
+        // Formatear las coordenadas a 6 decimales para precisión y legibilidad
+        const formattedCoords = `${pointInfo.lat.toFixed(6)}, ${pointInfo.lng.toFixed(6)}`;
+        
+        // Usamos un <a> con un atributo data-coords para el JS
+        // y mostramos el nombre del aeropuerto y las coordenadas limpias.
+        return `<a href="#" 
+                   class="point-link" 
+                   data-lat="${pointInfo.lat}" 
+                   data-lng="${pointInfo.lng}">
+                   ${pointInfo.name || 'Punto Desconocido'} (${formattedCoords})
+                </a>`;
+    };
+
+    // Insertar Las Tarjetas Con La Información De Las Distancias Buscadas
+    items.forEach((r, idx) => {
+        const globalIndex = start + idx; // índice real en distanceRecords
+        
+        const pointA_html = createPointHTML(r.pointA_info);
+        const pointB_html = createPointHTML(r.pointB_info);
+
+        distanceList.insertAdjacentHTML(
+            "beforeend",
+            `<div class="distance-info" data-record-index="${globalIndex}">
                 ${r.type}: ${r.distance} Kilómetros
                 <div>
+                    <p>Punto de salida: ${pointA_html}</p>
+                    <p>Punto de llegada: ${pointB_html}</p>
                     <p>Hora de Salida (${r.tzLabel}): ${r.start_hour}</p>
                     <p>Hora de Llegada Aproximada (${r.tzLabel}): ${r.end_hour}</p>
                     <div class="save-text-and-button">
@@ -89,8 +142,32 @@ function renderDistanceList() {
                     </div>
                 </div>
             </div>`
-    );
-  });
+        );
+    });
+    
+    // 3. Evento para realizar el zoom al punto
+    attachPointClickListeners();
+}
+
+function attachPointClickListeners() {
+    const pointLinks = document.querySelectorAll('.point-link');
+    
+    pointLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault(); // Evita que la página salte al hacer clic en el <a>
+
+            const lat = parseFloat(this.getAttribute('data-lat'));
+            const lng = parseFloat(this.getAttribute('data-lng'));
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+                // Mueve el mapa a las coordenadas y aplica un zoom apropiado
+                map.flyTo([lat, lng], 10, {
+                    duration: 1.5 // Duración de la animación en segundos
+                });
+                
+            }
+        });
+    });
 }
 
 // Si Existe El Botón "Anterior", Cuando Se Presiona Decrementa Las Páginas
@@ -152,98 +229,130 @@ function updateSelectedTimezoneClock() {
 
 // Función Para Limpiar La Opción Activa
 function clearActiveMode() {
-  // A. Eliminar el evento listener del mapa si existe
-  if (mapClickListener) {
-    map.off("click", mapClickListener);
-    mapClickListener = null;
-  }
-  if (routingControl) {
-    map.removeControl(routingControl);
-    routingControl = null;
-  }
+    // 1. Limpiar el listener de clic del mapa (Notificación)
+    if (typeof mapClickListener !== 'undefined' && mapClickListener !== null) {
+        map.off("click", mapClickListener);
+        mapClickListener = null;
+    }
+    
+    // 2. Limpiar los listeners de clic de CADA marcador (Selección)
+    // 🚨 CAMBIO CLAVE: Pasamos la referencia de la función para removerla específicamente.
+    if (airportMarkers && airportMarkers.length > 0 && activeMarkerClickHandler) {
+        airportMarkers.forEach(marker => {
+            // ¡SÓLO remueve el handler de selección! El handler del popup permanece.
+            marker.off('click', activeMarkerClickHandler); 
+        });
+        activeMarkerClickHandler = null; // Limpiar la referencia de la función
+    }
 
-  // B. Limpiar los dibujos del mapa (Layers)
-  if (_polyline && map.hasLayer(_polyline)) {
-    map.removeLayer(_polyline);
-  }
-  if (markerA && map.hasLayer(markerA)) {
-    map.removeLayer(markerA);
-  }
-  if (markerB && map.hasLayer(markerB)) {
-    map.removeLayer(markerB);
-  }
-  // D. Reiniciar variables de estado del modo
-  _pointA = null;
-  _pointB = null;
-  _polyline = null;
-  markerA = null;
-  markerB = null;
+    // 3. Limpieza de capas y estado
+    if (_polyline) {
+        map.removeLayer(_polyline);
+    }
+    
+    map.closePopup();
+    
+    _pointA = null;
+    _pointB = null;
+    markerA = null;
+    markerB = null;
+    _polyline = null;
 }
 
 //Siempre se limpia el modo activo antes de iniciar uno nuevo
 function PlanePointAB() {
-  clearActiveMode();
-  mapClickListener = function (e) {
-    if (!_pointA) {
-      // Primer clic: Punto A
-      markerA = L.marker(e.latlng).addTo(map);
-      _pointA = e.latlng;
-    } else if (!_pointB) {
-      // Segundo clic: Punto B
-      markerB = L.marker(e.latlng).addTo(map);
-      _pointB = e.latlng;
+    clearActiveMode();
 
-      _polyline = L.polyline([_pointA, _pointB], { color: "red" }).addTo(map);
+    // 1. Definimos la función de selección (Punto A/B/Reinicio) y la almacenamos.
+    activeMarkerClickHandler = function (e) {
+        const clickedMarker = e.target;
+        const clickedLatLng = e.latlng;
+        
+        clickedMarker.closePopup();
+        map.closePopup(); // Eliminar popup de advertencia
 
-      let distance = map.distance(_pointA, _pointB);
-      distance = distance / 1000;
+        if (!_pointA) {
+            // Primer clic: Establecer Punto A
+            markerA = clickedMarker;
+            _pointA = clickedLatLng;
+        } else if (!_pointB && clickedMarker !== markerA) {
+            // Segundo clic: Establecer Punto B
+            markerB = clickedMarker;
+            _pointB = clickedLatLng;
 
-      // Obtener La Diferencia Horaria Estándar De La Zona Seleccionada
-      const offset = getSelectedTimezoneOffset();
-      // Marcar El Tiempo De Salida (Tiempo Actual)
-      const startTS = Date.now();
-      // Calcular El Tiempo Estimado De Salida Asumiendo 800 km/h
-      const endTS = startTS + (distance / 800) * 3600000;
-      // Mostar La Zona Horaria Seleccionada En El Reporte
-      const tzLabel = timezoneSelect?.value || "GMT-4";
-      // Formatear La Hora De Salida Según La Zona Seleccionada
-      const start_hour = formatTimeWithOffset(startTS, offset);
-      // Formatear La Hora Estimada De Llegada Según La Zona Seleccionada
-      const end_hour = formatTimeWithOffset(endTS, offset);
+            // --- LÓGICA DE CÁLCULO Y DIBUJO ---
+            _polyline = L.polyline([_pointA, _pointB], { color: "red" }).addTo(map);
 
-      // Generar El Reporte De Cada Distancia Aérea Buscada En El Menú Derecho
-      distanceRecords.push({
-        type: "Distancia Aérea",
-        distance: distance.toFixed(2),
-        tzLabel,
-        start_hour,
-        end_hour,
-      });
-      renderDistanceList();
-    } else {
-      // Tercer clic: Reinicio de la ruta + eliminación de capas previas
-      if (_polyline) {
-        map.removeLayer(_polyline);
-      }
-      if (markerA) {
-        map.removeLayer(markerA);
-      }
-      if (markerB) {
-        map.removeLayer(markerB);
-      }
+            let distance = map.distance(_pointA, _pointB);
+            distance = distance / 1000;
 
-      _polyline = null;
-      _pointB = null;
-      markerB = null;
+            const offset = getSelectedTimezoneOffset();
+            const startTS = Date.now();
+            const endTS = startTS + (distance / 800) * 3600000;
+            const tzLabel = timezoneSelect?.value || "GMT-4";
+            const start_hour = formatTimeWithOffset(startTS, offset);
+            const end_hour = formatTimeWithOffset(endTS, offset);
 
-      // Nuevo punto A
-      _pointA = e.latlng;
-      markerA = L.marker(e.latlng).addTo(map);
+            distanceRecords.push({
+                type: "Distancia Aérea",
+                distance: distance.toFixed(2),
+                tzLabel,
+                start_hour,
+                end_hour,
+                pointA_info: {
+                name: markerA.getPopup().getContent().match(/<b>(.*?) \((.*?)\)<\/b>/)?.[1] || "Origen", // Extraer nombre del popup
+                lat: _pointA.lat,
+                lng: _pointA.lng,
+                },
+                pointB_info: {
+                    name: markerB.getPopup().getContent().match(/<b>(.*?) \((.*?)\)<\/b>/)?.[1] || "Destino",
+                    lat: _pointB.lat,
+                    lng: _pointB.lng,
+                },
+              });
+            renderDistanceList();
+            // --- FIN LÓGICA DE CÁLCULO Y DIBUJO ---
+
+        } else {
+            // Tercer clic: Reinicio de la ruta + Nuevo punto A
+            if (_polyline) {
+                map.removeLayer(_polyline);
+            }
+            _polyline = null;
+            _pointB = null;
+            markerB = null;
+
+            // Nuevo punto A
+            _pointA = clickedLatLng;
+            markerA = clickedMarker;
+        }
+    };
+
+    // 2. Definimos el listener del mapa para la notificación
+    mapClickListener = function (e) {
+        L.popup({
+            closeButton: false, 
+            autoClose: true,    
+            className: 'selection-warning-popup',
+            maxWidth: 300,
+            autoPan: false
+        })
+        .setLatLng(e.latlng)
+        .setContent("⚠️ Error de Selección:<br>Por favor, selecciona un marcador de aeropuerto.")
+        .openOn(map);
+    };
+
+    // 3. Adjuntar listeners
+
+    // Adjuntar la función ESPECÍFICA a los marcadores
+    if (airportMarkers && airportMarkers.length > 0) {
+        airportMarkers.forEach(marker => {
+            marker.on("click", activeMarkerClickHandler);
+        });
     }
-  };
 
-  // 3. Adjuntar el listener guardado al mapa
-  map.on("click", mapClickListener);
+    // Adjuntar listener de advertencia al mapa
+    map.on("click", mapClickListener);
 }
 
 // Función para mostrar una notificación sencilla
@@ -326,120 +435,133 @@ function showNotification(message, duration = 3000, type = "error") {
 }
 
 function VehiclePointAB() {
-  clearActiveMode();
-  mapClickListener = function (e) {
-    if (!_pointA) {
-      // Primer clic: Punto A
-      markerA = L.marker(e.latlng).addTo(map);
-      _pointA = e.latlng;
-    } else if (!_pointB) {
-      // Segundo clic: Punto B
-      markerB = L.marker(e.latlng).addTo(map);
-      _pointB = e.latlng;
-      showNotification("Determinando la ruta...", 2500, "info");
-      routingControl = L.Routing.control({
-        waypoints: [
-          L.latLng(_pointA.lat, _pointA.lng),
-          L.latLng(_pointB.lat, _pointB.lng),
-        ],
-        language: "es",
-        formatter: new L.Routing.Formatter({ language: "es" }),
-        routeWhileDragging: false,
-        draggableWaypoints: false,
-        createMarker: function () {
-          return null;
-        },
-        lineOptions: {
-          styles: [{ color: "blue", opacity: 0.6, weight: 6 }],
-        },
-        show: false,
-      }).addTo(map);
+    clearActiveMode();
+    mapClickListener = function (e) {
+        if (!_pointA) {
+            // Primer clic: Punto A
+            markerA = L.marker(e.latlng).addTo(map);
+            _pointA = e.latlng;
+        } else if (!_pointB) {
+            // Segundo clic: Punto B
+            markerB = L.marker(e.latlng).addTo(map);
+            _pointB = e.latlng;
+            showNotification("Determinando la ruta...", 2500, "info");
 
-      routingControl.on("routingerror", function (e) {
-        // Mensaje de error a mostrar al usuario
-        showNotification("Error: No se encontró una ruta vehicular posible entre los puntos seleccionados. Por favor, intente con otras ubicaciones.", 5000, "error");
+            // VERIFICACIÓN ADICIONAL PARA EVITAR EL ERROR
+            if (!_pointA || !_pointB) {
+                showNotification("Error de estado: Intente la selección de nuevo.", 3000, "error");
+                clearActiveMode(); // Limpieza forzada
+                return;
+            }
 
-        // Limpiar la ruta y los marcadores para dejar la aplicación en un estado limpio
-        if (routingControl) {
-          map.removeControl(routingControl);
-          routingControl = null;
+            routingControl = L.Routing.control({
+                // CAMBIO CLAVE: Usamos L.latLng(objeto) en lugar de propiedades separadas.
+                waypoints: [
+                    L.latLng(_pointA), 
+                    L.latLng(_pointB),
+                ],
+                language: "es",
+                formatter: new L.Routing.Formatter({ language: "es" }),
+                routeWhileDragging: false,
+                draggableWaypoints: false,
+                createMarker: function () {
+                    return null;
+                },
+                lineOptions: {
+                    styles: [{ color: "blue", opacity: 0.6, weight: 6 }],
+                },
+                show: false,
+            }).addTo(map);
+
+            routingControl.on("routingerror", function (e) {
+                // ... (Lógica de error existente) ...
+                showNotification("Error: No se encontró una ruta vehicular posible entre los puntos seleccionados. Por favor, intente con otras ubicaciones.", 5000, "error");
+
+                if (routingControl) {
+                    map.removeControl(routingControl);
+                    routingControl = null;
+                }
+                if (markerA) {
+                    map.removeLayer(markerA);
+                }
+                if (markerB) {
+                    map.removeLayer(markerB);
+                }
+                _pointA = null;
+                _pointB = null;
+                markerA = null;
+                markerB = null;
+            });
+
+            routingControl.on("routesfound", function (e) {
+                let route = e.routes[0];
+                if (route) {
+                    let distance = route.summary.totalDistance / 1000;
+                    const offset = getSelectedTimezoneOffset();
+                    const startTS = Date.now();
+                    const endTS = startTS + (distance / 70) * 3600000;
+                    const tzLabel = timezoneSelect?.value || "GMT-4";
+                    const start_hour = formatTimeWithOffset(startTS, offset);
+                    const end_hour = formatTimeWithOffset(endTS, offset);
+
+                    const instructions =
+                        route.instructions?.map(
+                            (instr, idx) => `${idx + 1}. ${instr.text}`
+                        ) || [];
+
+                    // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS PARA renderDistanceList
+                    distanceRecords.push({
+                        type: "Distancia Terrestre",
+                        distance: distance.toFixed(2),
+                        tzLabel,
+                        start_hour,
+                        end_hour,
+                        instructions,
+                        pointA_info: {
+                            name: "Origen (Mapa)",
+                            lat: _pointA.lat,
+                            lng: _pointA.lng,
+                        },
+                        pointB_info: {
+                            name: "Destino (Mapa)",
+                            lat: _pointB.lat,
+                            lng: _pointB.lng,
+                        },
+                    });
+                    renderDistanceList();
+                }
+            });
+        } else {
+            // Tercer clic: Reinicio de la ruta
+            // ... (Lógica de limpieza existente del else, se mantiene igual) ...
+
+            // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
+            if (routingControl) {
+                map.removeControl(routingControl);
+                routingControl = null;
+            }
+            // Limpieza de la lista, ya que se regenerará en el próximo routesfound
+            document.querySelectorAll(".distance-info").forEach((el) => el.remove());
+
+            // 2. Limpieza de marcadores
+            if (markerA) {
+                map.removeLayer(markerA);
+            }
+            if (markerB) {
+                map.removeLayer(markerB);
+            }
+
+            // 3. Reinicio de variables de punto
+            _pointB = null;
+            markerB = null;
+
+            // 4. Nuevo punto A
+            _pointA = e.latlng;
+            markerA = L.marker(e.latlng).addTo(map);
         }
-        if (markerA) {
-          map.removeLayer(markerA);
-        }
-        if (markerB) {
-          map.removeLayer(markerB);
-        }
-        _pointA = null; // Reiniciar puntos para que el siguiente clic sea el Punto A
-        _pointB = null;
-        markerA = null;
-        markerB = null;
-      });
+    };
 
-      routingControl.on("routesfound", function (e) {
-        let route = e.routes[0];
-        if (route) {
-          let distance = route.summary.totalDistance / 1000;
-          // Obtener La Diferencia Horaria Estándar De La Zona Seleccionada
-          const offset = getSelectedTimezoneOffset();
-          // Marcar El Tiempo De Salida (Tiempo Actual)
-          const startTS = Date.now();
-          // Calcular El Tiempo Estimado De Salida Asumiendo 70 km/h
-          const endTS = startTS + (distance / 70) * 3600000;
-          // Mostar La Zona Horaria Seleccionada En El Reporte
-          const tzLabel = timezoneSelect?.value || "GMT-4";
-          // Formatear La Hora De Salida Según La Zona Seleccionada
-          const start_hour = formatTimeWithOffset(startTS, offset);
-          // Formatear La Hora Estimada De Llegada Según La Zona Seleccionada
-          const end_hour = formatTimeWithOffset(endTS, offset);
-
-          // Obtener Instrucciones De La Ruta
-          const instructions =
-            route.instructions?.map(
-              (instr, idx) => `${idx + 1}. ${instr.text}`
-            ) || [];
-
-          // Generar El Reporte De Cada Distancia Terrestre Buscada En El Menú Derecho
-          distanceRecords.push({
-            type: "Distancia Terrestre",
-            distance: distance.toFixed(2),
-            tzLabel,
-            start_hour,
-            end_hour,
-            instructions,
-          });
-          renderDistanceList();
-        }
-      });
-    } else {
-      // Tercer clic: Reinicio de la ruta
-      // 1. LIMPIEZA DEL MODO VEHICULAR ANTERIOR
-      if (routingControl) {
-        map.removeControl(routingControl);
-        routingControl = null;
-      }
-      // Eliminar información de distancia anterior
-      document.querySelectorAll(".distance-info").forEach((el) => el.remove());
-
-      // 2. Limpieza de marcadores
-      if (markerA) {
-        map.removeLayer(markerA);
-      }
-      if (markerB) {
-        map.removeLayer(markerB);
-      }
-
-      // 3. Reinicio de variables de punto
-      _pointB = null;
-      markerB = null;
-
-      // 4. Nuevo punto A
-      _pointA = e.latlng;
-      markerA = L.marker(e.latlng).addTo(map);
-    }
-  };
-
-  map.on("click", mapClickListener);
+    map.on("click", mapClickListener);
 }
 
 // Llamar A La Función
