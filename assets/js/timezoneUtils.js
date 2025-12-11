@@ -31,6 +31,6 @@ function updateSelectedTimezoneClock() {
   const now = Date.now();
   const current = formatTimeWithOffset(now, offset);
   if (tzClock) {
-    tzClock.textContent = `Hora Actual (${tzLabel}): ${current}`;
+    tzClock.textContent = `Hora actual (${tzLabel}): ${current}`;
   }
 }

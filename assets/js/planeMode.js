@@ -34,8 +34,11 @@ function PlanePointAB() {
 
             distanceRecords.push({
                 type: "plane",
-                typeLabel: "Distancia Aérea",
-                distance: distance.toFixed(2),
+                typeLabel: "Distancia aérea",
+                distance: distance.toLocaleString("es-VE", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                        }),
                 tzLabel,
                 start_hour,
                 end_hour,

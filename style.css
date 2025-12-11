@@ -27,7 +27,7 @@
 /* Alinear menú derecho a la derecha de la pantalla */
 .right-menu {
     right: 0.5rem;
-    width: 25vw;
+    width: 28vw;
     overflow-x: hidden;
 }
 
@@ -222,7 +222,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    left: 0.5rem;
+    left: auto; 
 }
 
 /* Botón para guardar la distancia buscada */
@@ -232,7 +232,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem;
+    padding: 0.4rem;
     border: 0.15rem solid #2e5863;
     border-radius: 0.5rem;
     background-color: #417885;
@@ -302,6 +302,26 @@
     cursor: pointer;
     font-family: "ProjectFont", sans-serif;
     font-size: 1rem;
+}
+
+/* Ícono para indicar qué modalidad es la distancia guardada */
+.distance-icon{
+    font-size: 1.5rem;
+}
+
+/* Alinear icono y texto */
+.mode-header{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+/* Propiedades del texto */
+.mode-text{
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.1;
 }
 
 /* *** MAPA *** */

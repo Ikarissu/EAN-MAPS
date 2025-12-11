@@ -85,8 +85,8 @@
 
   // Permitir compatibilidad con registros previos
   function normalizeType(r) {
-    if (r.type === "Distancia Aérea") r.type = "plane";
-    if (r.type === "Distancia Terrestre") r.type = "vehicle";
+    if (r.type === "Distancia aérea") r.type = "plane";
+    if (r.type === "Distancia terrestre") r.type = "vehicle";
     return r;
   }
 
@@ -132,9 +132,9 @@
       const modeLabel =
         record.typeLabel ||
         (record.type === "plane"
-          ? "Distancia Aérea"
+          ? "Distancia aérea"
           : record.type === "vehicle"
-          ? "Distancia Terrestre"
+          ? "Distancia terrestre"
           : record.type || "Distancia");
       // Estructura y propiedades del PDF a generar
       content.push(
@@ -213,7 +213,7 @@
       ],
       [
         {
-          text: `Hora De Salida (${record.tzLabel})`,
+          text: `Hora de salida (${record.tzLabel})`,
           style: "label",
           color: "#fff",
           fillColor: "#396974",
@@ -231,7 +231,7 @@
       ],
       [
         {
-          text: `Hora De Llegada Estimada (${record.tzLabel})`,
+          text: `Hora de llegada estimada (${record.tzLabel})`,
           style: "label",
           color: "#fff",
           fillColor: "#396974",
@@ -249,34 +249,11 @@
       ],
     ];
 
-    // Fecha de creación (si existe)
-    if (record.createdAt) {
-      const readableDate = new Date(record.createdAt).toLocaleString();
-      body.push([
-        {
-          text: "Fecha de creación",
-          style: "label",
-          color: "#fff",
-          fillColor: "#396974",
-          margin: [8, 6, 8, 6],
-        },
-      ]);
-      body.push([
-        {
-          text: readableDate,
-          style: "value",
-          color: "#000",
-          fillColor: "#f8f8f8",
-          margin: [8, 6, 8, 10],
-        },
-      ]);
-    }
-
     // Lista de instrucciones para las distancias terrestres
     if (record.instructions?.length) {
       body.push([
         {
-          text: "Instrucciones De Ruta",
+          text: "Instrucciones de ruta",
           style: "label",
           color: "#fff",
           fillColor: "#396974",

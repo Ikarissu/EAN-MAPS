@@ -8,8 +8,8 @@ function generatePdf(record) {
   // Dependiendo del modo en que se calculó la distancia, imprimir el nombre
   const modeLabel =
     record.typeLabel ||
-    (record.type === "plane" ? "Distancia Aérea" :
-     record.type === "vehicle" ? "Distancia Terrestre" :
+    (record.type === "plane" ? "Distancia aérea" :
+     record.type === "vehicle" ? "Distancia terrestre" :
      (record.type || "Distancia"));
 
   // Mostrar alerta de que el PDF se está generando
@@ -67,7 +67,7 @@ function generatePdf(record) {
             ],
             [
               {
-                text: `Hora De Salida (${record.tzLabel})`,
+                text: `Hora de salida (${record.tzLabel})`,
                 style: "label",
                 color: "#fff",
                 fillColor: "#396974",
@@ -85,7 +85,7 @@ function generatePdf(record) {
             ],
             [
               {
-                text: `Hora De Llegada Estimada (${record.tzLabel})`,
+                text: `Hora de llegada estimada (${record.tzLabel})`,
                 style: "label",
                 color: "#fff",
                 fillColor: "#396974",
@@ -105,7 +105,7 @@ function generatePdf(record) {
               ? [
                   [
                     {
-                      text: "Instrucciones De Ruta",
+                      text: "Instrucciones de ruta",
                       style: "label",
                       color: "#fff",
                       fillColor: "#396974",

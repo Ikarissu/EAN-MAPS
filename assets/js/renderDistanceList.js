@@ -47,15 +47,25 @@ function renderDistanceList() {
         const pointA_html = createPointHTML(r.pointA_info);
         const pointB_html = createPointHTML(r.pointB_info);
 
+        const modeIcon =
+            r.type === "plane"
+                ? '<i class="bx bx-plane-alt distance-icon"></i>'
+                : r.type === "vehicle"
+                ? '<i class="bx bx-car distance-icon"></i>'
+                : '<i class="bx bx-map distance-icon"></i>';
+
         distanceList.insertAdjacentHTML(
             "beforeend",
             `<div class="distance-info" data-record-index="${globalIndex}">
-                ${r.typeLabel || r.type}: ${r.distance} Kilómetros
+                <div class="mode-header">
+                  <span class="mode-icon">${modeIcon}</span>
+                  <span class="mode-text">${r.typeLabel || r.type}: ${r.distance} Kilómetros</span>
+                </div>
                 <div>
                     <p>Punto de salida: ${pointA_html}</p>
                     <p>Punto de llegada: ${pointB_html}</p>
-                    <p>Hora de Salida (${r.tzLabel}): ${r.start_hour}</p>
-                    <p>Hora de Llegada Aproximada (${r.tzLabel}): ${r.end_hour}</p>
+                    <p>Hora de salida (${r.tzLabel}): ${r.start_hour}</p>
+                    <p>Hora de llegada aproximada (${r.tzLabel}): ${r.end_hour}</p>
                     <div class="distance-record-options">
                         <button class="save-button">
                             <i class="bx bx-save save-btn"></i>

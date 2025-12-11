@@ -1,7 +1,7 @@
 function showRecordOnMap(record) {
   clearActiveMode();
 
-  if (record.type === "Distancia Aérea") {
+  if (record.type === "Distancia aérea") {
     _pointA = record.pointA;
     _pointB = record.pointB;
     if (_pointA && _pointB) {
@@ -10,7 +10,7 @@ function showRecordOnMap(record) {
       _polyline = L.polyline([_pointA, _pointB], { color: "red" }).addTo(map);
       map.fitBounds(_polyline.getBounds(), { padding: [50, 50] });
     }
-  } else if (record.type === "Distancia Terrestre") {
+  } else if (record.type === "Distancia terrestre") {
     _pointA = record.pointA;
     _pointB = record.pointB;
     if (_pointA && _pointB) {
