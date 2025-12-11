@@ -60,6 +60,9 @@
             <label for="ubication-log">Ubicaciones Buscadas</label>
         </div>
         <div class="right-menu-options">
+            <button id="export-all-pdf" type="button" class="export-all-btn">
+                Exportar PDF
+            </button>
             <div id="distance-list">
                 <div class="distance-info empty-distance">
                     Sin búsquedas registradas.
@@ -74,6 +77,38 @@
     </aside>
     <div id="main-map"></div>
 
+    <div id="export-modal" class="modal-overlay" hidden>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Exportar PDF</h3>
+          <button type="button" id="close-export-modal" class="modal-close">✕</button>
+        </div>
+        <form id="export-filters-form" class="modal-body">
+          <label class="modal-field">
+            <span>Rango de fechas (opcional)</span>
+            <div class="modal-row">
+              <input type="date" id="filter-date-from" name="dateFrom">
+              <input type="date" id="filter-date-to" name="dateTo">
+            </div>
+          </label>
+
+          <label class="modal-field">
+            <span>Modalidad</span>
+            <select id="filter-mode" name="mode">
+              <option value="all">Todas</option>
+              <option value="plane">Aérea</option>
+              <option value="vehicle">Terrestre</option>
+            </select>
+          </label>
+
+          <div class="modal-actions">
+            <button type="button" id="cancel-export-modal" class="modal-secondary">Cancelar</button>
+            <button type="submit" class="modal-primary">Generar PDF</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
 </body>
 <!-- LEAFTLET JS -->
 <script src="dist/leaflet.js"></script>
@@ -86,13 +121,43 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <!-- CUSTOM JS -->
-<!-- Zonas Horarias Disponibles Para Seleccionar (En Base A Hora Del Dispositivo) -->
+ <!-- Zonas horarias disponibles para seleccionar (en base a la hora del dispositivo) -->
 <script src="assets/js/timezoneOptions.js"></script>
-<!-- Inicialización De Select2 Para Zonas Horarias -->
+<!-- Inicialización de Select2 para zonas horarias -->
 <script src="assets/js/select2Gmt.js"></script>
-<!-- Guardar Y Cargar Registros De Distancia Con localStorage -->
+<!-- Guardar y cargar registros de distancia con localStorage -->
 <script src="assets/js/saveAndLoadDistanceRecords.js"></script>
-
-<script src="scripts.js"></script>
+<!-- Inicialización del mapa con Leaflet -->
+<script src="assets/js/initializeMap.js"></script>
+<!-- Carga y despliegue de aeropuertos -->
+<script src="assets/js/airportsLayer.js"></script>
+<!-- Estado global de modalidades -->
+<script src="assets/js/state.js"></script>
+<!-- Referencias a elementos DOM (modalidad, zona horaria, reloj, paginación) -->
+<script src="assets/js/domRefs.js"></script>
+<!-- Renderizar la lista de distancias calculadas y mostrar en pantalla -->
+<script src="assets/js/renderDistanceList.js"></script>
+<!-- Controles de paginación de la lista de distancias -->
+<script src="assets/js/paginationControls.js"></script>
+<!-- Utilidades de zona horaria -->
+<script src="assets/js/timezoneUtils.js"></script>
+<!-- Limpieza de modo activo -->
+<script src="assets/js/mapCleanup.js"></script>
+<!-- Modo aéreo (selección A/B y cálculo) -->
+<script src="assets/js/planeMode.js"></script>
+<!-- Modo terrestre (selección A/B y cálculo) -->
+<script src="assets/js/vehicleMode.js"></script>
+<!-- Notificaciones -->
+<script src="assets/js/notifications.js"></script>
+<!-- Inicialización de elementos UI -->
+<script src="assets/js/uiHandlers.js"></script>
+<!-- Generación de PDF -->
+<script src="assets/js/pdfExport.js"></script>
+<!-- Redibujar las distancias guardadas -->
+<script src="assets/js/reDrawDistanceRecords.js"></script>
+<!-- Eventos de los botones de guardar y redibujar ruta -->
+<script src="assets/js/distanceListDelegates.js"></script>
+<!-- Generación de PDF con todos los registros y según filtro -->
+<script src="assets/js/pdfAllExport.js"></script>
 
 </html>
