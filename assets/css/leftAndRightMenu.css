@@ -31,6 +31,8 @@
 .right-menu-title .bx {
     font-size: 3rem;
     line-height: 1;
+    cursor: pointer;
+    user-select: none;
 }
 
 /* Contenedor de las opciones y los íconos del menú izquierdo */
@@ -51,6 +53,11 @@
 /* ------------------------------------------------------------------ */
 
 /* *** Propiedades específicas para menú izquierdo *** */
+
+/* Posición base del menú izquierdo */
+.left-menu {
+    left: 0.5rem;
+}
 
 /* Opciones del menú izquierdo */
 .left-menu-options {
@@ -175,6 +182,11 @@
 
 /* *** Propiedades específicas para menú derecho *** */
 
+/* Posición base del menú derecho */
+.right-menu {
+    right: 0.5rem;
+}
+
 /* Alinear menú derecho a la derecha de la pantalla */
 .right-menu {
     right: 0.5rem;
@@ -213,7 +225,8 @@
     word-break: break-word;
     overflow: hidden;
     position: relative;
-    padding-right: 4rem; /* ajusta según el ancho total de los botones */
+    padding-right: 4rem;
+    /* ajusta según el ancho total de los botones */
 }
 
 /* Espacio entre las cartas de las distancias buscadas */
@@ -226,7 +239,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    left: auto; 
+    left: auto;
 }
 
 /* Botón para guardar la distancia buscada */
@@ -296,12 +309,12 @@
 }
 
 /* Ícono para indicar qué modalidad es la distancia guardada */
-.distance-icon{
+.distance-icon {
     font-size: 1.5rem;
 }
 
 /* Alinear icono y texto de modalidad */
-.mode-header{
+.mode-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -309,8 +322,128 @@
 }
 
 /* Propiedades del texto */
-.mode-text{
+.mode-text {
     font-size: 1.05rem;
     font-weight: 600;
     line-height: 1.1;
+}
+
+/* *** Medidas responsivas *** */
+
+/* *** Máx. 1024 *** */
+
+@media (max-width: 1024px) {
+
+    /* Menús más anchos */
+    .left-menu {
+        width: 25vw;
+    }
+
+    .right-menu {
+        width: 30vw;
+    }
+}
+
+/* *** Máx. 768 *** */
+
+/* *** Pliegue/despliegue de los menús izquierdo y derecho *** */
+
+@media (max-width: 768px) {
+
+    /* *** Propiedades para ambos menús *** */
+
+    /* Menús más delgados */
+    .left-menu,
+    .right-menu {
+        width: 30vw;
+        transition: transform 0.25s ease;
+        overflow: hidden;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Cuando el menú está plegado, sólo se deja el ícono visible como pestaña */
+    .left-menu:not(.is-open) {
+        transform: translateX(calc(-100% + 3.6rem));
+    }
+
+    .right-menu:not(.is-open) {
+        transform: translateX(calc(100% - 3.6rem));
+    }
+
+    /* Cuando el menú está plegado, todo el contenido interno está oculto */
+    .left-menu:not(.is-open) .left-menu-options,
+    .left-menu:not(.is-open) .left-menu-title label,
+    .right-menu:not(.is-open) .right-menu-title label,
+    .right-menu:not(.is-open) .right-menu-options,
+    .right-menu:not(.is-open) .distance-pagination {
+        display: none;
+    }
+
+    /* Cuando el menú está plegado, el ícono de los títulos está del lado derecho y el texto del lado izquierdo */
+    .left-menu:not(.is-open) .left-menu-title {
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+    }
+
+    .right-menu:not(.is-open) .right-menu-title {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    /* Cuando el menú está desplegado, todos los elementos están visibles */
+    .left-menu.is-open,
+    .right-menu.is-open {
+        transform: translateX(0);
+    }
+
+    /* Íconos del título más pequeños */
+    .left-menu-title .bx,
+    .right-menu-title .bx {
+        font-size: 2rem;
+    }
+
+    .left-menu-title,
+    .right-menu-title {
+        font-size: 1rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+
+    /* *** Propiedades específicas para menú izquierdo *** */
+
+    /* Padding del título del menú izquierdo */
+    .left-menu-title {
+        padding: 1rem;
+    }
+
+    .left-menu-item,
+    .left-menu-options #plane,
+    .left-menu-options #vehicle,
+    .left-menu-options #clear-mode,
+    .select2-container .select2-selection--single,
+    .select2-container--default .select2-results__option,
+    .select2-container--default .select2-search--dropdown .select2-search__field,
+    .tz-clock {
+        font-size: 0.8rem;
+    }
+
+    .left-menu-options{
+        padding-top: 0;
+    }
+
+    /* ------------------------------------------------------------------ */
+
+    /* *** Propiedades específicas para menú derecho *** */
+
+    .right-menu {
+        width: 35vw;
+    }
+
+    .export-all-btn,
+    .distance-info,
+    .distance-pagination,
+    .mode-text {
+        font-size: 0.8rem;
+    }
 }

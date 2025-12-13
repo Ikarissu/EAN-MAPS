@@ -26,10 +26,10 @@
 <body>
     <aside class="left-menu" id="left-menu" aria-expanded="true">
         <div class="left-menu-title">
-            <i class="bx bx-location-pin"></i>
+            <i class="bx bx-location-pin left-menu-toggle" role="button" aria-label="Abrir/cerrar menú izquierdo"></i>
             <label for="mode">EAN-MAPS</label>
         </div>
-        <nav class="left-menu-options" id="left-menu-options">
+        <nav class="left-menu-options">
             <div class="left-menu-item">
                 <i class="bx bx-trip"></i>
                 <label for="mode">Modalidad</label>
@@ -60,9 +60,9 @@
             </div>
         </nav>
     </aside>
-    <aside class="right-menu">
+    <aside class="right-menu" id="right-menu" aria-expanded="true">
         <div class="right-menu-title">
-            <i class="bx bx-location"></i>
+            <i class="bx bx-location right-menu-toggle" role="button" aria-label="Abrir/cerrar menú derecho"></i>
             <label for="ubication-log">Ubicaciones buscadas</label>
         </div>
         <div class="right-menu-options">
@@ -165,5 +165,48 @@
 <script src="assets/js/distanceListDelegates.js"></script>
 <!-- Generación de PDF con todos los registros y según filtro -->
 <script src="assets/js/pdfAllExport.js"></script>
+
+
+
+<script>
+        // ...existing code...
+    // Toggle de menús en móviles usando el ícono del título como pestaña
+    (function () {
+      const leftMenu = document.getElementById('left-menu');
+      const rightMenu = document.getElementById('right-menu');
+      const leftToggleIcon = document.querySelector('.left-menu-toggle');
+      const rightToggleIcon = document.querySelector('.right-menu-toggle');
+    
+      function setExpanded(menuEl, expanded) {
+        menuEl.classList.toggle('is-open', expanded);
+        menuEl.setAttribute('aria-expanded', String(expanded));
+      }
+    
+      function toggleMenu(menuEl) {
+        const expanded = !menuEl.classList.contains('is-open');
+        setExpanded(menuEl, expanded);
+      }
+    
+      function applyInitialMobileState() {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        setExpanded(leftMenu, !isMobile);   // móvil: plegado; escritorio: abierto
+        setExpanded(rightMenu, !isMobile);
+      }
+    
+      applyInitialMobileState();
+      window.addEventListener('resize', applyInitialMobileState);
+    
+      // Clic en el ícono grande del título abre/cierra
+      leftToggleIcon?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu(leftMenu);
+      });
+      rightToggleIcon?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu(rightMenu);
+      });
+    })();
+    // ...existing code...
+</script>
 
 </html>
