@@ -16,7 +16,7 @@ const prevBtn = document.getElementById("prev-distance");
 // Botón de "Siguiente"
 const nextBtn = document.getElementById("next-distance");
 // Mostrar dos registros por página
-let PAGE_SIZE = getPageSizeByWidth();
+let PAGE_SIZE = getPageSizeByWidth() || 2;
 // Obtener las distancias buscadas
 let distanceRecords = loadDistanceRecords();
 // Página actual de la páginación
@@ -25,12 +25,13 @@ let currentPage = 1;
 // Calcular PAGE_SIZE según resolución
 function getPageSizeByWidth() {
   const w = window.innerWidth;
-  if (w < 1400) return 1;
+  if (w < 1450) return 1;
+  return 2;
 }
 
 // Recalcula al redimensionar y re-renderiza si cambia
 window.addEventListener('resize', () => {
-  const newSize = getPageSizeByWidth();
+  const newSize = getPageSizeByWidth() || 2;
   if (newSize !== PAGE_SIZE) {
     PAGE_SIZE = newSize;
     renderDistanceList();

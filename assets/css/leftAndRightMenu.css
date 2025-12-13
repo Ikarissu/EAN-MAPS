@@ -1,14 +1,4 @@
-/* *** FUENTE DEL PROYECTO *** */
-@font-face {
-    font-family: "ProjectFont";
-    src: url("./assets/fonts/OpenSauceOne-ExtraBold.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* *** MENÚS:
-- IZQUIERDO - MODALIDAD Y ZONA HORARIA 
-- DERECHO - HISTORIAL DE UBICACIONES BUSCADAS *** */
+/* *** Propiedades para ambos menús *** */
 
 /* Contenedores */
 .left-menu,
@@ -24,13 +14,6 @@
     margin-top: 3rem;
 }
 
-/* Alinear menú derecho a la derecha de la pantalla */
-.right-menu {
-    right: 0.5rem;
-    width: 28vw;
-    overflow-x: hidden;
-}
-
 /* Títulos */
 .left-menu-title,
 .right-menu-title {
@@ -41,11 +24,6 @@
     align-items: center;
     gap: 0.5rem;
     line-height: 1.2;
-}
-
-/* Colocar padding inferior al título del menú derecho */
-.right-menu-title {
-    padding-bottom: 1rem;
 }
 
 /* Íconos de los títulos */
@@ -64,11 +42,15 @@
     font-size: 1.2rem;
 }
 
-/* Íconos de las opciones del menú izquierdo */
+/* Íconos de las opciones de los menús */
 .left-menu-item .bx,
 .right-menu-item .bx {
     font-size: 2rem;
 }
+
+/* ------------------------------------------------------------------ */
+
+/* *** Propiedades específicas para menú izquierdo *** */
 
 /* Opciones del menú izquierdo */
 .left-menu-options {
@@ -184,6 +166,27 @@
     background: #284b53;
 }
 
+/* Reloj con la hora actual según la zona horaria */
+.tz-clock {
+    font-size: 1.1rem;
+}
+
+/* ------------------------------------------------------------------ */
+
+/* *** Propiedades específicas para menú derecho *** */
+
+/* Alinear menú derecho a la derecha de la pantalla */
+.right-menu {
+    right: 0.5rem;
+    width: 28vw;
+    overflow-x: hidden;
+}
+
+/* Colocar padding inferior al título del menú derecho */
+.right-menu-title {
+    padding-bottom: 1rem;
+}
+
 /* Opciones del menú derecho */
 .right-menu-options {
     display: flex;
@@ -210,6 +213,7 @@
     word-break: break-word;
     overflow: hidden;
     position: relative;
+    padding-right: 4rem; /* ajusta según el ancho total de los botones */
 }
 
 /* Espacio entre las cartas de las distancias buscadas */
@@ -245,19 +249,6 @@
 /* Texto del botón */
 .button-text {
     font-size: 0.5rem;
-}
-
-/* Reloj con la hora actual según la zona horaria */
-.tz-clock {
-    font-size: 1.1rem;
-}
-
-
-/* Poner los botones de zoom del mapa en línea horizontal */
-.leaflet-control-zoom {
-    display: flex;
-    flex-direction: row;
-    gap: 0.2rem;
 }
 
 /* Paginación de las distancias buscadas */
@@ -309,7 +300,7 @@
     font-size: 1.5rem;
 }
 
-/* Alinear icono y texto */
+/* Alinear icono y texto de modalidad */
 .mode-header{
     display: flex;
     align-items: center;
@@ -322,126 +313,4 @@
     font-size: 1.05rem;
     font-weight: 600;
     line-height: 1.1;
-}
-
-/* *** MAPA *** */
-
-/* Tamaño base del mapa */
-#main-map {
-    height: 100vh;
-    width: auto;
-}
-
-/* MODAL PARA GENERAR REPORTES PDF */
-
-/* Centrar modal y oscurecer fondo */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-}
-
-/* Contenedor */
-.modal-content {
-    width: 90%;
-    max-width: 480px;
-    background: #f8f8f8;
-    color: #0f172a;
-    border-radius: 0.75rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    border: 2px solid #2e5863;
-}
-
-/* Encabezado */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: #396974;
-    color: #fff;
-    font-family: "ProjectFont", sans-serif;
-}
-
-/* Botón de cierre */
-.modal-close {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 1.4rem;
-    cursor: pointer;
-}
-
-/* Cuerpo */
-.modal-body {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-/* Agrupar los campos y definir fuente */
-.modal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    font-family: "ProjectFont", sans-serif;
-    color: #0f172a;
-}
-
-/* Colocar los inputs de fecha en línea horizontal */
-.modal-row {
-    display: flex;
-    gap: 0.5rem;
-}
-
-/* Estilo personalizado para los inputs */
-.modal-row input[type="date"],
-.modal-body select {
-    flex: 1;
-    padding: 0.55rem 0.75rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 0.5rem;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 0.95rem;
-    background: #fff;
-}
-
-/* Alinear a la derecha los botones de acciones */
-.modal-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
-}
-
-/* Estilos base de los botones */
-.modal-primary,
-.modal-secondary {
-    padding: 0.7rem 1.1rem;
-    border-radius: 0.5rem;
-    border: 0.12rem solid #2e5863;
-    font-family: "ProjectFont", sans-serif;
-    cursor: pointer;
-}
-
-/* Color para botón de generar PDF */
-.modal-primary {
-    background: #417885;
-    color: #fff;
-}
-
-/* Color para botón de cerrar */
-.modal-secondary {
-    background: #e2e8f0;
-    color: #0f172a;
-}
-
-/* Ocultar todas las reglas overlay cuando ya la modal no se muestre (esté hidden) */
-.modal-overlay[hidden] {
-    display: none;
 }

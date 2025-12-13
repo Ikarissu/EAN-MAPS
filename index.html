@@ -12,18 +12,24 @@
     <!-- SELECT2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
     <!-- CUSTOM CSS -->
-    <link rel="stylesheet" href="style.css" />
+    <!-- Menús izquierdo y derecho -->
+    <link rel="stylesheet" href="assets/css/leftAndRightMenu.css" />
+    <!-- Mapa y fuente -->
+    <link rel="stylesheet" href="assets/css/mapAndFont.css" />
+    <!-- Modal de generación PDF -->
+    <link rel="stylesheet" href="assets/css/pdfModal.css" />
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
 
 </head>
 
 <body>
-    <aside class="left-menu">
+    <aside class="left-menu" id="left-menu" aria-expanded="true">
         <div class="left-menu-title">
             <i class="bx bx-location-pin"></i>
             <label for="mode">EAN-MAPS</label>
         </div>
-        <nav class="left-menu-options">
+        <nav class="left-menu-options" id="left-menu-options">
             <div class="left-menu-item">
                 <i class="bx bx-trip"></i>
                 <label for="mode">Modalidad</label>
@@ -121,7 +127,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <!-- CUSTOM JS -->
- <!-- Zonas horarias disponibles para seleccionar (en base a la hora del dispositivo) -->
+<!-- Zonas horarias disponibles para seleccionar (en base a la hora del dispositivo) -->
 <script src="assets/js/timezoneOptions.js"></script>
 <!-- Inicialización de Select2 para zonas horarias -->
 <script src="assets/js/select2Gmt.js"></script>
