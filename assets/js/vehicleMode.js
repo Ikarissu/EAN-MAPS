@@ -106,6 +106,7 @@ function VehiclePointAB() {
           });
           saveDistanceRecords(distanceRecords);
           renderDistanceList();
+          window.openBottomMenu?.();
         }
       });
     } else {

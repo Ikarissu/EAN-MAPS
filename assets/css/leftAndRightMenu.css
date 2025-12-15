@@ -96,6 +96,10 @@
     cursor: not-allowed;
 }
 
+.left-menu-options-group .left-menu-item {
+  margin-bottom: 1rem;
+}
+
 /* Fuente y color de fondo del Select2 */
 .select2-container .select2-selection--single {
     background-color: #33616d;

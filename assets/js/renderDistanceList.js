@@ -1,6 +1,9 @@
 // Renderizar lista de distancias buscadas
 function renderDistanceList() {
-    // Calcular el total de páginas en base a los registros existentes
+  // Ir a la última página donde quedó el nuevo registro
+  currentPage = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
+
+  // Calcular el total de páginas en base a los registros existentes
   const totalPages = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
   currentPage = Math.max(1, Math.min(currentPage, totalPages));
   // Actualizar indicador de páginas y habilitar/deshabilitar botones
@@ -81,6 +84,9 @@ function renderDistanceList() {
     
     // 3. Evento para realizar el zoom al punto
     attachPointClickListeners();
+
+    // Abrir el menú inferior al terminar de renderizar
+    window.openBottomMenu?.();
 }
 
 function attachPointClickListeners() {

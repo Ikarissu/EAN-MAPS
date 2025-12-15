@@ -58,6 +58,7 @@ function PlanePointAB() {
               });
             saveDistanceRecords(distanceRecords);
             renderDistanceList();
+            window.openBottomMenu?.();
             // --- FIN LÓGICA DE CÁLCULO Y DIBUJO ---
 
         } else {

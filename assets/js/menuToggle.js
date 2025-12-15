@@ -18,6 +18,13 @@
     setExpanded(target, willExpand);
   }
 
+  // Abrir el menú derecho (inferior en móviles) cuando se calcule una distancia
+  window.openBottomMenu = () => {
+    if (!rightMenu) return;
+    setExpanded(rightMenu, true);
+    setExpanded(leftMenu, false);
+  };
+
   // Estado inicial del menú: si la pantalla tiene "max-width: 768px", los menús inician plegados
   function applyInitialMobileState() {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
