@@ -63,7 +63,39 @@ function VehiclePointAB() {
       });
 
       routingControl.on("routesfound", function (e) {
-        let route = e.routes[0];
+        // Guardar las rutas alternativas (excluir la ruta principal en index 0)
+        const alternatives = (e.routes || []).slice(1).map((r) => {
+          const distKm = r.summary?.totalDistance
+            ? r.summary.totalDistance / 1000
+            : 0;
+          const instr = r.instructions
+            ? r.instructions.map((instr, idx) => `${idx + 1}. ${instr.text}`)
+            : [];
+
+          // Normalizar coordenadas a {lat,lng}
+          const coords = (r.coordinates || []).map((c) => {
+            if (c && typeof c.lat === "number" && typeof c.lng === "number") {
+              return { lat: c.lat, lng: c.lng };
+            }
+            if (Array.isArray(c) && c.length >= 2) {
+              // Algunos motores devuelven [lng, lat]
+              const maybeLat = Number(c[1]);
+              const maybeLng = Number(c[0]);
+              return { lat: maybeLat, lng: maybeLng };
+            }
+            return null;
+          }).filter(Boolean);
+
+          return {
+            distance: distKm,
+            instructions: instr,
+            coords,
+            summary: r.summary || {},
+          };
+        });
+
+        // Selección principal (primera ruta)
+        let route = e.routes && e.routes[0] ? e.routes[0] : null;
         if (route) {
           let distance = route.summary.totalDistance / 1000;
           const offset = getSelectedTimezoneOffset();
@@ -74,11 +106,24 @@ function VehiclePointAB() {
           const end_hour = formatTimeWithOffset(endTS, offset);
 
           const instructions =
-            route.instructions?.map(
-              (instr, idx) => `${idx + 1}. ${instr.text}`
-            ) || [];
+            route.instructions?.map((instr, idx) => `${idx + 1}. ${instr.text}`) ||
+            [];
 
-          // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS PARA renderDistanceList
+          // Preparar la información de la ruta principal (raw) para poder restaurarla luego
+          const primaryRoute = {
+            distanceKm: distance,
+            instructions: instructions,
+            // coordenadas si están disponibles en route.coordinates
+            coords: (route.coordinates || []).map(c => {
+              if (c && typeof c.lat === 'number' && typeof c.lng === 'number') return {lat: c.lat, lng: c.lng};
+              if (Array.isArray(c) && c.length >= 2) return { lat: Number(c[1]), lng: Number(c[0]) };
+              return null;
+            }).filter(Boolean),
+            endTS: endTS,
+            summary: route.summary || {}
+          };
+
+          // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS Y las alternativas
           distanceRecords.push({
             type: "vehicle",
             typeLabel: "Distancia terrestre",
@@ -89,8 +134,14 @@ function VehiclePointAB() {
             tzLabel,
             start_hour,
             end_hour,
+            // startTS numérico para poder recalcular horas al cambiar alternativa
+            startTS,
             createdAt: new Date().toISOString(),
             instructions,
+            // Guardar alternativas (puede incluir la ruta principal como alternativa 0)
+            alternatives,
+            selectedAlternativeIndex: 0,
+            primaryRoute,
             pointA_info: {
               name: "Origen (Mapa)",
               lat: _pointA.lat,

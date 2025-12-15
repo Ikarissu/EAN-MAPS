@@ -248,7 +248,8 @@
 
 /* Botón para guardar la distancia buscada */
 .save-button,
-.show-route-button {
+.show-route-button,
+.alt-route-button {
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -654,7 +655,8 @@
 
   /* Fuente más pequeña y padding para botones de opciones de las distancias buscadas */
   .save-button,
-  .show-route-button {
+  .show-route-button,
+  .alt-route-button {
     font-size: 1.3rem;
     padding: 0.35rem;
   }
