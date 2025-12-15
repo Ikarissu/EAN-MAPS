@@ -143,6 +143,14 @@
         padding: 0.5rem 0.7rem;
     }
 
+    /* Inputs de fecha a ancho completo dentro de la fila */
+    .modal-row input[type="date"] {
+        width: 100%;
+        flex: 1 1 100%;
+        box-sizing: border-box;
+        display: block;
+    }
+
     /* Acciones apiladas y a ancho completo */
     .modal-actions {
         flex-direction: column;
@@ -183,6 +191,14 @@
     .modal-body select {
         font-size: 0.88rem;
     }
+
+    /* Inputs de fecha a ancho completo dentro de la fila */
+    .modal-row input[type="date"] {
+        width: 100%;
+        flex: 1 1 100%;
+        box-sizing: border-box;
+        display: block;
+    }
 }
 
 /* *** Máx. 320 *** */
@@ -217,6 +233,14 @@
     .modal-body select {
         padding: 0.45rem 0.65rem;
         font-size: 0.85rem;
+    }
+
+    /* Inputs de fecha a ancho completo dentro de la fila */
+    .modal-row input[type="date"] {
+        width: 100%;
+        flex: 1 1 100%;
+        box-sizing: border-box;
+        display: block;
     }
 
     /* Botones más compactos */
