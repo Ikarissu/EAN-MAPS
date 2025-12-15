@@ -4,6 +4,8 @@
   const rightMenu = document.getElementById("right-menu");
   const leftToggleIcon = document.querySelector(".left-menu-toggle");
   const rightToggleIcon = document.querySelector(".right-menu-toggle");
+  const leftTitle = document.querySelector(".left-menu-title");
+  const rightTitle = document.querySelector(".right-menu-title");
 
   // Expandir el menú si se detecta la clase "is-open"
   function setExpanded(menuEl, expanded) {
@@ -41,6 +43,16 @@
     toggleExclusive(leftMenu, rightMenu);
   });
   rightToggleIcon?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleExclusive(rightMenu, leftMenu);
+  });
+
+  // Títulos clickeables: permitir toggle al tocar toda el área del título
+  leftTitle?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleExclusive(leftMenu, rightMenu);
+  });
+  rightTitle?.addEventListener("click", (e) => {
     e.stopPropagation();
     toggleExclusive(rightMenu, leftMenu);
   });

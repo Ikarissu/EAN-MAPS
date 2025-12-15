@@ -32,6 +32,10 @@
     font-family: "ProjectFont", sans-serif;
 }
 
+.modal-header label{
+    font-size: 1.2rem;
+}
+
 /* Botón de cierre */
 .modal-close {
     background: transparent;
