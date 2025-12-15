@@ -57,7 +57,7 @@ function PlanePointAB() {
                 pointB: _pointB,
               });
             saveDistanceRecords(distanceRecords);
-            renderDistanceList();
+            renderDistanceList({ jumpToLast: true });
             window.openBottomMenu?.();
             // --- FIN LÓGICA DE CÁLCULO Y DIBUJO ---
 

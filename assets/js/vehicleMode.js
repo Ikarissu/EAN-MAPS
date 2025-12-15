@@ -105,7 +105,7 @@ function VehiclePointAB() {
             pointB: _pointB,
           });
           saveDistanceRecords(distanceRecords);
-          renderDistanceList();
+          renderDistanceList({ jumpToLast: true });
           window.openBottomMenu?.();
         }
       });

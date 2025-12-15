@@ -13,7 +13,6 @@ function showNotification(message, duration = 3000, type = "error") {
         position: fixed;
         top: 20px;
         right: 20px;
-        left: 20px;
         background-color: ${bg};
         color: white;
         padding: 15px;

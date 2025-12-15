@@ -32,7 +32,7 @@ if (vehicleBtn) {
 // Limpiar la opción seleccionada si se presionó el botón
 if (clearBtn) {
   clearBtn.addEventListener("click", function () {
-    clearActiveMode();
+    clearRouteOnly();
     planeBtn?.classList.remove("selected-mode");
     vehicleBtn?.classList.remove("selected-mode");
     if (planeBtn) planeBtn.disabled = false;

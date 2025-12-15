@@ -1,11 +1,17 @@
 // Renderizar lista de distancias buscadas
-function renderDistanceList() {
-  // Ir a la última página donde quedó el nuevo registro
-  currentPage = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
+function renderDistanceList(opts = {}) {
+  const { jumpToLast = false } = opts;
 
   // Calcular el total de páginas en base a los registros existentes
   const totalPages = Math.max(1, Math.ceil(distanceRecords.length / PAGE_SIZE));
-  currentPage = Math.max(1, Math.min(currentPage, totalPages));
+  
+  // Solo saltar a la última página cuando se solicite explícitamente
+  if (jumpToLast || !currentPage) {
+    currentPage = totalPages;
+  } else {
+    currentPage = Math.max(1, Math.min(currentPage, totalPages));
+  }
+
   // Actualizar indicador de páginas y habilitar/deshabilitar botones
   if (pageIndicator) {
     const current = distanceRecords.length ? currentPage : 0;
@@ -14,9 +20,11 @@ function renderDistanceList() {
   if (prevBtn) prevBtn.disabled = currentPage <= 1 || !distanceRecords.length;
   if (nextBtn)
     nextBtn.disabled = currentPage >= totalPages || !distanceRecords.length;
+
   // Limpiar contenedor de distancias si no hay ninguna
   if (!distanceList) return;
   distanceList.innerHTML = "";
+  
   // Mostrar mensaje si no hay registros
   if (!distanceRecords.length) {
     distanceList.innerHTML =
