@@ -109,3 +109,120 @@
 .modal-overlay[hidden] {
     display: none;
 }
+
+/* *** Máx. 425 *** */
+@media (max-width: 425px) {
+    /* Contenedor más angosto para móviles */
+    .modal-content {
+        width: 92%;
+        max-width: 420px;
+    }
+
+    /* Header con menos padding y fuente menor */
+    .modal-header {
+        padding: 0.85rem;
+        font-size: 1rem;
+    }
+
+    /* Cuerpo con padding y separación reducidos */
+    .modal-body {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    /* Filas en columna para evitar desbordes */
+    .modal-row {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    /* Inputs y select más compactos */
+    .modal-row input[type="date"],
+    .modal-body select {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+    }
+
+    /* Acciones apiladas y a ancho completo */
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
+    /* Botones full-width con padding reducido */
+    .modal-primary,
+    .modal-secondary {
+        width: 100%;
+        padding: 0.65rem 1rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* *** Máx. 375 *** */
+
+@media (max-width: 375px) {
+    /* Bordes ligeramente más redondeados */
+    .modal-content {
+        border-radius: 0.65rem;
+    }
+
+    /* Header aún más compacto */
+    .modal-header {
+        padding: 0.75rem;
+    }
+
+    /* Menos padding y gap en el cuerpo */
+    .modal-body {
+        padding: 0.85rem;
+        gap: 0.7rem;
+    }
+
+    /* Inputs/select con fuente menor */
+    .modal-row input[type="date"],
+    .modal-body select {
+        font-size: 0.88rem;
+    }
+}
+
+/* *** Máx. 320 *** */
+
+@media (max-width: 320px) {
+    /* Contenedor casi full-width y radios menores */
+    .modal-content {
+        width: 95%;
+        max-width: 300px;
+        border-radius: 0.6rem;
+    }
+
+    /* Header con padding mínimo y texto menor */
+    .modal-header {
+        padding: 0.7rem;
+        font-size: 0.95rem;
+    }
+
+    /* Cuerpo con menos padding y separación */
+    .modal-body {
+        padding: 0.75rem;
+        gap: 0.6rem;
+    }
+
+    /* Separación vertical más corta entre campos */
+    .modal-field {
+        gap: 0.3rem;
+    }
+
+    /* Controles con padding y fuente reducidos */
+    .modal-row input[type="date"],
+    .modal-body select {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.85rem;
+    }
+
+    /* Botones más compactos */
+    .modal-primary,
+    .modal-secondary {
+        padding: 0.6rem 0.9rem;
+        font-size: 0.9rem;
+    }
+}

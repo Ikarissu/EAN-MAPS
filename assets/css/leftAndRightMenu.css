@@ -447,3 +447,283 @@
         font-size: 0.8rem;
     }
 }
+
+/* Ocultar el menú de instrucciones de leaftlet */
+.leaflet-right .leaflet-routing-container.leaflet-routing-container-hide {
+  display: none;
+}
+
+/* *** Máx. 425 *** */
+
+/* Colocar el menú izquierdo arriba y el menú derecho abajo */
+
+@media (max-width: 425px) {
+
+  /* *** Propiedades para ambos menús *** */
+
+  /* Ocupar casi todo el ancho y hacer transición verticalmente */
+  .left-menu,
+  .right-menu {
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+    transition: transform 0.25s ease;
+    overflow: hidden;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Cuando están plegados, ocultar contenido interno */
+  .left-menu:not(.is-open) .left-menu-options,
+  .left-menu:not(.is-open) .left-menu-title label,
+  .right-menu:not(.is-open) .right-menu-title label,
+  .right-menu:not(.is-open) .right-menu-options,
+  .right-menu:not(.is-open) .distance-pagination {
+    display: none;
+  }
+
+  /* Todo el menú plegado actúa como botón (barra clickeable) */
+  .left-menu:not(.is-open),
+  .right-menu:not(.is-open) {
+    cursor: pointer;
+  }
+
+  /* Evitar selección accidental del texto del título */
+  .left-menu-title,
+  .right-menu-title {
+    user-select: none;
+  }
+
+  /* Cuando están desplegados, todo el contenido es visible */
+  .left-menu.is-open,
+  .right-menu.is-open {
+    transform: translateY(0);
+  }
+
+  /* Íconos de los títulos más pequeños */
+
+  .left-menu-title .bx,
+  .right-menu-title .bx {
+    font-size: 1.6rem;
+  }
+
+  /* Íconos de las opciones más pequeños */
+  .left-menu-item .bx,
+  .right-menu-item .bx {
+    font-size: 1.4rem;
+  }
+
+  /* Títulos compactos */
+  .left-menu-title,
+  .right-menu-title {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* Tamaño de fuente más pequeño */
+  .left-menu-item,
+  .left-menu-options #plane,
+  .left-menu-options #vehicle,
+  .left-menu-options #clear-mode,
+  .select2-container .select2-selection--single,
+  .select2-container--default .select2-results__option,
+  .select2-container--default .select2-search--dropdown .select2-search__field,
+  .tz-clock,
+  .export-all-btn,
+  .distance-info,
+  .distance-pagination,
+  .mode-text {
+    font-size: 0.8rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+
+  /* *** Propiedades específicas para menú izquierdo *** */
+
+  /* Menú anclado arriba */
+  .left-menu {
+    top: 0.5rem;
+    bottom: auto;
+    margin-top: 0.5rem;
+  }
+
+  /* Cuando está plegado, el menú se oculta hacia arriba dejando la pestaña visible */
+  .left-menu:not(.is-open) {
+    transform: translateY(calc(-100% + 3.6rem));
+  }
+
+  /* Alinear los elementos como filas */
+  .left-menu-options-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  /* Ocupar el ancho disponible */
+  .left-menu-options-group .left-menu-item {
+    flex: 1 1 45%;
+    min-width: 9rem;
+  }
+
+  /* Botones más compactos al estar en fila */
+  .left-menu-options-group #plane,
+  .left-menu-options-group #vehicle,
+  .left-menu-options-group #clear-mode {
+    padding: 0.8rem;
+    width: 100%;
+  }
+
+  /* ------------------------------------------------------------------ */
+
+  /* *** Propiedades específicas para menú derecho *** */
+
+  /* Menú anclado abajo */
+  .right-menu {
+    bottom: 0.5rem;
+    top: auto;
+    margin-top: 0;
+  }
+
+  /* Cuando está plegado, el menú se oculta hacia abajo dejando la pestaña visible */
+  .right-menu:not(.is-open) {
+    transform: translateY(calc(100% - 3.6rem));
+  }
+
+}
+
+/* *** Máx. 375 *** */
+
+@media (max-width: 375px) {
+
+  /* *** Propiedades para ambos menús *** */
+
+  /* Íconos de los títulos más pequeños */
+  .left-menu-title .bx,
+  .right-menu-title .bx {
+    font-size: 1.4rem;
+  }
+
+  /* Íconos de opciones más pequeños */
+  .left-menu-item .bx,
+  .right-menu-item .bx {
+    font-size: 1.25rem;
+  }
+
+  /* Padding menor en los títulos de los menús */
+  .left-menu-title,
+  .right-menu-title {
+    padding: 0.6rem 0.8rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+
+  /* *** Propiedades específicas para menú izquierdo *** */
+
+  /* Espacio entre las opciones del menú izquierdo */
+  .left-menu-options-group {
+    gap: 0.4rem;
+  }
+  
+  /* Los items ocupan ancho con un mínimo para mantener legibilidad */
+  .left-menu-options-group .left-menu-item {
+    flex: 1 1 48%;
+    min-width: 8.5rem;
+  }
+
+  /* Botones más compactos en disposición en fila */
+  .left-menu-options-group #plane,
+  .left-menu-options-group #vehicle,
+  .left-menu-options-group #clear-mode {
+    padding: 0.7rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+
+  /* *** Propiedades específicas para menú derecho *** */
+
+  /* Padding para la información de las distancias buscadas */
+  .distance-info {
+    padding-right: 3.5rem;
+  }
+
+  /* Fuente más pequeña y padding para botones de opciones de las distancias buscadas */
+  .save-button,
+  .show-route-button {
+    font-size: 1.3rem;
+    padding: 0.35rem;
+  }
+
+}
+
+/* *** Máx. 320 *** */
+
+@media (max-width: 320px) {
+
+  /* *** Propiedades para ambos menús *** */
+
+  /* Íconos de títulos más pequeños */
+  .left-menu-title .bx,
+  .right-menu-title .bx {
+    font-size: 1.2rem;
+  }
+
+  /* Íconos de opciones más pequeños */
+  .left-menu-item .bx,
+  .right-menu-item .bx {
+    font-size: 1.1rem;
+  }
+
+  /* Padding y fuente menor en los títulos de los menús */
+  .left-menu-title,
+  .right-menu-title {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  /* Bordes redondeados y margen */
+  .left-menu,
+  .right-menu {
+    border-radius: 0.4rem;
+    margin: 0.4rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+  
+  /* *** Propiedades específicas para menú izquierdo *** */
+  
+  /* Espacio entre las opciones del menú izquierdo */
+  .left-menu-options-group {
+    gap: 0.35rem;
+  }
+  
+  /* Los items ocupan ancho con un mínimo para mantener legibilidad */
+  .left-menu-options-group .left-menu-item {
+    flex: 1 1 48%;
+    min-width: 8.5rem;
+  }
+
+  /* Botones del menú izquierdo con padding más compacto */
+  .left-menu-options-group #plane,
+  .left-menu-options-group #vehicle,
+  .left-menu-options-group #clear-mode {
+    padding: 0.65rem;
+  }
+
+  /* ------------------------------------------------------------------ */
+  
+  /* *** Propiedades específicas para menú derecho *** */
+
+  /* Padding reducido en las distancias buscadas */
+  .distance-info {
+    padding: 0.8rem;
+    padding-right: 3.2rem;
+  }
+
+  /* Botones de paginación más pequeños */
+  .distance-pagination button {
+    padding: 0.3rem 0.6rem;
+  }
+
+}

@@ -11,10 +11,11 @@
     menuEl.setAttribute("aria-expanded", String(expanded));
   }
 
-  // Mantener plegado si no se detecta la clase "is-open"
-  function toggleMenu(menuEl) {
-    const expanded = !menuEl.classList.contains("is-open");
-    setExpanded(menuEl, expanded);
+  // Abrir un menú a la vez: si se expande uno, se pliega el otro
+  function toggleExclusive(target, other) {
+    const willExpand = !target.classList.contains("is-open");
+    if (willExpand) setExpanded(other, false);
+    setExpanded(target, willExpand);
   }
 
   // Estado inicial del menú: si la pantalla tiene "max-width: 768px", los menús inician plegados
@@ -30,10 +31,24 @@
   // Activar evento de pliegue/despliegue al detectar el click en el ícono de cada menú
   leftToggleIcon?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleMenu(leftMenu);
+    toggleExclusive(leftMenu, rightMenu);
   });
   rightToggleIcon?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleMenu(rightMenu);
+    toggleExclusive(rightMenu, leftMenu);
+  });
+
+  // Permitir click en todo el menú cuando está plegado (barra clickeable)
+  leftMenu?.addEventListener("click", (e) => {
+    if (!leftMenu.classList.contains("is-open")) {
+      e.stopPropagation();
+      toggleExclusive(leftMenu, rightMenu);
+    }
+  });
+  rightMenu?.addEventListener("click", (e) => {
+    if (!rightMenu.classList.contains("is-open")) {
+      e.stopPropagation();
+      toggleExclusive(rightMenu, leftMenu);
+    }
   });
 })();
