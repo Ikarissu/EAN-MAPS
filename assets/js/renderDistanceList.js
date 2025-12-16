@@ -60,6 +60,14 @@ function renderDistanceList(opts = {}) {
     const pointA_html = createPointHTML(r.pointA_info);
     const pointB_html = createPointHTML(r.pointB_info);
 
+    const altRouteButtonHTML = (r.type === "vehicle")
+        ? `
+            <button class="alt-route-button" data-alt-index="0" title="Mostrar ruta alternativa">
+                <i class='bx bx-path'></i>
+            </button>
+          `
+        : '';
+
     const modeIcon =
       r.type === "plane"
         ? '<i class="bx bx-plane-alt distance-icon"></i>'
@@ -92,9 +100,7 @@ function renderDistanceList(opts = {}) {
                         <button class="show-route-button">
                             <i class="bx bx-route"></i>
                         </button>
-                        <button class="alt-route-button" data-alt-index="0" title="Mostrar ruta alternativa">
-                          <i class='bx bx-path'></i>
-                        </button>
+                        ${altRouteButtonHTML}
                     </div>
                 </div>
             </div>`
@@ -166,7 +172,7 @@ function attachPrimaryRouteListeners() {
       );
       setRecordToPrimary(recordIndex);
       const record = distanceRecords[recordIndex];
-      drawPrimaryRouteOnMap(record);
+      
     });
   });
 }
@@ -251,28 +257,6 @@ function setRecordToAlternative(recordIndex, altIdx) {
   updateRecordDOM(recordIndex);
 }
 
-// Mostrar en el mapa la ruta principal obtenida
-function drawPrimaryRouteOnMap(record) {
-  const coords = record?.primaryRoute?.coords;
-  if (!coords || !coords.length) {
-    showNotification(
-      "No hay coordenadas almacenadas de la ruta principal.",
-      2500,
-      "info"
-    );
-    return;
-  }
-
-  clearPolylines();
-
-  const latlngs = coords.map((c) => [c.lat, c.lng]);
-  window._currentPrimaryPolyline = L.polyline(latlngs, {
-    color: "blue",
-    weight: 5,
-    opacity: 0.8,
-  }).addTo(map);
-  map.fitBounds(window._currentPrimaryPolyline.getBounds());
-}
 
 // Mostrar en el mapa la ruta alternativa obtenida
 function showAlternativeOnMap(record, altIdx) {
