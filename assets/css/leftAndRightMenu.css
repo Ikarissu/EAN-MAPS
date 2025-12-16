@@ -383,6 +383,18 @@
 
 /* *** Medidas responsivas *** */
 
+@media (max-width: 1280px) {
+
+    /* Menús más anchos */
+    .left-menu {
+        width: 25vw;
+    }
+
+    .right-menu {
+        width: 35vw;
+    }
+}
+
 /* *** Máx. 1024 *** */
 
 @media (max-width: 1024px) {
