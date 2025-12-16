@@ -1,7 +1,7 @@
 
 function reverseGeocode(latlng) {
   return new Promise((resolve) => {
-    // servicio Nominatim de Geocoder,.org para geocodificación inversa
+    // servicio Nominatim de Geocoder.org para geocodificación inversa
     const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=18&addressdetails=1`;
 
     fetch(nominatimUrl)
