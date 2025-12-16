@@ -1,7 +1,7 @@
 let airportMarkers = [];
 
 // Función para cargar y mostrar aeropuertos en el mapa
-fetch("airports.json")
+fetch("json/airports.json")
   .then((response) => response.json())
   .then((data) => {
     data.forEach((airport) => {

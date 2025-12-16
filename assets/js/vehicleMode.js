@@ -1,16 +1,42 @@
+
+function reverseGeocode(latlng) {
+  return new Promise((resolve) => {
+    // servicio Nominatim de Geocoder,.org para geocodificación inversa
+    const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=18&addressdetails=1`;
+
+    fetch(nominatimUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        let name = data.display_name || "Ubicación desconocida";
+
+        if (data.address && data.address.road) {
+          name = data.address.road;
+        }
+
+        resolve(name);
+      })
+      .catch((error) => {
+        console.error("Error en geocodificación inversa:", error);
+        resolve("Ubicación (Geocodificación fallida)");
+      });
+  });
+}
+
 function VehiclePointAB() {
   clearActiveMode();
-  mapClickListener = function (e) {
+  mapClickListener = async function (e) {
     if (!_pointA) {
       // Primer clic: Punto A
       markerA = L.marker(e.latlng).addTo(map);
       _pointA = e.latlng;
+      _pointA.name = await reverseGeocode(_pointA);
     } else if (!_pointB) {
       // Segundo clic: Punto B
       markerB = L.marker(e.latlng).addTo(map);
       _pointB = e.latlng;
       showNotification("Determinando la ruta...", 2500, "info");
 
+      _pointB.name = await reverseGeocode(_pointB);
       // VERIFICACIÓN ADICIONAL PARA EVITAR EL ERROR
       if (!_pointA || !_pointB) {
         showNotification(
@@ -23,7 +49,7 @@ function VehiclePointAB() {
       }
 
       routingControl = L.Routing.control({
-        // CAMBIO CLAVE: Usamos L.latLng(objeto) en lugar de propiedades separadas.
+        // se usa un objeto latlng en lugar de datos separados
         waypoints: [L.latLng(_pointA), L.latLng(_pointB)],
         language: "es",
         formatter: new L.Routing.Formatter({ language: "es" }),
@@ -78,7 +104,7 @@ function VehiclePointAB() {
               return { lat: c.lat, lng: c.lng };
             }
             if (Array.isArray(c) && c.length >= 2) {
-              // Algunos motores devuelven [lng, lat]
+              //Se asegura que siempre las coordenadas mantengan el formato {lat,lng}
               const maybeLat = Number(c[1]);
               const maybeLng = Number(c[0]);
               return { lat: maybeLat, lng: maybeLng };
@@ -123,7 +149,7 @@ function VehiclePointAB() {
             summary: route.summary || {}
           };
 
-          // CAMBIO CLAVE: INCLUIR LA ESTRUCTURA DE PUNTOS Y las alternativas
+          // Despliegue de informacion y guardado de registro
           distanceRecords.push({
             type: "vehicle",
             typeLabel: "Distancia terrestre",
@@ -143,12 +169,12 @@ function VehiclePointAB() {
             selectedAlternativeIndex: 0,
             primaryRoute,
             pointA_info: {
-              name: "Origen (Mapa)",
+              name: _pointA.name || "Origen (Mapa)",
               lat: _pointA.lat,
               lng: _pointA.lng,
             },
             pointB_info: {
-              name: "Destino (Mapa)",
+              name: _pointB.name || "Destino (Mapa)",
               lat: _pointB.lat,
               lng: _pointB.lng,
             },
@@ -180,6 +206,7 @@ function VehiclePointAB() {
       // 3. Nuevo punto A
       _pointA = e.latlng;
       markerA = L.marker(e.latlng).addTo(map);
+      _pointA.name = await reverseGeocode(_pointA);
     }
   };
 
