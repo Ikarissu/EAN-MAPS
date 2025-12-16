@@ -37,37 +37,50 @@
   applyInitialMobileState();
   window.addEventListener("resize", applyInitialMobileState);
 
+  // Detectar si la pantalla es de dispositivo móvil
+  function isMobile() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  function toggleResponsive(target, other) {
+    const willExpand = !target.classList.contains("is-open");
+    if (isMobile()) {
+      if (willExpand) setExpanded(other, false);
+      setExpanded(target, willExpand);
+    } else {
+      setExpanded(target, willExpand);
+    }
+  }
+
   // Activar evento de pliegue/despliegue al detectar el click en el ícono de cada menú
   leftToggleIcon?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleExclusive(leftMenu, rightMenu);
+    toggleResponsive(leftMenu, rightMenu);
   });
   rightToggleIcon?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleExclusive(rightMenu, leftMenu);
+    toggleResponsive(rightMenu, leftMenu);
   });
 
-  // Títulos clickeables: permitir toggle al tocar toda el área del título
   leftTitle?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleExclusive(leftMenu, rightMenu);
+    toggleResponsive(leftMenu, rightMenu);
   });
   rightTitle?.addEventListener("click", (e) => {
     e.stopPropagation();
-    toggleExclusive(rightMenu, leftMenu);
+    toggleResponsive(rightMenu, leftMenu);
   });
 
-  // Permitir click en todo el menú cuando está plegado (barra clickeable)
   leftMenu?.addEventListener("click", (e) => {
     if (!leftMenu.classList.contains("is-open")) {
       e.stopPropagation();
-      toggleExclusive(leftMenu, rightMenu);
+      toggleResponsive(leftMenu, rightMenu);
     }
   });
   rightMenu?.addEventListener("click", (e) => {
     if (!rightMenu.classList.contains("is-open")) {
       e.stopPropagation();
-      toggleExclusive(rightMenu, leftMenu);
+      toggleResponsive(rightMenu, leftMenu);
     }
   });
 })();

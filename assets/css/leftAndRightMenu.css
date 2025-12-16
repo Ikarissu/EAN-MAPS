@@ -24,6 +24,16 @@
     align-items: center;
     gap: 0.5rem;
     line-height: 1.2;
+    cursor: pointer !important;
+    user-select: none;
+}
+
+/* Hacer clickeable el título para plegar/desplegar menús */
+.left-menu-title,
+.left-menu-title *,
+.right-menu-title,
+.right-menu-title * {
+    cursor: pointer !important;
 }
 
 /* Íconos de los títulos */
@@ -31,7 +41,6 @@
 .right-menu-title .bx {
     font-size: 3rem;
     line-height: 1;
-    cursor: pointer;
     user-select: none;
 }
 
@@ -48,6 +57,41 @@
 .left-menu-item .bx,
 .right-menu-item .bx {
     font-size: 2rem;
+}
+
+/* Permitir plegar los menús para mejor visualización */
+.desktop-fold .left-menu,
+.desktop-fold .right-menu {
+    transition: transform 0.25s ease;
+    overflow: hidden;
+    pointer-events: auto;
+}
+
+/* Pestaña visible al plegar */
+.desktop-fold .left-menu:not(.is-open) {
+    transform: translateX(calc(-100% + 3.6rem));
+}
+.desktop-fold .right-menu:not(.is-open) {
+    transform: translateX(calc(100% - 3.6rem));
+}
+
+/* Ocultar contenido interno cuando está plegado */
+.desktop-fold .left-menu:not(.is-open) .left-menu-options,
+.desktop-fold .left-menu:not(.is-open) .left-menu-title label,
+.desktop-fold .right-menu:not(.is-open) .right-menu-title label,
+.desktop-fold .right-menu:not(.is-open) .right-menu-options,
+.desktop-fold .right-menu:not(.is-open) .distance-pagination {
+    display: none;
+}
+
+/* Iconos y textos más compactos al plegar */
+.desktop-fold .left-menu:not(.is-open) .left-menu-title {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+.desktop-fold .right-menu:not(.is-open) .right-menu-title {
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 /* ------------------------------------------------------------------ */
@@ -180,6 +224,10 @@
 /* Reloj con la hora actual según la zona horaria */
 .tz-clock {
     font-size: 1.1rem;
+}
+
+.desktop-fold .left-menu:not(.is-open) .left-menu-title .bx {
+    padding-bottom: 1rem;
 }
 
 /* ------------------------------------------------------------------ */
