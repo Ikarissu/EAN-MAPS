@@ -81,6 +81,14 @@
             <button id="export-all-pdf" type="button" class="export-all-btn">
                 Exportar PDF
             </button>
+                <div class="history-io">
+                    <label>Historial (JSON)</label>
+                    <div class="history-io-row">
+                        <button id="export-history-btn" type="button">Exportar historial (.json)</button>
+                        <button id="import-history-btn" type="button">Importar historial (.json)</button>
+                        <input id="import-history-file" type="file" accept="application/json" style="display:none" />
+                    </div>
+                </div>
             <div id="distance-list">
                 <div class="distance-info empty-distance">
                     Sin búsquedas registradas.
@@ -181,4 +189,6 @@
 <script src="assets/js/menuToggle.js"></script>
 <!-- Búsqueda de coordenadas en el menú derecho -->
 <script src="assets/js/coordSearch.js"></script>
+<!-- Export/Import del historial JSON -->
+<script src="assets/js/historyIO.js"></script>
 </html>
