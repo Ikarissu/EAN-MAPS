@@ -24,38 +24,40 @@ function reverseGeocode(latlng) {
 
 function VehiclePointAB() {
   clearActiveMode();
-  mapClickListener = async function (e) {
-    if (!_pointA) {
-      // Primer clic: Punto A
-      markerA = L.marker(e.latlng).addTo(map);
-      _pointA = e.latlng;
-      _pointA.name = await reverseGeocode(_pointA);
-    } else if (!_pointB) {
-      // Segundo clic: Punto B
-      markerB = L.marker(e.latlng).addTo(map);
-      _pointB = e.latlng;
-      showNotification("Determinando la ruta...", 2500, "info");
+  // Usar lista de waypoints y marcadores para permitir 2 o más puntos
+  if (!window._routeWaypoints) window._routeWaypoints = [];
+  if (!window._routeMarkers) window._routeMarkers = [];
 
-      _pointB.name = await reverseGeocode(_pointB);
-      // VERIFICACIÓN ADICIONAL PARA EVITAR EL ERROR
-      if (!_pointA || !_pointB) {
-        showNotification(
-          "Error de estado: Intente la selección de nuevo.",
-          3000,
-          "error"
-        );
-        clearActiveMode(); // Limpieza forzada
-        return;
-      }
+  mapClickListener = async function (e) {
+    // Añadir nuevo waypoint
+    const latlng = e.latlng;
+    // crear marcador y almacenar
+    try {
+      const m = L.marker(latlng).addTo(map);
+      window._routeMarkers.push(m);
+    } catch (err) {}
+    window._routeWaypoints.push(latlng);
+    // intentar obtener nombre del punto (opcional)
+    try { latlng.name = await reverseGeocode(latlng); } catch (err) {}
+
+    // Mantener compatibilidad: punto A = primer waypoint, punto B = último
+    _pointA = window._routeWaypoints[0] || null;
+    _pointB = window._routeWaypoints[window._routeWaypoints.length - 1] || null;
+
+    // Si hay al menos 2 waypoints, calcular ruta
+    if (window._routeWaypoints.length >= 2) {
+      showNotification("Determinando la ruta...", 1200, "info");
+
+      // remover control anterior si existe
+      if (routingControl) { map.removeControl(routingControl); routingControl = null; }
+
+      const wpObjs = window._routeWaypoints.map(wp => L.latLng(wp));
 
       routingControl = L.Routing.control({
-        // se usa un objeto latlng en lugar de datos separados
-        waypoints: [L.latLng(_pointA), L.latLng(_pointB)],
+        waypoints: wpObjs,
         language: "es",
         formatter: new L.Routing.Formatter({ language: "es" }),
-        createMarker: function () {
-          return null;
-        },
+        createMarker: function () { return null; },
         lineOptions: {
           styles: [{ color: "blue", opacity: 0.6, weight: 6 }],
         },
@@ -63,27 +65,18 @@ function VehiclePointAB() {
       }).addTo(map);
 
       routingControl.on("routingerror", function (e) {
-        // ... (Lógica de error existente) ...
         showNotification(
           "Error: No se encontró una ruta vehicular posible entre los puntos seleccionados.",
           5000,
           "error"
         );
 
-        if (routingControl) {
-          map.removeControl(routingControl);
-          routingControl = null;
-        }
-        if (markerA) {
-          map.removeLayer(markerA);
-        }
-        if (markerB) {
-          map.removeLayer(markerB);
-        }
-        _pointA = null;
-        _pointB = null;
-        markerA = null;
-        markerB = null;
+        if (routingControl) { map.removeControl(routingControl); routingControl = null; }
+        // quitar marcadores de la ruta
+        try { window._routeMarkers.forEach(m => map.removeLayer(m)); } catch (err) {}
+        window._routeMarkers = [];
+        window._routeWaypoints = [];
+        _pointA = null; _pointB = null;
       });
 
       routingControl.on("routesfound", function (e) {
@@ -166,13 +159,17 @@ function VehiclePointAB() {
             alternatives,
             selectedAlternativeIndex: 0,
             primaryRoute,
+            // Guardar los waypoints utilizados para crear la ruta (normalizados)
+            waypoints: Array.isArray(window._routeWaypoints)
+              ? window._routeWaypoints.map(wp => ({ lat: wp.lat, lng: wp.lng, name: wp.name || null }))
+              : [],
             pointA_info: {
-              name: _pointA.name || "Origen (Mapa)",
+              name: _pointA.name,
               lat: _pointA.lat,
               lng: _pointA.lng,
             },
             pointB_info: {
-              name: _pointB.name || "Destino (Mapa)",
+              name: _pointB.name,
               lat: _pointB.lat,
               lng: _pointB.lng,
             },
@@ -210,3 +207,31 @@ function VehiclePointAB() {
 
   map.on("click", mapClickListener);
 }
+
+  // Resetea la ruta actual pero mantiene el modo activo para crear una nueva
+  function resetVehicleRouteKeepMode() {
+    try {
+      if (routingControl) {
+        map.removeControl(routingControl);
+        routingControl = null;
+      }
+    } catch (e) {}
+
+    try {
+      if (window._routeMarkers && window._routeMarkers.length) {
+        window._routeMarkers.forEach(m => { try { map.removeLayer(m); } catch (e) {} });
+        window._routeMarkers = [];
+      }
+    } catch (e) {}
+
+    try { window._routeWaypoints = []; } catch (e) {}
+
+    _pointA = null;
+    _pointB = null;
+    markerA = null;
+    markerB = null;
+
+    try { if (typeof removeDrawnRoutes === 'function') removeDrawnRoutes(); } catch (e) {}
+
+    try { showNotification('Nueva ruta: listo para seleccionar puntos', 2000, 'success'); } catch (e) { console.log('Nueva ruta iniciada'); }
+  }

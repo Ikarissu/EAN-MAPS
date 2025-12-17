@@ -34,6 +34,14 @@ function clearActiveMode({ keepPoints = false } = {}) {
   if (markerB) { map.removeLayer(markerB); markerB = null; }
   _pointA = null;
   _pointB = null;
+  // borrar marcadores de rutas multi-waypoint si existen
+  try {
+    if (window._routeMarkers && Array.isArray(window._routeMarkers)) {
+      window._routeMarkers.forEach(m => { try { map.removeLayer(m); } catch (e) {} });
+      window._routeMarkers = [];
+    }
+  } catch (e) {}
+  try { window._routeWaypoints = []; } catch (e) {}
  
 }
 

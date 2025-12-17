@@ -10,19 +10,32 @@ function showRecordOnMap(record) {
   if (routingControl) { map.removeControl(routingControl); routingControl = null; }
   if (_polyline) { map.removeLayer(_polyline); _polyline = null; }
 
-  _pointA = record.pointA;
-  _pointB = record.pointB;
+  // Preparar puntos a partir de los waypoints guardados o los puntos A y B
+  const wps = Array.isArray(record.waypoints) && record.waypoints.length ? record.waypoints : (record.pointA && record.pointB ? [record.pointA, record.pointB] : []);
+  _pointA = wps[0] || null;
+  _pointB = wps[wps.length - 1] || null;
 
-  if (isPlane && _pointA && _pointB) {
+  if (isPlane && wps.length >= 2) {
+    // crear marcadores para los endpoints
     markerA = L.marker(_pointA).addTo(map);
     markerB = L.marker(_pointB).addTo(map);
     _polyline = L.polyline([_pointA, _pointB], { color: "red" }).addTo(map);
     map.fitBounds(_polyline.getBounds(), { padding: [50, 50] });
-  } else if (isVehicle && _pointA && _pointB) {
-    markerA = L.marker(_pointA).addTo(map);
-    markerB = L.marker(_pointB).addTo(map);
+  } else if (isVehicle && wps.length >= 2) {
+    // crear marcadores para todos los waypoints y registrarlos para poder limpiarlos
+    try { if (!window._routeMarkers) window._routeMarkers = []; } catch (e) { window._routeMarkers = []; }
+    try { if (!window._routeWaypoints) window._routeWaypoints = []; } catch (e) { window._routeWaypoints = []; }
+    wps.forEach((wp) => {
+      try {
+        const m = L.marker(wp).addTo(map);
+        window._routeMarkers.push(m);
+      } catch (e) {}
+      try { window._routeWaypoints.push({ lat: wp.lat, lng: wp.lng, name: wp.name || null }); } catch (e) {}
+    });
+
+    const latlngs = wps.map(w => L.latLng(w.lat, w.lng));
     routingControl = L.Routing.control({
-      waypoints: [L.latLng(_pointA.lat, _pointA.lng), L.latLng(_pointB.lat, _pointB.lng)],
+      waypoints: latlngs,
       language: "es",
       formatter: new L.Routing.Formatter({ language: "es" }),
       routeWhileDragging: false,
@@ -31,6 +44,8 @@ function showRecordOnMap(record) {
       lineOptions: { styles: [{ color: "blue", opacity: 0.6, weight: 6 }] },
       show: false,
     }).addTo(map);
-    map.fitBounds(L.latLngBounds([_pointA, _pointB]), { padding: [50, 50] });
+
+    // ajustar vista al bounds de los waypoints
+    try { map.fitBounds(L.latLngBounds(latlngs), { padding: [50, 50] }); } catch (e) {}
   }
 }
