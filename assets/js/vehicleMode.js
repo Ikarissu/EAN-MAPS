@@ -117,10 +117,8 @@ function VehiclePointAB() {
           let distance = route.summary.totalDistance / 1000;
           const offset = getSelectedTimezoneOffset();
           const startTS = Date.now();
-          const endTS = startTS + (distance / 70) * 3600000;
           const tzLabel = timezoneSelect?.value || "GMT-4";
           const start_hour = formatTimeWithOffset(startTS, offset);
-          const end_hour = formatTimeWithOffset(endTS, offset);
           // calcular duración en segundos usando summary si existe, o por aproximación (velocidad 70 km/h)
           let durationSec = 0;
           if (route.summary && (route.summary.totalTime || route.summary.total_time || route.summary.duration)) {
@@ -128,6 +126,9 @@ function VehiclePointAB() {
           } else {
             durationSec = Math.round((distance / 70) * 3600);
           }
+          // calcular endTS a partir de durationSec para que end_hour y dist_hour sean consistentes
+          const endTS = startTS + (durationSec * 1000);
+          const end_hour = formatTimeWithOffset(endTS, offset);
           const dist_hour = (function(sec){
             try {
               const s = Number(sec) || 0;

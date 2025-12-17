@@ -218,6 +218,14 @@ function setRecordToPrimary(recordIndex) {
     const endTS = record.primaryRoute.endTS || startTS;
     record.end_hour = formatTimeWithOffset(endTS, offset);
     record.start_hour = formatTimeWithOffset(startTS, offset);
+    // Restaurar duración si está disponible en primaryRoute, o calcularla
+    if (record.primaryRoute && (record.primaryRoute.dist_hour || record.primaryRoute.durationSec)) {
+      record.dist_hour = record.primaryRoute.dist_hour || formatDuration(record.primaryRoute.durationSec || 0);
+    } else {
+      // fallback: aproximar por distancia
+      const approxSec = Math.round((Number(record.primaryRoute?.distanceKm || 0) / 70) * 3600);
+      record.dist_hour = formatDuration(approxSec);
+    }
   }
 
   saveDistanceRecords(distanceRecords);
@@ -241,11 +249,13 @@ function setRecordToAlternative(recordIndex, altIdx) {
   record.instructions = alt.instructions || [];
   const offset = getSelectedTimezoneOffset();
   const startTS = record.startTS || Date.now();
-  record.end_hour = formatTimeWithOffset(
-    startTS + (Number(alt.distance || 0) / 70) * 3600000,
-    offset
-  );
+  // Preferir duración real de la alternativa (summary) si está disponible
+  const altDurationSec = Number(
+    alt?.summary?.totalTime || alt?.summary?.total_time || alt?.summary?.duration || alt?.durationSeconds || 0
+  ) || Math.round((Number(alt.distance || 0) / 70) * 3600);
+  record.end_hour = formatTimeWithOffset(startTS + altDurationSec * 1000, offset);
   record.start_hour = formatTimeWithOffset(startTS, offset);
+  record.dist_hour = formatDuration(altDurationSec);
 
   saveDistanceRecords(distanceRecords);
   updateRecordDOM(recordIndex);
