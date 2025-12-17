@@ -60,9 +60,10 @@
 
 /* *** Propiedades específicas para menú izquierdo *** */
 
-.left-menu{
+.left-menu {
   width: 24vw !important;
 }
+
 /* Opciones del menú izquierdo */
 .left-menu-options {
   display: flex;
@@ -338,6 +339,7 @@
 .leaflet-right .leaflet-routing-container.leaflet-routing-container-hide {
   display: none;
 }
+
 /* Ítems del grupo: dos por fila y que llenen el ancho */
 .left-menu-options-group .left-menu-item {
   flex: 1 1 48%;
@@ -357,11 +359,6 @@
   width: 100%;
 }
 
-
-
-
-
-
 /* Grupo en fila con wrap */
 .left-menu-options-group {
   display: flex;
@@ -372,8 +369,10 @@
 /* Ítems: siempre 2 por fila, sin min-width que rompa la fila */
 .left-menu-options-group .left-menu-item {
   box-sizing: border-box;
-  flex: 0 1 calc(50% - 0.25rem); /* 2 columnas */
-  min-width: 0;                  /* permitir que quepan */
+  flex: 0 1 calc(50% - 0.25rem);
+  /* 2 columnas */
+  min-width: 0;
+  /* permitir que quepan */
 }
 
 /* Último ítem impar ocupa toda la fila */
@@ -583,6 +582,28 @@
 
 /* *** Medidas responsivas *** */
 
+/* *** Máx. 2560 *** */
+@media (max-width: 2560px) {
+  .left-menu {
+    width: 13vw !important;
+  }
+
+  .right-menu {
+    width: 20vw !important;
+  }
+}
+
+/* *** Máx. 2560 *** */
+@media (max-width: 1440px) {
+  .left-menu {
+    width: 23vw !important;
+  }
+
+  .right-menu {
+    width: 30vw !important;
+  }
+}
+
 /* *** Máx. 1024 *** */
 @media (max-width: 1024px) {
   .left-menu {
@@ -593,6 +614,40 @@
     width: 35vw !important;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* *** Máx. 768 *** */
+@media (max-width: 768px) {
+  .left-menu {
+    width: 45vw !important;
+  }
+
+  .right-menu {
+    width: 40vw !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
 
 /* *** Min. 769 *** */
 
@@ -689,7 +744,6 @@
 
 }
 
-
 /* *** Máx. 425 *** */
 
 /* Colocar el menú izquierdo arriba y el menú derecho abajo */
@@ -754,7 +808,6 @@
   .left-menu-title,
   .right-menu-title {
     font-size: 1rem;
-    padding: 0.75rem 1rem;
   }
 
   /* Tamaño de fuente más pequeño */
@@ -762,6 +815,7 @@
   .left-menu-options #plane,
   .left-menu-options #vehicle,
   .left-menu-options #clear-mode,
+  .left-menu-options #new-route-btn,
   .select2-container .select2-selection--single,
   .select2-container--default .select2-results__option,
   .select2-container--default .select2-search--dropdown .select2-search__field,
@@ -769,6 +823,10 @@
   .export-all-btn,
   .distance-info,
   .distance-pagination,
+  #coord-search-input,
+  #coord-search-btn,
+  #export-history-btn,
+  #import-history-btn,
   .mode-text {
     font-size: 0.8rem;
   }
@@ -798,7 +856,8 @@
   /* Botones más compactos al estar en fila */
   .left-menu-options-group #plane,
   .left-menu-options-group #vehicle,
-  .left-menu-options-group #clear-mode {
+  .left-menu-options-group #clear-mode,
+  .left-menu-options #new-route-btn {
     padding: 0.8rem;
     width: 100%;
   }
@@ -845,45 +904,49 @@
     padding: 0.6rem 0.8rem;
   }
 
-  /* ------------------------------------------------------------------ */
+  .desktop-fold .left-menu:not(.is-open) .left-menu-title .bx {
+    padding-bottom: 0;
 
-  /* *** Propiedades específicas para menú izquierdo *** */
+    /* ------------------------------------------------------------------ */
 
-  /* Espacio entre las opciones del menú izquierdo */
-  .left-menu-options-group {
-    gap: 0.4rem;
+    /* *** Propiedades específicas para menú izquierdo *** */
+
+    /* Espacio entre las opciones del menú izquierdo */
+    .left-menu-options-group {
+      gap: 0.4rem;
+    }
+
+    /* Los items ocupan ancho con un mínimo para mantener legibilidad */
+    .left-menu-options-group .left-menu-item {
+      flex: 1 1 48%;
+      min-width: 8.5rem;
+    }
+
+    /* Botones más compactos en disposición en fila */
+    .left-menu-options-group #plane,
+    .left-menu-options-group #vehicle,
+    .left-menu-options-group #clear-mode,
+    .left-menu-options #new-route-btn {
+      padding: 0.7rem;
+    }
+
+    /* ------------------------------------------------------------------ */
+
+    /* *** Propiedades específicas para menú derecho *** */
+
+    /* Padding para la información de las distancias buscadas */
+    .distance-info {
+      padding-right: 3.5rem;
+    }
+
+    /* Fuente más pequeña y padding para botones de opciones de las distancias buscadas */
+    .save-button,
+    .show-route-button,
+    .alt-route-button {
+      font-size: 1.3rem;
+      padding: 0.35rem;
+    }
   }
-
-  /* Los items ocupan ancho con un mínimo para mantener legibilidad */
-  .left-menu-options-group .left-menu-item {
-    flex: 1 1 48%;
-    min-width: 8.5rem;
-  }
-
-  /* Botones más compactos en disposición en fila */
-  .left-menu-options-group #plane,
-  .left-menu-options-group #vehicle,
-  .left-menu-options-group #clear-mode {
-    padding: 0.7rem;
-  }
-
-  /* ------------------------------------------------------------------ */
-
-  /* *** Propiedades específicas para menú derecho *** */
-
-  /* Padding para la información de las distancias buscadas */
-  .distance-info {
-    padding-right: 3.5rem;
-  }
-
-  /* Fuente más pequeña y padding para botones de opciones de las distancias buscadas */
-  .save-button,
-  .show-route-button,
-  .alt-route-button {
-    font-size: 1.3rem;
-    padding: 0.35rem;
-  }
-
 }
 
 /* *** Máx. 320 *** */
@@ -936,7 +999,8 @@
   /* Botones del menú izquierdo con padding más compacto */
   .left-menu-options-group #plane,
   .left-menu-options-group #vehicle,
-  .left-menu-options-group #clear-mode {
+  .left-menu-options-group #clear-mode,
+  .left-menu-options #new-route-btn {
     padding: 0.65rem;
   }
 

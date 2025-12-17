@@ -40,10 +40,8 @@
                     <button id="vehicle">Terrestre</button>
                 </div>
                 <div class="left-menu-item">
-                    <i class='bx  bx-arrow-s-right'></i> 
-                    <div class="route-controls">
-                        <button id="new-route-btn" type="button">Nueva ruta</button>
-                    </div>
+                    <i class='bx  bx-arrow-s-right'></i>
+                    <button id="new-route-btn" type="button">Nueva ruta</button>
                 </div>
                 <div class="left-menu-item">
                     <i class="bx bx-plane-alt"></i>
@@ -58,26 +56,26 @@
                 <i class="bx bx-globe"></i>
                 <label for="timezone">Zona horaria</label>
             </div>
+            <div class="left-menu-item">
+                <i class="bx bx-clock-dashed-half"></i>
+                <select id="timezone" name="timezone"></select>
+            </div>
+            <div class="left-menu-item">
+                <i class="bx bx-clock"></i>
+                <div id="tz-clock" class="tz-clock"></div>
+            </div>
+            <div class="coord-search">
                 <div class="left-menu-item">
-                    <i class="bx bx-clock-dashed-half"></i>
-                    <select id="timezone" name="timezone"></select>
+                    <i class='bx  bx-menu-search'></i>
+                    <label for="coord-search-input">Buscar (nombre o coordenadas)</label>
                 </div>
-                <div class="left-menu-item">
-                    <i class="bx bx-clock"></i>
-                    <div id="tz-clock" class="tz-clock"></div>
+                <div class="coord-search-row">
+                    <i class='bx  bx-search-alt'></i>
+                    <input id="coord-search-input" type="text" placeholder="10.263552, -67.586518" />
+                    <button id="coord-search-btn" type="button">Buscar</button>
                 </div>
-                <div class="coord-search">
-                    <div class="left-menu-item">
-                        <i class='bx  bx-menu-search'></i>
-                        <label for="coord-search-input">Buscar (nombre o coordenadas)</label>
-                    </div>
-                    <div class="coord-search-row">
-                        <i class='bx  bx-search-alt'></i>
-                        <input id="coord-search-input" type="text" placeholder="10.263552, -67.586518" />
-                        <button id="coord-search-btn" type="button">Buscar</button>
-                    </div>
-                    <div id="coord-suggestions" class="coord-suggestions" aria-hidden="true"></div>
-                </div>
+                <div id="coord-suggestions" class="coord-suggestions" aria-hidden="true"></div>
+            </div>
         </nav>
     </aside>
     <aside class="right-menu" id="right-menu" aria-expanded="true">
