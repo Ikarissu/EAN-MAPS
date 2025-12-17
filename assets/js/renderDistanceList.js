@@ -107,204 +107,231 @@ function renderDistanceList(opts = {}) {
     attachAltRouteListeners();
 
     // Abrir el menú inferior al terminar de renderizar
-    window.openBottomMenu?.();
+  // Mostrar ruta principal
+  attachPrimaryRouteListeners();
+
+  // Abrir el menú derecho (inferior en móviles) al terminar de renderizar
+  window.openBottomMenu?.();
 }
 
-  // Mantener referencia a la polilínea alternativa mostrada actualmente
-  window._currentAltPolyline = window._currentAltPolyline || null;
+// Mantener referencia a la polilínea alternativa mostrada actualmente
+window._currentAltPolyline = window._currentAltPolyline || null;
+// Mantener referencia a la polilínea principal mostrada actualmente
+window._currentPrimaryPolyline = window._currentPrimaryPolyline || null;
 
-  function attachAltRouteListeners() {
-    const altBtns = document.querySelectorAll('.alt-route-button');
-    altBtns.forEach(btn => {
-      btn.addEventListener('click', function () {
-        const recordEl = this.closest('.distance-info');
-        const idx = parseInt(recordEl?.getAttribute('data-record-index') || '-1', 10);
-        const record = distanceRecords[idx];
-
-        if (!record || !record.alternatives || !record.alternatives.length) {
-          showNotification('No hay rutas alternativas guardadas para este registro.', 2500, 'info');
-          return;
-        }
-
-        // Toggle panel
-        let panel = recordEl.querySelector('.alt-route-panel');
-        if (panel) {
-          try {
-            if (window._currentAltPolyline) {
-              map.removeLayer(window._currentAltPolyline);
-              window._currentAltPolyline = null;
-            }
-          } catch (err) {}
-          panel.remove();
-          return;
-        }
-
-        panel = document.createElement('div');
-        panel.className = 'alt-route-panel';
-        panel.innerHTML = record.alternatives.map((alt, i) => {
-          const d = Number(alt.distance || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          const secs = alt?.summary?.totalTime || alt?.summary?.total_time || alt?.summary?.duration || alt?.durationSeconds || 0;
-          const durLabel = formatDuration(secs);
-            // Determinar si esta alternativa está seleccionada actualmente
-            const isSelected = (record.selectedAlternativeIndex || 0) === (i + 1);
-            const selectLabel = isSelected ? 'Quitar' : 'Seleccionar';
-            return `
-            <div class="alt-route-item" data-alt-index="${i}">
-              <div class="alt-route-meta">Alternativa ${i+1}: ${d} km — ${durLabel}</div>
-              <div class="alt-route-actions">
-                <button class="show-alt-route-button">Mostrar</button>
-                <button class="select-alt-route-button">${selectLabel}</button>
-              </div>
-            </div>`;
-        }).join('') + '<div class="alt-actions"><button class="close-alt-panel">Cerrar</button></div>';
-
-        recordEl.appendChild(panel);
-
-        panel.querySelector('.close-alt-panel').addEventListener('click', () => {
-          try {
-            if (window._currentAltPolyline) {
-              map.removeLayer(window._currentAltPolyline);
-              window._currentAltPolyline = null;
-            }
-          } catch (err) {}
-          panel.remove();
-        });
-
-        panel.querySelectorAll('.show-alt-route-button').forEach(b => {
-          b.addEventListener('click', function () {
-            const altIdx = parseInt(this.closest('.alt-route-item').getAttribute('data-alt-index'), 10);
-            showAlternativeOnMap(record, altIdx);
-          });
-        });
-
-            panel.querySelectorAll('.select-alt-route-button').forEach(b => {
-              b.addEventListener('click', function () {
-                const altIdx = parseInt(this.closest('.alt-route-item').getAttribute('data-alt-index'), 10);
-                const recordIndex = parseInt(recordEl.getAttribute('data-record-index'), 10);
-                toggleAlternativeSelection(recordIndex, altIdx, panel);
-              });
-            });
-      });
-    });
-  }
-
-  function showAlternativeOnMap(record, altIdx) {
-    const alt = record?.alternatives?.[altIdx];
-    if (!alt || !alt.coords || !alt.coords.length) {
-      showNotification('Ruta alternativa inválida.', 2000, 'error');
-      return;
+// Limpiar polilíneas dibujadas
+function clearPolylines() {
+  try {
+    if (window._currentAltPolyline) {
+      map.removeLayer(window._currentAltPolyline);
+      window._currentAltPolyline = null;
     }
+    if (window._currentPrimaryPolyline) {
+      map.removeLayer(window._currentPrimaryPolyline);
+      window._currentPrimaryPolyline = null;
+    }
+  } catch (err) {}
+}
 
-    // Remover polilínea previa
-    try {
-      if (window._currentAltPolyline) {
-        map.removeLayer(window._currentAltPolyline);
-        window._currentAltPolyline = null;
+// Actualizar el DOM de la información de las distancias
+function updateRecordDOM(recordIndex) {
+  const record = distanceRecords[recordIndex];
+  const recordEl = document.querySelector(
+    `.distance-info[data-record-index="${recordIndex}"]`
+  );
+  if (!record || !recordEl) return;
+
+  const modeText = recordEl.querySelector(".mode-text");
+  if (modeText)
+    modeText.textContent = `${record.typeLabel || record.type}: ${
+      record.distance
+    } Kilómetros`;
+  const endHourEl = recordEl.querySelector(".end-hour");
+  if (endHourEl)
+    endHourEl.textContent = `Hora de llegada aproximada (${record.tzLabel}): ${record.end_hour}`;
+  const startHourEl = recordEl.querySelector(".start-hour");
+  if (startHourEl)
+    startHourEl.textContent = `Hora de salida (${record.tzLabel}): ${record.start_hour}`;
+}
+
+// Dibujar la ruta principal al detectar click
+function attachPrimaryRouteListeners() {
+  const mainBtns = document.querySelectorAll(".show-route-button");
+  mainBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const recordEl = this.closest(".distance-info");
+      const recordIndex = parseInt(
+        recordEl?.getAttribute("data-record-index") || "-1",
+        10
+      );
+      setRecordToPrimary(recordIndex);
+      const record = distanceRecords[recordIndex];
+      drawPrimaryRouteOnMap(record);
+    });
+  });
+}
+
+// Dibujar la ruta alternativa al detectar click
+function attachAltRouteListeners() {
+  const altBtns = document.querySelectorAll(".alt-route-button");
+  altBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const recordEl = this.closest(".distance-info");
+      const recordIndex = parseInt(
+        recordEl?.getAttribute("data-record-index") || "-1",
+        10
+      );
+      const altIdx = parseInt(this.getAttribute("data-alt-index") || "0", 10);
+      const record = distanceRecords[recordIndex];
+
+      if (!record || !record.alternatives || !record.alternatives.length) {
+        showNotification(
+          "No hay rutas alternativas guardadas para este registro.",
+          2500,
+          "info"
+        );
+        return;
       }
-    } catch (err) {
-      // noop
-    }
 
-    const latlngs = alt.coords.map(c => [c.lat, c.lng]);
-    window._currentAltPolyline = L.polyline(latlngs, { color: 'orange', weight: 5, opacity: 0.85 }).addTo(map);
-    map.fitBounds(window._currentAltPolyline.getBounds());
-  }
-
-  function zoomAlternative(record, altIdx) {
-    const alt = record?.alternatives?.[altIdx];
-    if (!alt || !alt.coords || !alt.coords.length) {
-      showNotification('Ruta alternativa inválida.', 2000, 'error');
-      return;
-    }
-    const latlngs = alt.coords.map(c => [c.lat, c.lng]);
-    const bounds = L.latLngBounds(latlngs);
-    map.fitBounds(bounds);
-  }
-
-function attachPointClickListeners() {
-    const pointLinks = document.querySelectorAll('.point-link');
-    
-    pointLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault(); // Evita que la página salte al hacer clic en el <a>
-
-            const lat = parseFloat(this.getAttribute('data-lat'));
-            const lng = parseFloat(this.getAttribute('data-lng'));
-
-            if (!isNaN(lat) && !isNaN(lng)) {
-                // Mueve el mapa a las coordenadas y aplica un zoom apropiado
-                map.flyTo([lat, lng], 10, {
-                    duration: 1.5 // Duración de la animación en segundos
-                });
-                
-            }
-        });
+      setRecordToAlternative(recordIndex, altIdx);
+      showAlternativeOnMap(record, altIdx);
     });
+  });
 }
 
+// Mostrar el registro principal
+function setRecordToPrimary(recordIndex) {
+  const record = distanceRecords[recordIndex];
+  if (!record) return;
+
+  record.selectedAlternativeIndex = 0;
+  if (record.primaryRoute) {
+    record.distance = Number(
+      record.primaryRoute.distanceKm || 0
+    ).toLocaleString("es-VE", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    record.instructions = record.primaryRoute.instructions || [];
+    const offset = getSelectedTimezoneOffset();
+    const startTS = record.startTS || Date.now();
+    const endTS = record.primaryRoute.endTS || startTS;
+    record.end_hour = formatTimeWithOffset(endTS, offset);
+    record.start_hour = formatTimeWithOffset(startTS, offset);
+  }
+
+  saveDistanceRecords(distanceRecords);
+  updateRecordDOM(recordIndex);
+}
+
+// Mostrar el registro alternativo
+function setRecordToAlternative(recordIndex, altIdx) {
+  const record = distanceRecords[recordIndex];
+  const alt = record?.alternatives?.[altIdx];
+  if (!record || !alt) {
+    showNotification("Ruta alternativa inválida.", 2000, "error");
+    return;
+  }
+
+  record.selectedAlternativeIndex = altIdx + 1;
+  record.distance = Number(alt.distance || 0).toLocaleString("es-VE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  record.instructions = alt.instructions || [];
+  const offset = getSelectedTimezoneOffset();
+  const startTS = record.startTS || Date.now();
+  record.end_hour = formatTimeWithOffset(
+    startTS + (Number(alt.distance || 0) / 70) * 3600000,
+    offset
+  );
+  record.start_hour = formatTimeWithOffset(startTS, offset);
+
+  saveDistanceRecords(distanceRecords);
+  updateRecordDOM(recordIndex);
+}
+
+// Mostrar en el mapa la ruta principal obtenida
+function drawPrimaryRouteOnMap(record) {
+  const coords = record?.primaryRoute?.coords;
+  if (!coords || !coords.length) {
+    showNotification(
+      "No hay coordenadas almacenadas de la ruta principal.",
+      2500,
+      "info"
+    );
+    return;
+  }
+
+  clearPolylines();
+
+  const latlngs = coords.map((c) => [c.lat, c.lng]);
+  window._currentPrimaryPolyline = L.polyline(latlngs, {
+    color: "blue",
+    weight: 5,
+    opacity: 0.8,
+  }).addTo(map);
+  map.fitBounds(window._currentPrimaryPolyline.getBounds());
+}
+
+// Mostrar en el mapa la ruta alternativa obtenida
+function showAlternativeOnMap(record, altIdx) {
+  const alt = record?.alternatives?.[altIdx];
+  if (!alt || !alt.coords || !alt.coords.length) {
+    showNotification("Ruta alternativa inválida.", 2000, "error");
+    return;
+  }
+
+  clearPolylines();
+
+  try {
+    if (routingControl) {
+      map.removeControl(routingControl);
+      routingControl = null;
+    }
+    if (typeof _polyline !== "undefined" && _polyline) {
+      map.removeLayer(_polyline);
+      _polyline = null;
+    }
+  } catch (_) {}
+
+  const latlngs = alt.coords.map((c) => [c.lat, c.lng]);
+  window._currentAltPolyline = L.polyline(latlngs, {
+    color: "orange",
+    weight: 5,
+    opacity: 0.85,
+  }).addTo(map);
+  map.fitBounds(window._currentAltPolyline.getBounds());
+}
+
+// Añadir eventos a los enlaces de puntos para centrar y hacer zoom en el mapa al hacer click
+function attachPointClickListeners() {
+  const pointLinks = document.querySelectorAll(".point-link");
+
+  pointLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault(); // Evita que la página salte al hacer clic en el <a>
+
+      const lat = parseFloat(this.getAttribute("data-lat"));
+      const lng = parseFloat(this.getAttribute("data-lng"));
+
+      if (!isNaN(lat) && !isNaN(lng)) {
+        // Mueve el mapa a las coordenadas y aplica un zoom apropiado
+        map.flyTo([lat, lng], 10, {
+          duration: 1.5, // Duración de la animación en segundos
+        });
+      }
+    });
+  });
+}
+
+// Formatear el tiempo recibido para mostrar la hora actual
 function formatDuration(sec) {
   sec = Number(sec) || 0;
-  if (sec <= 0) return '—';
+  if (sec <= 0) return "—";
   const mins = Math.round(sec / 60);
   if (mins < 60) return `${mins} min`;
   const hours = Math.floor(mins / 60);
   const remMins = mins % 60;
   return remMins ? `${hours} h ${remMins} min` : `${hours} h`;
-}
-
-function toggleAlternativeSelection(recordIndex, altIdx, panel) {
-  const record = distanceRecords[recordIndex];
-  if (!record) return;
-
-  const currentlySelected = record.selectedAlternativeIndex || 0; // 0 = primary
-  const targetIndex = altIdx + 1; // alternatives are stored starting at 1
-
-  if (currentlySelected === targetIndex) {
-    // Deseleccionar -> restaurar ruta principal
-    record.selectedAlternativeIndex = 0;
-    if (record.primaryRoute) {
-      record.distance = Number(record.primaryRoute.distanceKm || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      record.instructions = record.primaryRoute.instructions || [];
-      const offset = getSelectedTimezoneOffset();
-      record.end_hour = formatTimeWithOffset(record.primaryRoute.endTS || (record.startTS || Date.now()), offset);
-      record.start_hour = formatTimeWithOffset(record.startTS || Date.now(), offset);
-      record.dist_hour = record.primaryRoute.dist_hour || '—';
-    }
-  } else {
-    // Seleccionar alternativa -> actualizar distancia, instrucciones y hora
-    const alt = record.alternatives?.[altIdx];
-    if (!alt) return;
-    record.selectedAlternativeIndex = targetIndex;
-    record.distance = Number(alt.distance || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    record.instructions = alt.instructions || [];
-    const offset = getSelectedTimezoneOffset();
-    const startTS = record.startTS || Date.now();
-    record.end_hour = formatTimeWithOffset(startTS + (Number(alt.distance || 0) / 70) * 3600000, offset);
-    record.start_hour = formatTimeWithOffset(startTS, offset);
-    record.dist_hour = formatDuration(alt?.summary?.totalTime || alt?.summary?.total_time || alt?.summary?.duration || alt?.durationSeconds || 0);
-  }
-
-  // Persistir y actualizar DOM del registro
-  saveDistanceRecords(distanceRecords);
-
-  const recordEl = document.querySelector(`.distance-info[data-record-index="${recordIndex}"]`);
-  if (recordEl) {
-    const modeText = recordEl.querySelector('.mode-text');
-    if (modeText) modeText.textContent = `${record.typeLabel || record.type}: ${record.distance} Kilómetros`;
-    const endHourEl = recordEl.querySelector('.end-hour');
-    if (endHourEl) endHourEl.textContent = `Hora de llegada aproximada (${record.tzLabel}): ${record.end_hour}`;
-    const startHourEl = recordEl.querySelector('.start-hour');
-    if (startHourEl) startHourEl.textContent = `Hora de salida (${record.tzLabel}): ${record.start_hour}`;
-    const distHourEl = recordEl.querySelector('.dist-hour');
-    if (distHourEl) distHourEl.textContent = `Duración estimada: ${record.dist_hour}`;
-
-    // Actualizar texto de botones dentro el panel
-    if (panel) {
-      panel.querySelectorAll('.alt-route-item').forEach(item => {
-        const i = parseInt(item.getAttribute('data-alt-index'), 10);
-        const btn = item.querySelector('.select-alt-route-button');
-        if (btn) btn.textContent = ((record.selectedAlternativeIndex || 0) === (i + 1)) ? 'Quitar' : 'Seleccionar';
-      });
-    }
-  }
 }
