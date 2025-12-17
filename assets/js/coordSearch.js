@@ -1,5 +1,9 @@
 // Manejo de búsqueda de coordenadas y búsqueda por nombre con nominatim
 (function () {
+  const notify = (msg, ms = 2000, type = 'info') => {
+    if (typeof showNotification === 'function') return showNotification(msg, ms, type);
+    try { console.log(type.toUpperCase(), msg); } catch (e) {}
+  };
 
   function parseCoords(input) {
     if (!input) return null;
