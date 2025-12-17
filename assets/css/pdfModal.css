@@ -255,41 +255,7 @@
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Modal genérico con el look del tema */
+/* Modal genérico para alertas */
 .app-modal-overlay {
   position: fixed;
   inset: 0;
@@ -346,4 +312,3 @@
 .modal-btn:hover { background-color: #4a8a98; }
 .modal-btn.secondary { background-color: #33616d; }
 .modal-btn.secondary:hover { background-color: #3f7683; }
-/* ...existing code... */
