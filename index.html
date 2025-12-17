@@ -36,15 +36,18 @@
             </div>
             <div class="left-menu-options-group">
                 <div class="left-menu-item">
-                    <i class="bx bx-plane-alt"></i>
-                    <button id="plane">Aérea</button>
-                </div>
-                <div class="left-menu-item">
                     <i class="bx bx-car"></i>
                     <button id="vehicle">Terrestre</button>
-                        <div class="route-controls">
-                            <button id="new-route-btn" type="button">Nueva ruta</button>
-                        </div>
+                </div>
+                <div class="left-menu-item">
+                    <i class='bx  bx-arrow-s-right'></i> 
+                    <div class="route-controls">
+                        <button id="new-route-btn" type="button">Nueva ruta</button>
+                    </div>
+                </div>
+                <div class="left-menu-item">
+                    <i class="bx bx-plane-alt"></i>
+                    <button id="plane">Aérea</button>
                 </div>
                 <div class="left-menu-item">
                     <i class="bx bx-eraser"></i>
@@ -55,7 +58,6 @@
                 <i class="bx bx-globe"></i>
                 <label for="timezone">Zona horaria</label>
             </div>
-            <div class="left-menu-options-group">
                 <div class="left-menu-item">
                     <i class="bx bx-clock-dashed-half"></i>
                     <select id="timezone" name="timezone"></select>
@@ -64,15 +66,18 @@
                     <i class="bx bx-clock"></i>
                     <div id="tz-clock" class="tz-clock"></div>
                 </div>
-                            <div class="coord-search">
-                <label for="coord-search-input">Buscar coordenadas</label>
-                <div class="coord-search-row">
-                    <input id="coord-search-input" type="text" placeholder="lat, lng" />
-                    <button id="coord-search-btn" type="button">Buscar</button>
+                <div class="coord-search">
+                    <div class="left-menu-item">
+                        <i class='bx  bx-menu-search'></i>
+                        <label for="coord-search-input">Buscar (nombre o coordenadas)</label>
+                    </div>
+                    <div class="coord-search-row">
+                        <i class='bx  bx-search-alt'></i>
+                        <input id="coord-search-input" type="text" placeholder="10.263552, -67.586518" />
+                        <button id="coord-search-btn" type="button">Buscar</button>
+                    </div>
+                    <div id="coord-suggestions" class="coord-suggestions" aria-hidden="true"></div>
                 </div>
-                                <div id="coord-suggestions" class="coord-suggestions" aria-hidden="true"></div>
-            </div>
-            </div>
         </nav>
     </aside>
     <aside class="right-menu" id="right-menu" aria-expanded="true">
@@ -84,14 +89,15 @@
             <button id="export-all-pdf" type="button" class="export-all-btn">
                 Exportar PDF
             </button>
-                <div class="history-io">
-                    <label>Historial (JSON)</label>
-                    <div class="history-io-row">
-                        <button id="export-history-btn" type="button">Exportar historial (.json)</button>
-                        <button id="import-history-btn" type="button">Importar historial (.json)</button>
-                        <input id="import-history-file" type="file" accept="application/json" style="display:none" />
-                    </div>
+            <div class="history-io">
+                <div class="history-io-row">
+                    <button id="export-history-btn" type="button"><i
+                            class='bx  bx-arrow-in-down-stroke-circle-half'></i> Exportar JSON</button>
+                    <button id="import-history-btn" type="button"><i class='bx  bx-arrow-in-up-stroke-circle-half'></i>
+                        Importar JSON</button>
+                    <input id="import-history-file" type="file" accept="application/json" style="display:none" />
                 </div>
+            </div>
             <div id="distance-list">
                 <div class="distance-info empty-distance">
                     Sin búsquedas registradas.
@@ -107,35 +113,35 @@
     <div id="main-map"></div>
 
     <div id="export-modal" class="modal-overlay" hidden>
-      <div class="modal-content">
-        <div class="modal-header">
-          <label>Exportar PDF</label>
-          <button type="button" id="close-export-modal" class="modal-close">✕</button>
-        </div>
-        <form id="export-filters-form" class="modal-body">
-          <label class="modal-field">
-            <span>Rango de fechas (opcional)</span>
-            <div class="modal-row">
-              <input type="date" id="filter-date-from" name="dateFrom">
-              <input type="date" id="filter-date-to" name="dateTo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label>Exportar PDF</label>
+                <button type="button" id="close-export-modal" class="modal-close">✕</button>
             </div>
-          </label>
+            <form id="export-filters-form" class="modal-body">
+                <label class="modal-field">
+                    <span>Rango de fechas (opcional)</span>
+                    <div class="modal-row">
+                        <input type="date" id="filter-date-from" name="dateFrom">
+                        <input type="date" id="filter-date-to" name="dateTo">
+                    </div>
+                </label>
 
-          <label class="modal-field">
-            <span>Modalidad</span>
-            <select id="filter-mode" name="mode">
-              <option value="all">Todas</option>
-              <option value="plane">Aérea</option>
-              <option value="vehicle">Terrestre</option>
-            </select>
-          </label>
+                <label class="modal-field">
+                    <span>Modalidad</span>
+                    <select id="filter-mode" name="mode">
+                        <option value="all">Todas</option>
+                        <option value="plane">Aérea</option>
+                        <option value="vehicle">Terrestre</option>
+                    </select>
+                </label>
 
-          <div class="modal-actions">
-            <button type="button" id="cancel-export-modal" class="modal-secondary">Cancelar</button>
-            <button type="submit" class="modal-primary">Generar PDF</button>
-          </div>
-        </form>
-      </div>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-export-modal" class="modal-secondary">Cancelar</button>
+                    <button type="submit" class="modal-primary">Generar PDF</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 </body>
@@ -196,4 +202,5 @@
 <script src="assets/js/coordSearch.js"></script>
 <!-- Export/Import del historial JSON -->
 <script src="assets/js/historyIO.js"></script>
+
 </html>

@@ -18,9 +18,8 @@
 
 /* Poner los botones de zoom del mapa en línea horizontal */
 .leaflet-control-zoom {
-    display: flex;
-    flex-direction: row;
-    gap: 0.2rem;
+    right: 1rem;
+    position: fixed;
 }
 
 /* *** Máx. 768 *** */

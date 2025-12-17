@@ -254,3 +254,96 @@
         font-size: 0.9rem;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Modal genérico con el look del tema */
+.app-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-modal {
+  background-color: #33616d;
+  border: 0.2rem solid #2e5863;
+  border-radius: 0.5rem;
+  color: #fff;
+  font-family: "ProjectFont", sans-serif;
+  width: min(90vw, 28rem);
+  box-shadow: 0 0.5rem 2rem rgba(0,0,0,0.35);
+  padding: 1rem;
+}
+
+.app-modal-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-modal-body {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.app-modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.modal-btn {
+  padding: 0.6rem 0.9rem;
+  border: 0.15rem solid #2e5863;
+  border-radius: 0.5rem;
+  background-color: #417885;
+  color: #fff;
+  cursor: pointer;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
+}
+
+.modal-btn:hover { background-color: #4a8a98; }
+.modal-btn.secondary { background-color: #33616d; }
+.modal-btn.secondary:hover { background-color: #3f7683; }
+/* ...existing code... */
