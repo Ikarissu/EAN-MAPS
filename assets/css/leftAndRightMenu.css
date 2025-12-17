@@ -3,29 +3,29 @@
 /* Contenedores */
 .left-menu,
 .right-menu {
-    background-color: #396974;
-    font-family: "ProjectFont", sans-serif;
-    color: #fff;
-    width: 20vw;
-    position: fixed;
-    z-index: 1000;
-    border-radius: 0.5rem;
-    margin: 0.5rem;
-    margin-top: 3rem;
+  background-color: #396974;
+  font-family: "ProjectFont", sans-serif;
+  color: #fff;
+  width: 20vw;
+  position: fixed;
+  z-index: 1000;
+  border-radius: 0.5rem;
+  margin: 0.5rem;
+  margin-top: 3rem;
 }
 
 /* Títulos */
 .left-menu-title,
 .right-menu-title {
-    padding: 1rem;
-    padding-bottom: 0;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    line-height: 1.2;
-    cursor: pointer !important;
-    user-select: none;
+  padding: 1rem;
+  padding-bottom: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.2;
+  cursor: pointer !important;
+  user-select: none;
 }
 
 /* Hacer clickeable el título para plegar/desplegar menús */
@@ -33,65 +33,30 @@
 .left-menu-title *,
 .right-menu-title,
 .right-menu-title * {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 /* Íconos de los títulos */
 .left-menu-title .bx,
 .right-menu-title .bx {
-    font-size: 3rem;
-    line-height: 1;
-    user-select: none;
+  font-size: 3rem;
+  line-height: 1;
+  user-select: none;
 }
 
 /* Contenedor de las opciones y los íconos del menú izquierdo */
 .left-menu-item,
 .right-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.2rem;
 }
 
 /* Íconos de las opciones de los menús */
 .left-menu-item .bx,
 .right-menu-item .bx {
-    font-size: 2rem;
-}
-
-/* Permitir plegar los menús para mejor visualización */
-.desktop-fold .left-menu,
-.desktop-fold .right-menu {
-    transition: transform 0.25s ease;
-    overflow: hidden;
-    pointer-events: auto;
-}
-
-/* Pestaña visible al plegar */
-.desktop-fold .left-menu:not(.is-open) {
-    transform: translateX(calc(-100% + 3.6rem));
-}
-.desktop-fold .right-menu:not(.is-open) {
-    transform: translateX(calc(100% - 3.6rem));
-}
-
-/* Ocultar contenido interno cuando está plegado */
-.desktop-fold .left-menu:not(.is-open) .left-menu-options,
-.desktop-fold .left-menu:not(.is-open) .left-menu-title label,
-.desktop-fold .right-menu:not(.is-open) .right-menu-title label,
-.desktop-fold .right-menu:not(.is-open) .right-menu-options,
-.desktop-fold .right-menu:not(.is-open) .distance-pagination {
-    display: none;
-}
-
-/* Iconos y textos más compactos al plegar */
-.desktop-fold .left-menu:not(.is-open) .left-menu-title {
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-}
-.desktop-fold .right-menu:not(.is-open) .right-menu-title {
-    flex-direction: row;
-    justify-content: flex-start;
+  font-size: 2rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -100,44 +65,44 @@
 
 /* Posición base del menú izquierdo */
 .left-menu {
-    left: 0.5rem;
+  left: 0.5rem;
 }
 
 /* Opciones del menú izquierdo */
 .left-menu-options {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
 }
 
 /* Botones del menú izquierdo */
 .left-menu-options #plane,
 .left-menu-options #vehicle,
 .left-menu-options #clear-mode {
-    width: 100%;
-    padding: 1rem;
-    border: 0.2rem solid #2e5863;
-    border-radius: 0.5rem;
-    background-color: #33616d;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
-    color: #fff;
-    cursor: pointer;
+  width: 100%;
+  padding: 1rem;
+  border: 0.2rem solid #2e5863;
+  border-radius: 0.5rem;
+  background-color: #33616d;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
 }
 
 /* Efecto hover de los botones del menú izquierdo */
 .left-menu-options #plane:hover,
 .left-menu-options #vehicle:hover,
 .left-menu-options #clear-mode:hover {
-    background-color: #417885;
+  background-color: #417885;
 }
 
 /* Efecto deshabilitado de los botones del menú izquierdo */
 .left-menu-options #plane:disabled,
 .left-menu-options #vehicle:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .left-menu-options-group .left-menu-item {
@@ -146,88 +111,88 @@
 
 /* Fuente y color de fondo del Select2 */
 .select2-container .select2-selection--single {
-    background-color: #33616d;
-    border: 0.2rem solid #2e5863;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
-    height: 2rem;
+  background-color: #33616d;
+  border: 0.2rem solid #2e5863;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
+  height: 2rem;
 }
 
 /* Fuente de las opciones del Select2 */
 .select2-container--default .select2-results__option {
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
 }
 
 /* Color de fuente del Select2 */
 .select2-container--default .select2-selection--single .select2-selection__placeholder {
-    color: #fff;
+  color: #fff;
 }
 
 /* Color del dropdown de las opciones del Select2 */
 .select2-container--default .select2-results>.select2-results__options {
-    background-color: #33616d;
+  background-color: #33616d;
 }
 
 /* Color de fuente de las opciones del Select2 */
 .select2-container--default .select2-results__option {
-    color: #fff;
+  color: #fff;
 }
 
 /* Color de hover al seleccionar las opciones del Select2 */
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #417885;
-    color: #fff;
+  background-color: #417885;
+  color: #fff;
 }
 
 /* Fondo del campo de búsqueda de las opciones del Select2 */
 .select2-container--default .select2-search--dropdown {
-    background: #33616d;
-    padding: 0.5rem;
+  background: #33616d;
+  padding: 0.5rem;
 }
 
 /* Fuente y color del input de búsqueda de las opciones del Select2 */
 .select2-container--default .select2-search--dropdown .select2-search__field {
-    background: #2e5863;
-    border: 0.12rem solid #2e5863;
-    color: #fff;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
-    border-radius: 0.35rem;
+  background: #2e5863;
+  border: 0.12rem solid #2e5863;
+  color: #fff;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
+  border-radius: 0.35rem;
 }
 
 /* Color de la opción seleccionada del Select2 */
 .left-menu .select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #fff;
+  color: #fff;
 }
 
 /* Color de la "X" del Select2 */
 .left-menu .select2-container--default .select2-selection--single .select2-selection__clear {
-    color: #fff;
+  color: #fff;
 }
 
 /* Ancho del scrollbar */
 .select2-container--default .select2-results__options::-webkit-scrollbar {
-    width: 1rem;
+  width: 1rem;
 }
 
 /* Color del scrollbar thumb */
 .select2-container--default .select2-results__options::-webkit-scrollbar-thumb {
-    background: #2e5863;
+  background: #2e5863;
 }
 
 /* Color de fondo del scrollbar */
 .select2-container--default .select2-results__options::-webkit-scrollbar-track {
-    background: #284b53;
+  background: #284b53;
 }
 
 /* Reloj con la hora actual según la zona horaria */
 .tz-clock {
-    font-size: 1.1rem;
+  font-size: 1.1rem;
 }
 
 .desktop-fold .left-menu:not(.is-open) .left-menu-title .bx {
-    padding-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -236,177 +201,224 @@
 
 /* Posición base del menú derecho */
 .right-menu {
-    right: 0.5rem;
+  right: 0.5rem;
 }
 
 /* Alinear menú derecho a la derecha de la pantalla */
 .right-menu {
-    right: 0.5rem;
-    width: 28vw;
-    overflow-x: hidden;
+  right: 0.5rem;
+  width: 28vw;
+  overflow-x: hidden;
 }
 
 /* Colocar padding inferior al título del menú derecho */
 .right-menu-title {
-    padding-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
 /* Opciones del menú derecho */
 .right-menu-options {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    padding-top: 0;
-    gap: 1rem;
-    width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  padding-top: 0;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Distancias buscadas */
 .distance-info {
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    padding: 1rem;
-    border: 0.2rem solid #2e5863;
-    border-radius: 0.5rem;
-    background-color: #33616d;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
-    color: #fff;
-    word-break: break-word;
-    overflow: hidden;
-    position: relative;
-    padding-right: 4rem;
-    /* ajusta según el ancho total de los botones */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  border: 0.2rem solid #2e5863;
+  border-radius: 0.5rem;
+  background-color: #33616d;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
+  color: #fff;
+  word-break: break-word;
+  overflow: hidden;
+  position: relative;
+  padding-right: 4rem;
+  /* ajusta según el ancho total de los botones */
 }
 
 /* Espacio entre las cartas de las distancias buscadas */
 .distance-info+.distance-info {
-    margin-top: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 /* Opciones de las distancias buscadas */
 .distance-record-options {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    left: auto;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  left: auto;
 }
 
 /* Botón para guardar la distancia buscada */
 .save-button,
 .show-route-button,
 .alt-route-button {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.4rem;
-    border: 0.15rem solid #2e5863;
-    border-radius: 0.5rem;
-    background-color: #417885;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1.5rem;
-    color: #fff;
-    cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border: 0.15rem solid #2e5863;
+  border-radius: 0.5rem;
+  background-color: #417885;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
 }
 
 /* Texto del botón */
 .button-text {
-    font-size: 0.5rem;
+  font-size: 0.5rem;
 }
 
 /* Paginación de las distancias buscadas */
 .distance-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0 1rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
 }
 
 /* Botones de la paginación de las distancias buscadas */
 .distance-pagination button {
-    padding: 0.4rem 0.8rem;
-    border: 0.15rem solid #2e5863;
-    border-radius: 0.4rem;
-    background-color: #417885;
-    color: #fff;
-    cursor: pointer;
-    font-family: "ProjectFont", sans-serif;
+  padding: 0.4rem 0.8rem;
+  border: 0.15rem solid #2e5863;
+  border-radius: 0.4rem;
+  background-color: #417885;
+  color: #fff;
+  cursor: pointer;
+  font-family: "ProjectFont", sans-serif;
 }
 
 /* Efecto deshabilitado de los botones de la paginación */
 .distance-pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Color blanco para los puntos de salida y llegada en las distancias buscadas */
 .point-link {
-    text-decoration: none;
-    color: #fff;
+  text-decoration: none;
+  color: #fff;
 }
 
 /* Botón para exportar todas las distancias buscadas a PDF */
 .export-all-btn {
-    padding: 0.8rem 1rem;
-    border: 0.15rem solid #2e5863;
-    border-radius: 0.5rem;
-    background-color: #417885;
-    color: #fff;
-    cursor: pointer;
-    font-family: "ProjectFont", sans-serif;
-    font-size: 1rem;
+  padding: 0.8rem 1rem;
+  border: 0.15rem solid #2e5863;
+  border-radius: 0.5rem;
+  background-color: #417885;
+  color: #fff;
+  cursor: pointer;
+  font-family: "ProjectFont", sans-serif;
+  font-size: 1rem;
 }
 
 /* Ícono para indicar qué modalidad es la distancia guardada */
 .distance-icon {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 /* Alinear icono y texto de modalidad */
 .mode-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 /* Propiedades del texto */
 .mode-text {
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.1;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.1;
 }
 
 /* *** Medidas responsivas *** */
 
 @media (max-width: 1280px) {
 
-    /* Menús más anchos */
-    .left-menu {
-        width: 25vw;
-    }
+  /* Menús más anchos */
+  .left-menu {
+    width: 25vw;
+  }
 
-    .right-menu {
-        width: 35vw;
-    }
+  .right-menu {
+    width: 35vw;
+  }
 }
 
 /* *** Máx. 1024 *** */
 
 @media (max-width: 1024px) {
 
-    /* Menús más anchos */
-    .left-menu {
-        width: 25vw;
-    }
+  /* Menús más anchos */
+  .left-menu {
+    width: 25vw;
+  }
 
-    .right-menu {
-        width: 30vw;
-    }
+  .right-menu {
+    width: 30vw;
+  }
+}
+
+/* Limitar el plegado horizontal (pestañas) a escritorio */
+@media (min-width: 769px) {
+
+  /* Permitir plegar los menús para mejor visualización */
+  .desktop-fold .left-menu,
+  .desktop-fold .right-menu {
+    transition: transform 0.25s ease;
+    overflow: hidden;
+    pointer-events: auto;
+  }
+
+  /* Permitir que el contenido (Select2) se desborde cuando el menú esté abierto */
+  .desktop-fold .left-menu.is-open,
+  .desktop-fold .right-menu.is-open {
+    overflow: visible;
+  }
+
+  /* Pestaña visible al plegar */
+  .desktop-fold .left-menu:not(.is-open) {
+    transform: translateX(calc(-100% + 3.6rem));
+  }
+
+  .desktop-fold .right-menu:not(.is-open) {
+    transform: translateX(calc(100% - 3.6rem));
+  }
+
+  /* Ocultar contenido interno cuando está plegado */
+  .desktop-fold .left-menu:not(.is-open) .left-menu-options,
+  .desktop-fold .left-menu:not(.is-open) .left-menu-title label,
+  .desktop-fold .right-menu:not(.is-open) .right-menu-title label,
+  .desktop-fold .right-menu:not(.is-open) .right-menu-options,
+  .desktop-fold .right-menu:not(.is-open) .distance-pagination {
+    display: none;
+  }
+
+  /* Iconos y textos más compactos al plegar */
+  .desktop-fold .left-menu:not(.is-open) .left-menu-title {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+  }
+
+  .desktop-fold .right-menu:not(.is-open) .right-menu-title {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
 }
 
 /* *** Máx. 768 *** */
@@ -415,102 +427,114 @@
 
 @media (max-width: 768px) {
 
-    /* *** Propiedades para ambos menús *** */
+  /* *** Propiedades para ambos menús *** */
 
-    /* Menús más delgados */
-    .left-menu,
-    .right-menu {
-        width: 30vw;
-        transition: transform 0.25s ease;
-        overflow: hidden;
-        opacity: 1;
-        pointer-events: auto;
-    }
+  /* Permitir que el contenido (Select2) se desborde cuando el menú esté abierto */
+  .left-menu.is-open,
+  .right-menu.is-open {
+    overflow: visible;
+  }
 
-    /* Cuando el menú está plegado, sólo se deja el ícono visible como pestaña */
-    .left-menu:not(.is-open) {
-        transform: translateX(calc(-100% + 3.6rem));
-    }
+  /* Asegurar que el dropdown quede por encima del menú */
+  .select2-container,
+  .select2-container .select2-dropdown {
+    z-index: 2001 !important;
+  }
 
-    .right-menu:not(.is-open) {
-        transform: translateX(calc(100% - 3.6rem));
-    }
+  /* Menús más delgados */
+  .left-menu,
+  .right-menu {
+    width: 30vw;
+    transition: transform 0.25s ease;
+    overflow: hidden;
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-    /* Cuando el menú está plegado, todo el contenido interno está oculto */
-    .left-menu:not(.is-open) .left-menu-options,
-    .left-menu:not(.is-open) .left-menu-title label,
-    .right-menu:not(.is-open) .right-menu-title label,
-    .right-menu:not(.is-open) .right-menu-options,
-    .right-menu:not(.is-open) .distance-pagination {
-        display: none;
-    }
+  /* Cuando el menú está plegado, sólo se deja el ícono visible como pestaña */
+  .left-menu:not(.is-open) {
+    transform: translateX(calc(-100% + 3.6rem));
+  }
 
-    /* Cuando el menú está plegado, el ícono de los títulos está del lado derecho y el texto del lado izquierdo */
-    .left-menu:not(.is-open) .left-menu-title {
-        flex-direction: row-reverse;
-        justify-content: flex-start;
-    }
+  .right-menu:not(.is-open) {
+    transform: translateX(calc(100% - 3.6rem));
+  }
 
-    .right-menu:not(.is-open) .right-menu-title {
-        flex-direction: row;
-        justify-content: flex-start;
-    }
+  /* Cuando el menú está plegado, todo el contenido interno está oculto */
+  .left-menu:not(.is-open) .left-menu-options,
+  .left-menu:not(.is-open) .left-menu-title label,
+  .right-menu:not(.is-open) .right-menu-title label,
+  .right-menu:not(.is-open) .right-menu-options,
+  .right-menu:not(.is-open) .distance-pagination {
+    display: none;
+  }
 
-    /* Cuando el menú está desplegado, todos los elementos están visibles */
-    .left-menu.is-open,
-    .right-menu.is-open {
-        transform: translateX(0);
-    }
+  /* Cuando el menú está plegado, el ícono de los títulos está del lado derecho y el texto del lado izquierdo */
+  .left-menu:not(.is-open) .left-menu-title {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+  }
 
-    /* Íconos del título más pequeños */
-    .left-menu-title .bx,
-    .right-menu-title .bx {
-        font-size: 2rem;
-    }
+  .right-menu:not(.is-open) .right-menu-title {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
 
-    .left-menu-title,
-    .right-menu-title {
-        font-size: 1rem;
-    }
+  /* Cuando el menú está desplegado, todos los elementos están visibles */
+  .left-menu.is-open,
+  .right-menu.is-open {
+    transform: translateX(0);
+  }
 
-    /* ------------------------------------------------------------------ */
+  /* Íconos del título más pequeños */
+  .left-menu-title .bx,
+  .right-menu-title .bx {
+    font-size: 2rem;
+  }
 
-    /* *** Propiedades específicas para menú izquierdo *** */
+  .left-menu-title,
+  .right-menu-title {
+    font-size: 1rem;
+  }
 
-    /* Padding del título del menú izquierdo */
-    .left-menu-title {
-        padding: 1rem;
-    }
+  /* ------------------------------------------------------------------ */
 
-    .left-menu-item,
-    .left-menu-options #plane,
-    .left-menu-options #vehicle,
-    .left-menu-options #clear-mode,
-    .select2-container .select2-selection--single,
-    .select2-container--default .select2-results__option,
-    .select2-container--default .select2-search--dropdown .select2-search__field,
-    .tz-clock {
-        font-size: 0.8rem;
-    }
+  /* *** Propiedades específicas para menú izquierdo *** */
 
-    .left-menu-options{
-        padding-top: 0;
-    }
+  /* Padding del título del menú izquierdo */
+  .left-menu-title {
+    padding: 1rem;
+  }
 
-    /* ------------------------------------------------------------------ */
+  .left-menu-item,
+  .left-menu-options #plane,
+  .left-menu-options #vehicle,
+  .left-menu-options #clear-mode,
+  .select2-container .select2-selection--single,
+  .select2-container--default .select2-results__option,
+  .select2-container--default .select2-search--dropdown .select2-search__field,
+  .tz-clock {
+    font-size: 0.8rem;
+  }
 
-    /* *** Propiedades específicas para menú derecho *** */
+  .left-menu-options {
+    padding-top: 0;
+  }
 
-    .right-menu {
-        width: 35vw;
-    }
+  /* ------------------------------------------------------------------ */
 
-    .export-all-btn,
-    .distance-info,
-    .distance-pagination,
-    .mode-text {
-        font-size: 0.8rem;
-    }
+  /* *** Propiedades específicas para menú derecho *** */
+
+  .right-menu {
+    width: 35vw;
+  }
+
+  .export-all-btn,
+  .distance-info,
+  .distance-pagination,
+  .mode-text {
+    font-size: 0.8rem;
+  }
 }
 
 /* Ocultar el menú de instrucciones de leaftlet */
@@ -690,7 +714,7 @@
   .left-menu-options-group {
     gap: 0.4rem;
   }
-  
+
   /* Los items ocupan ancho con un mínimo para mantener legibilidad */
   .left-menu-options-group .left-menu-item {
     flex: 1 1 48%;
@@ -756,14 +780,14 @@
   }
 
   /* ------------------------------------------------------------------ */
-  
+
   /* *** Propiedades específicas para menú izquierdo *** */
-  
+
   /* Espacio entre las opciones del menú izquierdo */
   .left-menu-options-group {
     gap: 0.35rem;
   }
-  
+
   /* Los items ocupan ancho con un mínimo para mantener legibilidad */
   .left-menu-options-group .left-menu-item {
     flex: 1 1 48%;
@@ -778,7 +802,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  
+
   /* *** Propiedades específicas para menú derecho *** */
 
   /* Padding reducido en las distancias buscadas */
