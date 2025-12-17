@@ -86,7 +86,7 @@
 
         // refrescar UI
         if (typeof renderDistanceList === 'function') renderDistanceList({ jumpToLast: true });
-        notify('Historial importado correctamente (historial anterior eliminado)', 2000, 'success');
+        window.location.reload();
       } catch (err) {
         console.error(err);
         alert('Error al leer el archivo. Asegúrate de seleccionar un JSON válido.');

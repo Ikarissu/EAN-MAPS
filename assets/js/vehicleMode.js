@@ -53,8 +53,6 @@ function VehiclePointAB() {
         waypoints: [L.latLng(_pointA), L.latLng(_pointB)],
         language: "es",
         formatter: new L.Routing.Formatter({ language: "es" }),
-        routeWhileDragging: false,
-        draggableWaypoints: false,
         createMarker: function () {
           return null;
         },
