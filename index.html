@@ -60,6 +60,14 @@
                     <i class="bx bx-clock"></i>
                     <div id="tz-clock" class="tz-clock"></div>
                 </div>
+                            <div class="coord-search">
+                <label for="coord-search-input">Buscar coordenadas</label>
+                <div class="coord-search-row">
+                    <input id="coord-search-input" type="text" placeholder="lat, lng" />
+                    <button id="coord-search-btn" type="button">Buscar</button>
+                </div>
+                                <div id="coord-suggestions" class="coord-suggestions" aria-hidden="true"></div>
+            </div>
             </div>
         </nav>
     </aside>
@@ -170,4 +178,6 @@
 <script src="assets/js/pdfAllExport.js"></script>
 <!-- Pliegue/Despliegue de los menús en pantallas pequeñas -->
 <script src="assets/js/menuToggle.js"></script>
+<!-- Búsqueda de coordenadas en el menú derecho -->
+<script src="assets/js/coordSearch.js"></script>
 </html>
