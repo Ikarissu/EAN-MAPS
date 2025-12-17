@@ -77,6 +77,7 @@ function renderDistanceList(opts = {}) {
                   <p>Punto de llegada: ${pointB_html}</p>
                   <p class="start-hour">Hora de salida (${r.tzLabel}): ${r.start_hour}</p>
                   <p class="end-hour">Hora de llegada aproximada (${r.tzLabel}): ${r.end_hour}</p>
+                  <p class="dist-hour">Duración estimada: ${r.dist_hour}</p>
                     <div class="distance-record-options">
                         <button class="save-button">
                             <i class="bx bx-save save-btn"></i>
@@ -261,6 +262,7 @@ function toggleAlternativeSelection(recordIndex, altIdx, panel) {
       const offset = getSelectedTimezoneOffset();
       record.end_hour = formatTimeWithOffset(record.primaryRoute.endTS || (record.startTS || Date.now()), offset);
       record.start_hour = formatTimeWithOffset(record.startTS || Date.now(), offset);
+      record.dist_hour = record.primaryRoute.dist_hour || '—';
     }
   } else {
     // Seleccionar alternativa -> actualizar distancia, instrucciones y hora
@@ -273,6 +275,7 @@ function toggleAlternativeSelection(recordIndex, altIdx, panel) {
     const startTS = record.startTS || Date.now();
     record.end_hour = formatTimeWithOffset(startTS + (Number(alt.distance || 0) / 70) * 3600000, offset);
     record.start_hour = formatTimeWithOffset(startTS, offset);
+    record.dist_hour = formatDuration(alt?.summary?.totalTime || alt?.summary?.total_time || alt?.summary?.duration || alt?.durationSeconds || 0);
   }
 
   // Persistir y actualizar DOM del registro
@@ -286,6 +289,8 @@ function toggleAlternativeSelection(recordIndex, altIdx, panel) {
     if (endHourEl) endHourEl.textContent = `Hora de llegada aproximada (${record.tzLabel}): ${record.end_hour}`;
     const startHourEl = recordEl.querySelector('.start-hour');
     if (startHourEl) startHourEl.textContent = `Hora de salida (${record.tzLabel}): ${record.start_hour}`;
+    const distHourEl = recordEl.querySelector('.dist-hour');
+    if (distHourEl) distHourEl.textContent = `Duración estimada: ${record.dist_hour}`;
 
     // Actualizar texto de botones dentro el panel
     if (panel) {

@@ -121,6 +121,24 @@ function VehiclePointAB() {
           const tzLabel = timezoneSelect?.value || "GMT-4";
           const start_hour = formatTimeWithOffset(startTS, offset);
           const end_hour = formatTimeWithOffset(endTS, offset);
+          // calcular duración en segundos usando summary si existe, o por aproximación (velocidad 70 km/h)
+          let durationSec = 0;
+          if (route.summary && (route.summary.totalTime || route.summary.total_time || route.summary.duration)) {
+            durationSec = route.summary.totalTime || route.summary.total_time || route.summary.duration;
+          } else {
+            durationSec = Math.round((distance / 70) * 3600);
+          }
+          const dist_hour = (function(sec){
+            try {
+              const s = Number(sec) || 0;
+              if (s <= 0) return '—';
+              const mins = Math.round(s / 60);
+              if (mins < 60) return `${mins} min`;
+              const hours = Math.floor(mins / 60);
+              const remMins = mins % 60;
+              return remMins ? `${hours} h ${remMins} min` : `${hours} h`;
+            } catch (e) { return '—'; }
+          })(durationSec);
 
           const instructions =
             route.instructions?.map((instr, idx) => `${idx + 1}. ${instr.text}`) ||
@@ -137,6 +155,8 @@ function VehiclePointAB() {
               return null;
             }).filter(Boolean),
             endTS: endTS,
+            durationSec: durationSec,
+            dist_hour: dist_hour,
             summary: route.summary || {}
           };
 
@@ -151,6 +171,7 @@ function VehiclePointAB() {
             tzLabel,
             start_hour,
             end_hour,
+            dist_hour,
             // startTS numérico para poder recalcular horas al cambiar alternativa
             startTS,
             createdAt: new Date().toISOString(),
