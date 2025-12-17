@@ -31,6 +31,19 @@ function PlanePointAB() {
             const tzLabel = timezoneSelect?.value || "GMT-4";
             const start_hour = formatTimeWithOffset(startTS, offset);
             const end_hour = formatTimeWithOffset(endTS, offset);
+            // Para modo avión no hay 'route.summary' — estimamos duración por velocidad de crucero (800 km/h)
+            const durationSec = Math.round((distance / 800) * 3600);
+            const dist_hour = (function(sec){
+                try {
+                    const s = Number(sec) || 0;
+                    if (s <= 0) return '—';
+                    const mins = Math.round(s / 60);
+                    if (mins < 60) return `${mins} min`;
+                    const hours = Math.floor(mins / 60);
+                    const remMins = mins % 60;
+                    return remMins ? `${hours} h ${remMins} min` : `${hours} h`;
+                } catch (e) { return '—'; }
+            })(durationSec);
 
             distanceRecords.push({
                 type: "plane",
@@ -42,6 +55,10 @@ function PlanePointAB() {
                 tzLabel,
                 start_hour,
                 end_hour,
+                dist_hour,
+                // guardar startTS y durationSec para cálculos y restauración
+                startTS,
+                durationSec,
                 createdAt: new Date().toISOString(),
                 pointA_info: {
                 name: markerA.getPopup().getContent().match(/<b>(.*?) \((.*?)\)<\/b>/)?.[1] || "Origen", // Extraer nombre del popup
