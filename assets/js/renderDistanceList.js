@@ -58,6 +58,14 @@ function renderDistanceList(opts = {}) {
         const pointA_html = createPointHTML(r.pointA_info);
         const pointB_html = createPointHTML(r.pointB_info);
 
+        const altRouteButtonHTML = (r.type === "vehicle")
+            ? `
+                <button class="alt-route-button" data-alt-index="0" title="Mostrar ruta alternativa">
+                    <i class='bx bx-path'></i>
+                </button>
+              `
+            : '';
+
         const modeIcon =
             r.type === "plane"
                 ? '<i class="bx bx-plane-alt distance-icon"></i>'
@@ -85,9 +93,7 @@ function renderDistanceList(opts = {}) {
                         <button class="show-route-button">
                             <i class="bx bx-route"></i>
                         </button>
-                    <button class="alt-route-button">
-                      <i class="bx bx-route"></i>
-                    </button>
+                        ${altRouteButtonHTML}
                     </div>
                 </div>
             </div>`
