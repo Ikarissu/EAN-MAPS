@@ -615,39 +615,16 @@
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* *** Máx. 768 *** */
 @media (max-width: 768px) {
   .left-menu {
-    width: 45vw !important;
+    width: 40vw !important;
   }
 
   .right-menu {
-    width: 40vw !important;
+    width: 47vw !important;
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 /* *** Min. 769 *** */
 
