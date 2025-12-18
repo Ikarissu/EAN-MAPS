@@ -58,6 +58,7 @@ function renderDistanceList(opts = {}) {
         const pointA_html = createPointHTML(r.pointA_info);
         const pointB_html = createPointHTML(r.pointB_info);
 
+        // Botón de ruta alternativa solo si es distancia terrestre
         const altRouteButtonHTML = (r.type === "vehicle")
             ? `
                 <button class="alt-route-button" data-alt-index="0" title="Mostrar ruta alternativa">
@@ -66,6 +67,7 @@ function renderDistanceList(opts = {}) {
               `
             : '';
 
+        // Icono según el tipo de distancia
         const modeIcon =
             r.type === "plane"
                 ? '<i class="bx bx-plane-alt distance-icon"></i>'
@@ -73,6 +75,7 @@ function renderDistanceList(opts = {}) {
                 ? '<i class="bx bx-car distance-icon"></i>'
                 : '<i class="bx bx-map distance-icon"></i>';
 
+        // Insertar el HTML de la tarjeta
         distanceList.insertAdjacentHTML(
             "beforeend",
             `<div class="distance-info" data-record-index="${globalIndex}">
@@ -122,10 +125,12 @@ window._currentPrimaryPolyline = window._currentPrimaryPolyline || null;
 // Limpiar polilíneas dibujadas
 function clearPolylines() {
   try {
+    // Eliminar la polilínea alternativa si existe
     if (window._currentAltPolyline) {
       map.removeLayer(window._currentAltPolyline);
       window._currentAltPolyline = null;
     }
+    // Eliminar la polilínea principal si existe
     if (window._currentPrimaryPolyline) {
       map.removeLayer(window._currentPrimaryPolyline);
       window._currentPrimaryPolyline = null;
@@ -140,8 +145,9 @@ function updateRecordDOM(recordIndex) {
     `.distance-info[data-record-index="${recordIndex}"]`
   );
   if (!record || !recordEl) return;
-
+  // Actualizar los campos relevantes
   const modeText = recordEl.querySelector(".mode-text");
+
   if (modeText)
     modeText.textContent = `${record.typeLabel || record.type}: ${
       record.distance
@@ -274,7 +280,7 @@ function drawPrimaryRouteOnMap(record) {
   }
 
   clearPolylines();
-
+  // Obtiene lat,long y dibuja la linea en el mapa
   const latlngs = coords.map((c) => [c.lat, c.lng]);
   window._currentPrimaryPolyline = L.polyline(latlngs, {
     color: "blue",

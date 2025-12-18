@@ -31,8 +31,9 @@ function PlanePointAB() {
             const tzLabel = timezoneSelect?.value || "GMT-4";
             const start_hour = formatTimeWithOffset(startTS, offset);
             const end_hour = formatTimeWithOffset(endTS, offset);
-            // Para modo avión no hay 'route.summary' — estimamos duración por velocidad de crucero (800 km/h)
+            // Para modo avión se estima duración por velocidad de crucero aproximada (800 km/h)
             const durationSec = Math.round((distance / 800) * 3600);
+            //Calcula la diferencia horaria de la distancia
             const dist_hour = (function(sec){
                 try {
                     const s = Number(sec) || 0;
@@ -45,6 +46,7 @@ function PlanePointAB() {
                 } catch (e) { return '—'; }
             })(durationSec);
 
+            // Guardar registro en el historial
             distanceRecords.push({
                 type: "plane",
                 typeLabel: "Distancia aérea",
@@ -60,6 +62,7 @@ function PlanePointAB() {
                 startTS,
                 durationSec,
                 createdAt: new Date().toISOString(),
+                // Información de puntos A y B
                 pointA_info: {
                 name: markerA.getPopup().getContent().match(/<b>(.*?) \((.*?)\)<\/b>/)?.[1] || "Origen", // Extraer nombre del popup
                 lat: _pointA.lat,
@@ -73,6 +76,7 @@ function PlanePointAB() {
                 pointA: _pointA,
                 pointB: _pointB,
               });
+              // Guardar en almacenamiento y refrescar lista
             saveDistanceRecords(distanceRecords);
             renderDistanceList({ jumpToLast: true });
             window.openBottomMenu?.();

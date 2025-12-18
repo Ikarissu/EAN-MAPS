@@ -1,20 +1,24 @@
-
+// Funcion de geocodificación inversa para obtener nombre de ubicación a partir de coordenadas
 function reverseGeocode(latlng) {
   return new Promise((resolve) => {
     // servicio Nominatim de Geocoder.org para geocodificación inversa
     const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latlng.lat}&lon=${latlng.lng}&zoom=18&addressdetails=1`;
 
+    // Realizar la solicitud fetch
     fetch(nominatimUrl)
       .then((response) => response.json())
       .then((data) => {
+        // Extraer un nombre legible de la respuesta
         let name = data.display_name || "Ubicación desconocida";
 
+        // Intentar obtener un nombre más específico si está disponible
         if (data.address && data.address.road) {
           name = data.address.road;
         }
 
         resolve(name);
       })
+      // Manejo de errores
       .catch((error) => {
         console.error("Error en geocodificación inversa:", error);
         resolve("Ubicación (Geocodificación fallida)");
@@ -50,9 +54,9 @@ function VehiclePointAB() {
 
       // remover control anterior si existe
       if (routingControl) { map.removeControl(routingControl); routingControl = null; }
-
+  // Crear el control de ruteo con los waypoints actuales
       const wpObjs = window._routeWaypoints.map(wp => L.latLng(wp));
-
+      // Crear el control de ruteo con opciones especificas como idioma y estilo
       routingControl = L.Routing.control({
         waypoints: wpObjs,
         language: "es",
@@ -64,6 +68,7 @@ function VehiclePointAB() {
         show: false,
       }).addTo(map);
 
+      // Manejo de errores y rutas encontradas
       routingControl.on("routingerror", function (e) {
         showNotification(
           "Error: No se encontró una ruta vehicular posible entre los puntos seleccionados.",
@@ -103,6 +108,7 @@ function VehiclePointAB() {
             return null;
           }).filter(Boolean);
 
+          // Retornar objeto de alternativa
           return {
             distance: distKm,
             instructions: instr,
@@ -129,6 +135,7 @@ function VehiclePointAB() {
           // calcular endTS a partir de durationSec para que end_hour y dist_hour sean consistentes
           const endTS = startTS + (durationSec * 1000);
           const end_hour = formatTimeWithOffset(endTS, offset);
+          // Calcular la diferencia horaria de la distancia
           const dist_hour = (function(sec){
             try {
               const s = Number(sec) || 0;
@@ -141,6 +148,7 @@ function VehiclePointAB() {
             } catch (e) { return '—'; }
           })(durationSec);
 
+          // Extraer instrucciones de la ruta principal
           const instructions =
             route.instructions?.map((instr, idx) => `${idx + 1}. ${instr.text}`) ||
             [];
@@ -185,6 +193,7 @@ function VehiclePointAB() {
             waypoints: Array.isArray(window._routeWaypoints)
               ? window._routeWaypoints.map(wp => ({ lat: wp.lat, lng: wp.lng, name: wp.name || null }))
               : [],
+            // Información de puntos A y B para compatibilidad
             pointA_info: {
               name: _pointA.name,
               lat: _pointA.lat,
@@ -232,20 +241,21 @@ function VehiclePointAB() {
 
   // Resetea la ruta actual pero mantiene el modo activo para crear una nueva
   function resetVehicleRouteKeepMode() {
+    // Borra ruta/controles
     try {
       if (routingControl) {
         map.removeControl(routingControl);
         routingControl = null;
       }
     } catch (e) {}
-
+    // Eliminar los marcadores anteriores
     try {
       if (window._routeMarkers && window._routeMarkers.length) {
         window._routeMarkers.forEach(m => { try { map.removeLayer(m); } catch (e) {} });
         window._routeMarkers = [];
       }
     } catch (e) {}
-
+    // Reinicio de variables de punto y waypoints
     try { window._routeWaypoints = []; } catch (e) {}
 
     _pointA = null;

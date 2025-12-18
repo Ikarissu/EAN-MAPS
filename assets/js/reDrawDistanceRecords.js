@@ -1,6 +1,10 @@
+
+//Mostrar un registro de distancia en el mapa
 function showRecordOnMap(record) {
+  // Limpiar cualquier modo activo
   clearActiveMode();
 
+  // Determinar tipo de registro
   const isPlane = record.type === "plane" || record.typeLabel === "Distancia aérea";
   const isVehicle = record.type === "vehicle" || record.typeLabel === "Distancia terrestre";
 
@@ -19,12 +23,14 @@ function showRecordOnMap(record) {
     // crear marcadores para los endpoints
     markerA = L.marker(_pointA).addTo(map);
     markerB = L.marker(_pointB).addTo(map);
+    // crear polilínea directa entre los puntos A y B
     _polyline = L.polyline([_pointA, _pointB], { color: "red" }).addTo(map);
     map.fitBounds(_polyline.getBounds(), { padding: [50, 50] });
   } else if (isVehicle && wps.length >= 2) {
     // crear marcadores para todos los waypoints y registrarlos para poder limpiarlos
     try { if (!window._routeMarkers) window._routeMarkers = []; } catch (e) { window._routeMarkers = []; }
     try { if (!window._routeWaypoints) window._routeWaypoints = []; } catch (e) { window._routeWaypoints = []; }
+    // Crear marcadores y guardar waypoints
     wps.forEach((wp) => {
       try {
         const m = L.marker(wp).addTo(map);
@@ -33,7 +39,9 @@ function showRecordOnMap(record) {
       try { window._routeWaypoints.push({ lat: wp.lat, lng: wp.lng, name: wp.name || null }); } catch (e) {}
     });
 
+    // Crear control de ruteo con los waypoints
     const latlngs = wps.map(w => L.latLng(w.lat, w.lng));
+    // Crear el control de ruteo con opciones
     routingControl = L.Routing.control({
       waypoints: latlngs,
       language: "es",

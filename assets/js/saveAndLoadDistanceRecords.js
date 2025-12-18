@@ -1,3 +1,5 @@
+
+// Guardar y Cargar Registros de Distancia en el Almacenamiento Local (Cookie Local)
 const STORAGE_KEY = "ean-maps:distanceRecords";
 
 // Cargar Las Distancias Almacenadas}

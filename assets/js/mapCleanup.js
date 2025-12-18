@@ -1,14 +1,19 @@
+
+// Elimina las rutas dibujadas actualmente (principal y alternativa)
 function removeDrawnRoutes() {
+  // Eliminar polilínea alternativa si existe
   try {
     if (window._currentAltPolyline) {
       map.removeLayer(window._currentAltPolyline);
       window._currentAltPolyline = null;
     }
+    // Eliminar polilínea principal si existe
     if (window._currentPrimaryPolyline) {
       map.removeLayer(window._currentPrimaryPolyline);
       window._currentPrimaryPolyline = null;
     }
   } catch (e) {}
+
 }
 
 

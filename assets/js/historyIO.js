@@ -1,7 +1,8 @@
 // Exportar / Importar historial en JSON
 (function(){
-    // ...existing code...
+  // Función genérica para mostrar un modal de confirmación/alerta
     function showModal({ title = 'Aviso', message = '', confirmText = 'Aceptar', cancelText = null }) {
+      
       return new Promise((resolve) => {
         const overlay = document.createElement('div');
         overlay.className = 'app-modal-overlay';
@@ -22,8 +23,9 @@
   
         const actions = document.createElement('div');
         actions.className = 'app-modal-actions';
-  
+        // Botones
         if (cancelText) {
+          // Botón de cancelar
           const cancelBtn = document.createElement('button');
           cancelBtn.className = 'modal-btn secondary';
           cancelBtn.textContent = cancelText;
@@ -31,11 +33,13 @@
           actions.appendChild(cancelBtn);
         }
   
+        // Botón de confirmar
         const okBtn = document.createElement('button');
         okBtn.className = 'modal-btn';
         okBtn.textContent = confirmText;
         okBtn.addEventListener('click', () => { resolve(true); document.body.removeChild(overlay); });
   
+        // Manejo de teclado
         overlay.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && cancelText) { resolve(false); document.body.removeChild(overlay); }
           if (e.key === 'Enter') { resolve(true); document.body.removeChild(overlay); }
@@ -50,20 +54,11 @@
         okBtn.focus();
       });
     }
-  
+  // Funciones específicas de alerta y confirmación
     const showAlertModal = (msg) => showModal({ title: 'Error', message: msg, confirmText: 'Aceptar' });
     const showConfirmModal = (msg) => showModal({ title: 'Confirmación', message: msg, confirmText: 'Importar', cancelText: 'Cancelar' });
 
-
-
-
-
-
-
-
-
-
-
+  // Función genérica de notificación
   const notify = (msg, ms = 2000, type = 'info') => {
     if (typeof showNotification === 'function') return showNotification(msg, ms, type);
     try { console.log(type.toUpperCase(), msg); } catch (e) {}
@@ -73,49 +68,63 @@
     // Validación mínima: debe ser un array. Se puede ampliar con checks más estrictos.
     return Array.isArray(obj);
   }
-
+  // Inicialización de botones y eventos
   function init() {
+  
     const exportBtn = document.getElementById('export-history-btn');
     const importBtn = document.getElementById('import-history-btn');
     const fileInput = document.getElementById('import-history-file');
+
+    // Verificar existencia de elementos
     if (!exportBtn || !importBtn || !fileInput) return;
 
     exportBtn.addEventListener('click', () => {
+      // Exportar historial como JSON
       try {
+        // Obtener datos del historial
         const data = (typeof loadDistanceRecords === 'function') ? loadDistanceRecords() : (window.distanceRecords || []);
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
+        //nombrar archivo para descarga
         a.download = 'ean-maps-history.json';
         document.body.appendChild(a);
+        // Iniciar descarga
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
         notify('Historial exportado', 2000, 'success');
       } catch (err) {
+        //manejo de errores
         console.error(err);
         notify('Error exportando historial', 3000, 'error');
       }
     });
-
+    // Importar historial desde archivo JSON
     importBtn.addEventListener('click', () => fileInput.click());
-
+    
+    // Manejo de selección de archivo
     fileInput.addEventListener('change', async (e) => {
       const f = e.target.files && e.target.files[0];
       if (!f) return;
       try {
+        // Leer contenido del archivo
         const text = await f.text();
         let parsed;
+        // Intentar parsear JSON
         try { parsed = JSON.parse(text); } catch (err) {
+          //manejo de error de parseo
           await showAlertModal('Archivo inválido: no se pudo parsear JSON.');
           return;
         }
+        // Validar estructura del historial
         if (!isValidHistory(parsed)) {
           await showAlertModal('Archivo inválido: se esperaba un array JSON con el historial.');
           return;
         }
 
+        // Confirmar reemplazo del historial actual
         const ok = await showConfirmModal('Importar este archivo reemplazará el historial actual. ¿Deseas continuar?');
         if (!ok) return;
 
