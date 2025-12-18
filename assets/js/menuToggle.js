@@ -9,7 +9,7 @@
 
   // Calcular y fijar la posición vertical de la pestaña plegada en escritorio
   function updateDesktopTabPositions() {
-    const isDesktop = window.matchMedia("(min-width: 769px)").matches;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
     if (!isDesktop || !leftMenu || !rightMenu) return;
 
     const remPx =
