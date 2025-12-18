@@ -585,7 +585,7 @@
 /* *** Máx. 2560 *** */
 @media (max-width: 2560px) {
   .left-menu {
-    width: 13vw !important;
+    width: 20vw !important;
   }
 
   .right-menu {
