@@ -593,7 +593,7 @@
   }
 }
 
-/* *** Máx. 2560 *** */
+/* *** Máx. 1440 *** */
 @media (max-width: 1440px) {
   .left-menu {
     width: 23vw !important;
@@ -604,6 +604,23 @@
   }
 }
 
+/* *** Máx. 1280 *** */
+@media (max-width: 1280px) {
+
+  .right-menu {
+    width: 38vw !important;
+  }
+  .export-all-btn,
+  #export-history-btn, 
+  #import-history-btn,
+  .distance-info,
+  .mode-text,
+  #distance-page-indicator{
+    font-size: 0.8rem;
+  }
+  
+}
+
 /* *** Máx. 1024 *** */
 @media (max-width: 1024px) {
   .left-menu {
@@ -611,9 +628,11 @@
   }
 
   .right-menu {
-    width: 50vw !important;
+    width: 35vw !important;
   }
 }
+
+
 
 /* *** Máx. 768 *** */
 @media (max-width: 768px) {
