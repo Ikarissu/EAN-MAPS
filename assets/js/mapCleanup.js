@@ -18,6 +18,8 @@ function removeDrawnRoutes() {
 
 
 function clearActiveMode({ keepPoints = false } = {}) {
+  // Desactivar el estado de modo activo
+  window.isModeActive = false;
   // Borra ruta/controles
   if (routingControl) { map.removeControl(routingControl); routingControl = null; }
   if (_polyline) { map.removeLayer(_polyline); _polyline = null; }

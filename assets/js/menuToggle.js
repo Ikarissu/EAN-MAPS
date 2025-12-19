@@ -54,12 +54,19 @@
       document.body.style.removeProperty("--right-panel-top");
     }
   }
-  // ...existing code...
+
+  // Bandera para ignorar el próximo clic en el menú izquierdo tras cerrarlo desde código
+  let ignoreNextLeftMenuClick = false;
 
   // Abrir o cerrar un menú y actualizar el atributo aria para accesibilidad
   function setExpanded(menuEl, expanded) {
+    console.log("setExpanded:", menuEl.id, "expanded:", expanded, "stack:", new Error().stack);
     menuEl.classList.toggle("is-open", expanded);
     menuEl.setAttribute("aria-expanded", String(expanded));
+    // Si cerramos el menú izquierdo desde código, ignorar el próximo clic
+    if (menuEl === leftMenu && !expanded) {
+      ignoreNextLeftMenuClick = true;
+    }
   }
 
   // Asegurar que solo un menú esté abierto a la vez
@@ -74,6 +81,7 @@
     if (!rightMenu || !leftMenu) return;
     setExpanded(rightMenu, true);
     setExpanded(leftMenu, false);
+    updateDesktopTabPositions();
   };
 
   // Estado inicial: ambos menús empiezan cerrados para que el usuario elija cuál abrir
@@ -125,11 +133,17 @@
 
   // Si el menú izquierdo está cerrado y se hace clic en su contenedor, se abre y cierra el otro
   leftMenu?.addEventListener("click", (e) => {
-    if (!leftMenu.classList.contains("is-open")) {
+  // Si el menú está cerrado por código (no por el usuario), ignora todos los clics
+  if (!leftMenu.classList.contains("is-open")) {
+    // Si hay un modo activo, no permitir abrir el menú
+    if (window.isModeActive) {
       e.stopPropagation();
-      toggleResponsive(leftMenu, rightMenu);
+      return;
     }
-  });
+    e.stopPropagation();
+    toggleResponsive(leftMenu, rightMenu);
+  }
+});
 
   // Si el menú derecho está cerrado y se hace clic en su contenedor, se abre y cierra el otro
   rightMenu?.addEventListener("click", (e) => {
@@ -146,5 +160,3 @@
   leftMenu && leftMenuResizeObserver.observe(leftMenu);
 
 })();
-
-//Control de menu
