@@ -1,12 +1,9 @@
-// Control para las acciones de ruta en modo terrestre (nueva ruta sin salir del modo)
+// Control para las acciones de ruta en modo terrestre 
 (function(){
   // Inicializa el botón de nueva ruta y lo transforma en "Terrestre - varios destinos"
   function init(){
     const btn = document.getElementById('new-route-btn');
     if (!btn) return;
-
-    // Ajustar texto inicial
-    btn.textContent = 'Varios destinos';
     btn.classList.remove('stop-route');
 
     // Estado de activación (multi-destinos)

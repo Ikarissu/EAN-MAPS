@@ -267,31 +267,3 @@ function VehiclePointAB() {
   map.on('click', mapClickListener);
 }
 
-  // Resetea la ruta actual pero mantiene el modo activo para crear una nueva
-  function resetVehicleRouteKeepMode() {
-    // Borra ruta/controles
-    try {
-      if (routingControl) {
-        map.removeControl(routingControl);
-        routingControl = null;
-      }
-    } catch (e) {}
-    // Eliminar los marcadores anteriores
-    try {
-      if (window._routeMarkers && window._routeMarkers.length) {
-        window._routeMarkers.forEach(m => { try { map.removeLayer(m); } catch (e) {} });
-        window._routeMarkers = [];
-      }
-    } catch (e) {}
-    // Reinicio de variables de punto y waypoints
-    try { window._routeWaypoints = []; } catch (e) {}
-
-    _pointA = null;
-    _pointB = null;
-    markerA = null;
-    markerB = null;
-
-    try { if (typeof removeDrawnRoutes === 'function') removeDrawnRoutes(); } catch (e) {}
-
-    try { showNotification('Nueva ruta: listo para seleccionar puntos', 2000, 'success'); } catch (e) { console.log('Nueva ruta iniciada'); }
-  }
