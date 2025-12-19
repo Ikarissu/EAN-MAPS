@@ -22,14 +22,12 @@
           try { showNotification('Modo: Varios destinos activado', 2000, 'success'); } catch(e){}
         } catch (e) { console.error(e); }
       } else {
-        // Detener modo multi por completo (no volver a A->B)
+        // Detener modo multi por completo 
         multiActive = false;
         btn.textContent = 'Varios destinos';
         btn.classList.remove('stop-route');
         try {
-          // Limpiar listeners, rutas y marcadores
-          if (typeof clearActiveMode === 'function') clearActiveMode();
-          else if (typeof resetVehicleRouteKeepMode === 'function') resetVehicleRouteKeepMode();
+
           // Asegurar que el botón de 'Terrestre' pueda reactivarse manualmente
           try { if (vehicleBtn) { vehicleBtn.classList.remove('selected-mode'); vehicleBtn.disabled = false; } } catch(e){}
           try { showNotification('Modo multi-destinos detenido', 1500, 'info'); } catch(e){}
