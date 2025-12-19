@@ -87,14 +87,16 @@
         </div>
         <div class="right-menu-options">
             <button id="export-all-pdf" type="button" class="export-all-btn">
-                Exportar PDF
+                <i class="bx bx-file-report"></i>
+                <span class="btn-label">Exportar PDF</span>
             </button>
             <div class="history-io">
                 <div class="history-io-row">
                     <button id="export-history-btn" type="button"><i
-                            class='bx  bx-arrow-in-down-stroke-circle-half'></i> Exportar JSON</button>
+                            class='bx  bx-arrow-in-down-stroke-circle-half'></i> 
+                            <span class="btn-label">Exportar JSON</span></button>
                     <button id="import-history-btn" type="button"><i class='bx  bx-arrow-in-up-stroke-circle-half'></i>
-                        Importar JSON</button>
+                        <span class="btn-label">Importar JSON</span></button>
                     <input id="import-history-file" type="file" accept="application/json" style="display:none" />
                 </div>
             </div>
@@ -202,5 +204,7 @@
 <script src="assets/js/coordSearch.js"></script>
 <!-- Export/Import del historial JSON -->
 <script src="assets/js/historyIO.js"></script>
+<!-- Ubicar elementos según el tamaño de pantalla  -->
+<script src="assets/js/relocateElements.js"></script>
 
 </html>

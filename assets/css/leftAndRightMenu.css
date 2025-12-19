@@ -111,16 +111,6 @@
   font-size: 0.9rem;
 }
 
-/* Estado activo de detener (botón rojo) para nueva ruta multi-destinos */
-.left-menu-options #new-route-btn.stop-route {
-  background-color: #c0392b;
-  border-color: #922b21;
-  color: #fff;
-}
-.left-menu-options #new-route-btn.stop-route:hover {
-  background-color: #a93226;
-}
-
 /* Efecto hover de los botones del menú izquierdo */
 .left-menu-options #plane:hover,
 .left-menu-options #vehicle:hover,
@@ -606,7 +596,7 @@
 /* *** Máx. 1440 *** */
 @media (max-width: 1440px) {
   .left-menu {
-    width: 23vw !important;
+    width: 25vw !important;
   }
 
   .right-menu {
@@ -620,15 +610,16 @@
   .right-menu {
     width: 38vw !important;
   }
+
   .export-all-btn,
-  #export-history-btn, 
+  #export-history-btn,
   #import-history-btn,
   .distance-info,
   .mode-text,
-  #distance-page-indicator{
+  #distance-page-indicator {
     font-size: 0.8rem;
   }
-  
+
 }
 
 /* *** Máx. 1024 *** */
@@ -641,8 +632,6 @@
     width: 35vw !important;
   }
 }
-
-
 
 /* *** Máx. 768 *** */
 @media (max-width: 768px) {
@@ -831,10 +820,13 @@
   .distance-pagination,
   #coord-search-input,
   #coord-search-btn,
-  #export-history-btn,
-  #import-history-btn,
-  .mode-text {
-    font-size: 0.8rem;
+  #distance-page-indicator,
+  .save-button,
+  .show-route-button,
+  .alt-route-button,
+  .mode-text,
+  .distance-icon {
+    font-size: 0.7rem;
   }
 
   /* ------------------------------------------------------------------ */
@@ -882,6 +874,27 @@
   /* Cuando está plegado, el menú se oculta hacia abajo dejando la pestaña visible */
   .right-menu:not(.is-open) {
     transform: translateY(calc(100% - 3.6rem));
+  }
+
+  /* Ocultar textos y dejar solo los íconos */
+  .right-menu-options .btn-label,
+  .history-io-row .btn-label {
+    display: none;
+  }
+
+  /* Quitar ancho forzado para todos los botones */
+  .right-menu-options button {
+    width: auto;
+    box-sizing: border-box;
+  }
+
+  /* Mantener los botones en fila con el mismo ancho */
+  .history-io-row {
+    flex-wrap: wrap;
+  }
+
+  .history-io-row button {
+    min-width: 9rem;
   }
 
 }
