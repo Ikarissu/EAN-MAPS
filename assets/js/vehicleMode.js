@@ -52,7 +52,7 @@ function VehiclePointMulti() {
     if (window._routeWaypoints.length >= 2) {
       createRoutingForWaypoints(window._routeWaypoints);
     } else {
-      // Tercer clic o más (no usado aquí) - mantener comportamiento previo: reiniciar A si toca
+      // Solo un punto, limpiar ruta previa si existe
       if (routingControl) {
         map.removeControl(routingControl);
         routingControl = null;
@@ -77,9 +77,10 @@ function VehiclePointMulti() {
 // Crea el control de ruteo para un arreglo de waypoints y maneja eventos
 function createRoutingForWaypoints(waypointsArray) {
   try { showNotification("Determinando la ruta...", 1200, "info"); } catch(e){}
-
+// Limpiar ruta previa si existe
   if (routingControl) { map.removeControl(routingControl); routingControl = null; }
   const wpObjs = waypointsArray.map(wp => L.latLng(wp));
+  // Crear nuevo control de ruta
   routingControl = L.Routing.control({
     waypoints: wpObjs,
     language: "es",
@@ -90,30 +91,31 @@ function createRoutingForWaypoints(waypointsArray) {
     },
     show: false,
   }).addTo(map);
-
+// Manejo de eventos de ruta
   routingControl.on("routingerror", function (e) {
     try { showNotification(
       "Error: No se encontró una ruta vehicular posible entre los puntos seleccionados.",
       5000,
       "error"
     ); } catch(e){}
-
+// Limpiar ruta/controles en caso de error
     if (routingControl) { map.removeControl(routingControl); routingControl = null; }
     try { window._routeMarkers.forEach(m => map.removeLayer(m)); } catch (err) {}
     window._routeMarkers = [];
     window._routeWaypoints = [];
     _pointA = null; _pointB = null;
   });
-
+// Al encontrar rutas, procesa y almacena información
   routingControl.on("routesfound", function (e) {
     const alternatives = (e.routes || []).slice(1).map((r) => {
       const distKm = r.summary?.totalDistance
         ? r.summary.totalDistance / 1000
         : 0;
+        // Procesar instrucciones
       const instr = r.instructions
         ? r.instructions.map((instr, idx) => `${idx + 1}. ${instr.text}`)
         : [];
-
+// Procesar coordenadas
       const coords = (r.coordinates || []).map((c) => {
         if (c && typeof c.lat === "number" && typeof c.lng === "number") {
           return { lat: c.lat, lng: c.lng };
@@ -134,6 +136,7 @@ function createRoutingForWaypoints(waypointsArray) {
       };
     });
 
+    // Procesar ruta primaria (la primera)
     let route = e.routes && e.routes[0] ? e.routes[0] : null;
     if (route) {
       let distance = route.summary.totalDistance / 1000;
@@ -149,6 +152,7 @@ function createRoutingForWaypoints(waypointsArray) {
       }
       const endTS = startTS + (durationSec * 1000);
       const end_hour = formatTimeWithOffset(endTS, offset);
+      // Formatear duración en horas y minutos
       const dist_hour = (function(sec){
         try {
           const s = Number(sec) || 0;
@@ -160,11 +164,12 @@ function createRoutingForWaypoints(waypointsArray) {
           return remMins ? `${hours} h ${remMins} min` : `${hours} h`;
         } catch (e) { return '—'; }
       })(durationSec);
-
+      // Procesar instrucciones
       const instructions =
         route.instructions?.map((instr, idx) => `${idx + 1}. ${instr.text}`) ||
         [];
 
+        // Construir objeto de ruta primaria
       const primaryRoute = {
         distanceKm: distance,
         instructions: instructions,
@@ -178,7 +183,7 @@ function createRoutingForWaypoints(waypointsArray) {
         dist_hour: dist_hour,
         summary: route.summary || {}
       };
-
+      // Almacenar registro de distancia
       distanceRecords.push({
         type: "vehicle",
         typeLabel: "Distancia terrestre",
@@ -196,9 +201,11 @@ function createRoutingForWaypoints(waypointsArray) {
         alternatives,
         selectedAlternativeIndex: 0,
         primaryRoute,
+        // Información de waypoints y puntos A/B
         waypoints: Array.isArray(waypointsArray)
           ? waypointsArray.map(wp => ({ lat: wp.lat, lng: wp.lng, name: wp.name || null }))
           : [],
+          // Información específica de puntos A y B
         pointA_info: {
           name: _pointA?.name,
           lat: _pointA?.lat,
