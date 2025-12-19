@@ -28,16 +28,25 @@ function PlanePointAB() {
     const clickedMarker = e.target;
     const clickedLatLng = e.latlng;
 
-    // Cerrar menú izquierdo al seleccionar un punto
-    try {
-      const leftMenuEl = document.getElementById("left-menu");
-      if (window.setExpanded && leftMenuEl) {
-        window.setExpanded(leftMenuEl, false);
-      } else if (leftMenuEl) {
+    // Cerrar ambos menús al seleccionar un punto en el mapa
+  try {
+    const leftMenuEl = document.getElementById("left-menu");
+    const rightMenuEl = document.getElementById("right-menu");
+    if (window.setExpanded) {
+      if (leftMenuEl) window.setExpanded(leftMenuEl, false);
+      if (rightMenuEl) window.setExpanded(rightMenuEl, false);
+    } else {
+      if (leftMenuEl) {
         leftMenuEl.classList.remove("is-open");
         leftMenuEl.setAttribute("aria-expanded", "false");
       }
-    } catch (err) {}
+      if (rightMenuEl) {
+        rightMenuEl.classList.remove("is-open");
+        rightMenuEl.setAttribute("aria-expanded", "false");
+      }
+    }
+    if (window.updateDesktopTabPositions) window.updateDesktopTabPositions();
+  } catch (err) {}
 
     clickedMarker.closePopup();
     map.closePopup(); // Eliminar popup de advertencia

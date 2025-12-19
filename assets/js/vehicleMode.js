@@ -57,15 +57,24 @@ function VehiclePointMulti() {
     // Añadir nuevo waypoint
     const latlng = e.latlng;
     // crear marcador y almacenar
-    // Cerrar menú izquierdo al seleccionar un punto
+    // Cerrar ambos menús al seleccionar un punto en el mapa
     try {
       const leftMenuEl = document.getElementById("left-menu");
-      if (window.setExpanded && leftMenuEl) {
-        window.setExpanded(leftMenuEl, false);
-      } else if (leftMenuEl) {
-        leftMenuEl.classList.remove("is-open");
-        leftMenuEl.setAttribute("aria-expanded", "false");
+      const rightMenuEl = document.getElementById("right-menu");
+      if (window.setExpanded) {
+        if (leftMenuEl) window.setExpanded(leftMenuEl, false);
+        if (rightMenuEl) window.setExpanded(rightMenuEl, false);
+      } else {
+        if (leftMenuEl) {
+          leftMenuEl.classList.remove("is-open");
+          leftMenuEl.setAttribute("aria-expanded", "false");
+        }
+        if (rightMenuEl) {
+          rightMenuEl.classList.remove("is-open");
+          rightMenuEl.setAttribute("aria-expanded", "false");
+        }
       }
+      if (window.updateDesktopTabPositions) window.updateDesktopTabPositions();
     } catch (err) {}
 
     try {
@@ -324,17 +333,26 @@ function VehiclePointAB() {
 
   mapClickListener = async function (e) {
     const latlng = e.latlng;
-    // Cerrar menú izquierdo al seleccionar un punto
+    // Cerrar ambos menús al seleccionar un punto en el mapa
     try {
       const leftMenuEl = document.getElementById("left-menu");
-      if (window.setExpanded && leftMenuEl) {
-        window.setExpanded(leftMenuEl, false);
-      } else if (leftMenuEl) {
-        leftMenuEl.classList.remove("is-open");
-        leftMenuEl.setAttribute("aria-expanded", "false");
+      const rightMenuEl = document.getElementById("right-menu");
+      if (window.setExpanded) {
+        if (leftMenuEl) window.setExpanded(leftMenuEl, false);
+        if (rightMenuEl) window.setExpanded(rightMenuEl, false);
+      } else {
+        if (leftMenuEl) {
+          leftMenuEl.classList.remove("is-open");
+          leftMenuEl.setAttribute("aria-expanded", "false");
+        }
+        if (rightMenuEl) {
+          rightMenuEl.classList.remove("is-open");
+          rightMenuEl.setAttribute("aria-expanded", "false");
+        }
       }
+      if (window.updateDesktopTabPositions) window.updateDesktopTabPositions();
     } catch (err) {}
-    
+
     // Si no hay punto A
     if (!_pointA) {
       _pointA = latlng;
