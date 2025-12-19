@@ -1044,7 +1044,7 @@
   /* Los items ocupan ancho con un mínimo para mantener legibilidad */
   .left-menu-options-group .left-menu-item {
     flex: 1 1 48%;
-    min-width: 8.5rem;
+    min-width: 6.5rem;
   }
 
   /* Botones del menú izquierdo con padding más compacto */

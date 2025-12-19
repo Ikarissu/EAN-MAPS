@@ -116,7 +116,7 @@ function renderDistanceList(opts = {}) {
   // Abrir el menú derecho (inferior en móviles) al terminar de renderizar
   window.openBottomMenu?.();
 
-  // Reubicar botones según ancho de pantalla
+  // Reubicar los botones de importar/exportar según el ancho de pantalla
   window.relocateActionButtons?.();
 }
 
