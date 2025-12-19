@@ -22,12 +22,12 @@
           // Limpiar cualquier ruta anterior y preparar modo multi
           if (typeof resetVehicleRouteKeepMode === 'function') resetVehicleRouteKeepMode();
           if (typeof VehiclePointMulti === 'function') VehiclePointMulti();
-          try { showNotification('Modo: Terrestre - varios destinos activado', 2000, 'success'); } catch(e){}
+          try { showNotification('Modo: Varios destinos activado', 2000, 'success'); } catch(e){}
         } catch (e) { console.error(e); }
       } else {
         // Detener modo multi por completo (no volver a A->B)
         multiActive = false;
-        btn.textContent = 'Terrestre - varios destinos';
+        btn.textContent = 'Varios destinos';
         btn.classList.remove('stop-route');
         try {
           // Limpiar listeners, rutas y marcadores
