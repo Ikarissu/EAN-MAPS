@@ -111,6 +111,16 @@
   font-size: 0.9rem;
 }
 
+/* Estado activo de detener (botón rojo) para nueva ruta multi-destinos */
+.left-menu-options #new-route-btn.stop-route {
+  background-color: #c0392b;
+  border-color: #922b21;
+  color: #fff;
+}
+.left-menu-options #new-route-btn.stop-route:hover {
+  background-color: #a93226;
+}
+
 /* Efecto hover de los botones del menú izquierdo */
 .left-menu-options #plane:hover,
 .left-menu-options #vehicle:hover,
