@@ -805,6 +805,16 @@
     font-size: 1rem;
   }
 
+/* Estado activo de detener (botón rojo) para nueva ruta multi-destinos */
+.left-menu-options #new-route-btn.stop-route {
+  background-color: #c0392b;
+  border-color: #922b21;
+  color: #fff;
+}
+.left-menu-options #new-route-btn.stop-route:hover {
+  background-color: #a93226;
+}
+
   /* Tamaño de fuente más pequeño */
   .left-menu-item,
   .left-menu-options #plane,
