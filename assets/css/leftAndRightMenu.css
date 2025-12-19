@@ -821,12 +821,15 @@
   #coord-search-input,
   #coord-search-btn,
   #distance-page-indicator,
-  .save-button,
-  .show-route-button,
-  .alt-route-button,
   .mode-text,
   .distance-icon {
     font-size: 0.7rem;
+  }
+
+  .save-button,
+  .show-route-button,
+  .alt-route-button {
+    font-size: 0.9rem;
   }
 
   /* ------------------------------------------------------------------ */
@@ -895,6 +898,30 @@
 
   .history-io-row button {
     min-width: 9rem;
+  }
+
+  .distance-record-options.responsive-actions #export-history-btn,
+  .distance-record-options.responsive-actions #import-history-btn,
+  .distance-record-options.responsive-actions #export-all-pdf {
+    padding: 0.4rem;
+    border: 0.15rem solid #2e5863;
+    border-radius: 0.5rem;
+    background-color: #417885;
+    color: #fff;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0;
+  }
+
+  .distance-record-options.responsive-actions #export-history-btn i,
+  .distance-record-options.responsive-actions #import-history-btn i,
+  .distance-record-options.responsive-actions #export-all-pdf i {
+    font-size: 1rem;
+    line-height: 1;
   }
 
 }
