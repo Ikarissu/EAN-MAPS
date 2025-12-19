@@ -168,6 +168,21 @@ function attachPrimaryRouteListeners() {
   const mainBtns = document.querySelectorAll(".show-route-button");
   mainBtns.forEach((btn) => {
     btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      // Cerrar menús: quitar la clase 'is-open' de los asides (left/right)
+      try {
+        const leftMenuEl = document.getElementById("left-menu");
+        const rightMenuEl = document.getElementById("right-menu");
+        if (leftMenuEl) {
+          leftMenuEl.classList.remove("is-open");
+          leftMenuEl.setAttribute("aria-expanded", "false");
+        }
+        if (rightMenuEl) {
+          rightMenuEl.classList.remove("is-open");
+          rightMenuEl.setAttribute("aria-expanded", "false");
+        }
+      } catch (err) {}
+
       const recordEl = e.currentTarget.closest(".distance-info");
       const recordIndex = parseInt(
         recordEl?.getAttribute("data-record-index") || "-1",
