@@ -101,6 +101,24 @@ function generatePdf(record) {
                 margin: [8, 6, 8, 10],
               },
             ],
+            [
+              {
+                text: `Duración estimada`,
+                style: "label",
+                color: "#fff",
+                fillColor: "#396974",
+                margin: [8, 6, 8, 6],
+              },
+            ],
+            [
+              {
+                text: record.dist_hour || "—",
+                style: "value",
+                color: "#000",
+                fillColor: "#f8f8f8",
+                margin: [8, 6, 8, 10],
+              },
+            ],
             ...(record.instructions?.length
               ? [
                   [

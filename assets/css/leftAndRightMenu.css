@@ -111,16 +111,6 @@
   font-size: 0.9rem;
 }
 
-/* Estado activo de detener (botón rojo) para nueva ruta multi-destinos */
-.left-menu-options #new-route-btn.stop-route {
-  background-color: #c0392b;
-  border-color: #922b21;
-  color: #fff;
-}
-.left-menu-options #new-route-btn.stop-route:hover {
-  background-color: #a93226;
-}
-
 /* Efecto hover de los botones del menú izquierdo */
 .left-menu-options #plane:hover,
 .left-menu-options #vehicle:hover,
@@ -606,11 +596,11 @@
 /* *** Máx. 1440 *** */
 @media (max-width: 1440px) {
   .left-menu {
-    width: 23vw !important;
+    width: 25vw !important;
   }
 
   .right-menu {
-    width: 30vw !important;
+    width: 35vw !important;
   }
 }
 
@@ -620,15 +610,16 @@
   .right-menu {
     width: 38vw !important;
   }
+
   .export-all-btn,
-  #export-history-btn, 
+  #export-history-btn,
   #import-history-btn,
   .distance-info,
   .mode-text,
-  #distance-page-indicator{
+  #distance-page-indicator {
     font-size: 0.8rem;
   }
-  
+
 }
 
 /* *** Máx. 1024 *** */
@@ -641,8 +632,6 @@
     width: 35vw !important;
   }
 }
-
-
 
 /* *** Máx. 768 *** */
 @media (max-width: 768px) {
@@ -831,10 +820,16 @@
   .distance-pagination,
   #coord-search-input,
   #coord-search-btn,
-  #export-history-btn,
-  #import-history-btn,
-  .mode-text {
-    font-size: 0.8rem;
+  #distance-page-indicator,
+  .mode-text,
+  .distance-icon {
+    font-size: 0.7rem;
+  }
+
+  .save-button,
+  .show-route-button,
+  .alt-route-button {
+    font-size: 0.9rem;
   }
 
   /* ------------------------------------------------------------------ */
@@ -882,6 +877,51 @@
   /* Cuando está plegado, el menú se oculta hacia abajo dejando la pestaña visible */
   .right-menu:not(.is-open) {
     transform: translateY(calc(100% - 3.6rem));
+  }
+
+  /* Ocultar textos y dejar solo los íconos */
+  .right-menu-options .btn-label,
+  .history-io-row .btn-label {
+    display: none;
+  }
+
+  /* Quitar ancho forzado para todos los botones */
+  .right-menu-options button {
+    width: auto;
+    box-sizing: border-box;
+  }
+
+  /* Mantener los botones en fila con el mismo ancho */
+  .history-io-row {
+    flex-wrap: wrap;
+  }
+
+  .history-io-row button {
+    min-width: 9rem;
+  }
+
+  .distance-record-options.responsive-actions #export-history-btn,
+  .distance-record-options.responsive-actions #import-history-btn,
+  .distance-record-options.responsive-actions #export-all-pdf {
+    padding: 0.4rem;
+    border: 0.15rem solid #2e5863;
+    border-radius: 0.5rem;
+    background-color: #417885;
+    color: #fff;
+    font-family: "ProjectFont", sans-serif;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0;
+  }
+
+  .distance-record-options.responsive-actions #export-history-btn i,
+  .distance-record-options.responsive-actions #import-history-btn i,
+  .distance-record-options.responsive-actions #export-all-pdf i {
+    font-size: 1rem;
+    line-height: 1;
   }
 
 }
@@ -952,6 +992,11 @@
       font-size: 1.3rem;
       padding: 0.35rem;
     }
+
+    .history-io-row button {
+      min-width: 7rem;
+    }
+
   }
 }
 
@@ -999,7 +1044,7 @@
   /* Los items ocupan ancho con un mínimo para mantener legibilidad */
   .left-menu-options-group .left-menu-item {
     flex: 1 1 48%;
-    min-width: 8.5rem;
+    min-width: 6.5rem;
   }
 
   /* Botones del menú izquierdo con padding más compacto */
@@ -1023,6 +1068,10 @@
   /* Botones de paginación más pequeños */
   .distance-pagination button {
     padding: 0.3rem 0.6rem;
+  }
+
+  .history-io-row button {
+    min-width: 5rem;
   }
 
 }

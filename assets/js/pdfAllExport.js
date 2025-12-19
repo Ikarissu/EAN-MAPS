@@ -1,5 +1,5 @@
 (() => {
-    // Obtener dónde se almacenarán los registros obtenidos y los elementos de la modal para interactual
+  // Obtener dónde se almacenarán los registros obtenidos y los elementos de la modal para interactual
   const STORAGE_KEY = "ean-maps:distanceRecords";
   const openBtn = document.getElementById("export-all-pdf");
   const modal = document.getElementById("export-modal");
@@ -110,10 +110,11 @@
   }
 
   // Dar formato a la distancia en kilómetros
-  const fmtKm = (n) => new Intl.NumberFormat("es-ES", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(n));
+  const fmtKm = (n) =>
+    new Intl.NumberFormat("es-ES", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(Number(n));
 
   // Generar cada registro del PDF en una hoja individual
   function generateCombinedPdf(records) {
@@ -121,7 +122,7 @@
       console.error("pdfMake no está disponible");
       return;
     }
-    
+
     // Mostrar alerta de que el PDF se está generando
     showNotification("Generando PDF...", 1200, "info");
 
@@ -195,7 +196,9 @@
     const body = [
       [
         {
-          text: `Distancia recorrida desde "${record.pointA_info?.name || "Origen"}" hasta "${record.pointB_info?.name || "Destino"}"`,
+          text: `Distancia recorrida desde "${
+            record.pointA_info?.name || "Origen"
+          }" hasta "${record.pointB_info?.name || "Destino"}"`,
           style: "label",
           color: "#fff",
           fillColor: "#396974",
@@ -241,6 +244,24 @@
       [
         {
           text: record.end_hour,
+          style: "value",
+          color: "#000",
+          fillColor: "#f8f8f8",
+          margin: [8, 6, 8, 10],
+        },
+      ],
+      [
+        {
+          text: `Duración estimada`,
+          style: "label",
+          color: "#fff",
+          fillColor: "#396974",
+          margin: [8, 6, 8, 6],
+        },
+      ],
+      [
+        {
+          text: record.dist_hour || "—",
           style: "value",
           color: "#000",
           fillColor: "#f8f8f8",

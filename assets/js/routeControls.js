@@ -6,7 +6,7 @@
     if (!btn) return;
 
     // Ajustar texto inicial
-    btn.textContent = 'Terrestre - varios destinos';
+    btn.textContent = 'Varios destinos';
     btn.classList.remove('stop-route');
 
     // Estado de activación (multi-destinos)
