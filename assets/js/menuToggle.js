@@ -96,6 +96,9 @@
     updateDesktopTabPositions();
   }
 
+  // Exponer toggleResponsive para que otros módulos puedan reutilizar la lógica
+  window.toggleResponsive = toggleResponsive;
+
   // Al hacer clic en el ícono del menú izquierdo, se abre/cierra y cierra el otro si corresponde
   leftToggleIcon?.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -143,3 +146,5 @@
   leftMenu && leftMenuResizeObserver.observe(leftMenu);
 
 })();
+
+//Control de menu

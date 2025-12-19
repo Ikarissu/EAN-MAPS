@@ -330,13 +330,39 @@ function attachPointClickListeners() {
   pointLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault(); // Evita que la página salte al hacer clic en el <a>
+      e.stopPropagation(); // Evita que el click burbujee y reabra el menú por listeners en los asides
 
       const lat = parseFloat(this.getAttribute("data-lat"));
       const lng = parseFloat(this.getAttribute("data-lng"));
 
       if (!isNaN(lat) && !isNaN(lng)) {
+        // Elimina marcador previo (si existe) y crea uno nuevo
+        try {
+          if (window._currentPointMarker) {
+            map.removeLayer(window._currentPointMarker);
+            window._currentPointMarker = null;
+          }
+        } catch (err) {}
+
+        // Crea y guarda la referencia del nuevo marcador
+        window._currentPointMarker = L.marker([lat, lng]).addTo(map);
+
+        // Cerrar menús: quitar la clase 'is-open' de los asides (left/right)
+        try {
+          const leftMenuEl = document.getElementById("left-menu");
+          const rightMenuEl = document.getElementById("right-menu");
+          if (leftMenuEl) {
+            leftMenuEl.classList.remove("is-open");
+            leftMenuEl.setAttribute("aria-expanded", "false");
+          }
+          if (rightMenuEl) {
+            rightMenuEl.classList.remove("is-open");
+            rightMenuEl.setAttribute("aria-expanded", "false");
+          }
+        } catch (err) {}
+
         // Mueve el mapa a las coordenadas y aplica un zoom apropiado
-        map.flyTo([lat, lng], 10, {
+        map.flyTo([lat, lng], 17, {
           duration: 1.5, // Duración de la animación en segundos
         });
       }
