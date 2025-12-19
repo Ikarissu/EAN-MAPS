@@ -167,8 +167,8 @@ function updateRecordDOM(recordIndex) {
 function attachPrimaryRouteListeners() {
   const mainBtns = document.querySelectorAll(".show-route-button");
   mainBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const recordEl = this.closest(".distance-info");
+    btn.addEventListener("click", function (e) {
+      const recordEl = e.currentTarget.closest(".distance-info");
       const recordIndex = parseInt(
         recordEl?.getAttribute("data-record-index") || "-1",
         10
@@ -184,14 +184,28 @@ function attachPrimaryRouteListeners() {
 function attachAltRouteListeners() {
   const altBtns = document.querySelectorAll(".alt-route-button");
   altBtns.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const recordEl = this.closest(".distance-info");
+    btn.addEventListener("click", function (e) {
+      const recordEl = e.currentTarget.closest(".distance-info");
       const recordIndex = parseInt(
         recordEl?.getAttribute("data-record-index") || "-1",
         10
       );
-      const altIdx = parseInt(this.getAttribute("data-alt-index") || "0", 10);
+      const altIdx = parseInt(e.currentTarget.getAttribute("data-alt-index") || "0", 10);
       const record = distanceRecords[recordIndex];
+        e.stopPropagation();
+              // Cerrar menús: quitar la clase 'is-open' de los asides (left/right)
+        try {
+          const leftMenuEl = document.getElementById("left-menu");
+          const rightMenuEl = document.getElementById("right-menu");
+          if (leftMenuEl) {
+            leftMenuEl.classList.remove("is-open");
+            leftMenuEl.setAttribute("aria-expanded", "false");
+          }
+          if (rightMenuEl) {
+            rightMenuEl.classList.remove("is-open");
+            rightMenuEl.setAttribute("aria-expanded", "false");
+          }
+        } catch (err) {}
 
       if (!record || !record.alternatives || !record.alternatives.length) {
         showNotification(
